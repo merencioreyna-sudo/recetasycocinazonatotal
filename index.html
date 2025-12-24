@@ -7,7 +7,7 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:wght@400;500;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" integrity="sha512-iecdLmaskl7CVkqkXNQ/ZH/XLlvWZOJyj7Yy7tcenmpD1ypASozpmT/E0iPtmFIB46ZmdtAc9eNBvH0H/ZpiBw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
     <style>
         /* RESET Y ESTILOS GENERALES */
         * {
@@ -117,9 +117,9 @@
         /* ENCABEZADO PREMIUM */
         header {
             text-align: center;
-            padding: 50px 0 40px;
+            padding: 40px 0 30px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 40px;
+            margin-bottom: 30px;
             position: relative;
             overflow: hidden;
         }
@@ -136,33 +136,40 @@
         }
         
         .logo-premium {
-            width: 120px;
-            height: 120px;
-            margin: 0 auto 25px;
+            width: 100px;
+            height: 100px;
+            margin: 0 auto 20px;
             border: 2px solid #D4AF37;
             border-radius: 50%;
             display: flex;
             align-items: center;
             justify-content: center;
             color: #D4AF37;
-            font-size: 2.5rem;
+            font-size: 2rem;
             background: rgba(10, 10, 10, 0.8);
-            box-shadow: 0 0 30px rgba(212, 175, 55, 0.4);
+            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
             position: relative;
+            overflow: hidden;
+        }
+        
+        .logo-premium img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
         }
         
         .logo-premium:after {
             content: '';
             position: absolute;
-            width: 140px;
-            height: 140px;
+            width: 110px;
+            height: 110px;
             border: 1px solid rgba(212, 175, 55, 0.2);
             border-radius: 50%;
         }
         
         h1 {
-            font-size: 3.5rem;
-            margin-bottom: 15px;
+            font-size: 2.8rem;
+            margin-bottom: 10px;
             background: linear-gradient(to right, #D4AF37, #F4E4A6, #D4AF37);
             -webkit-background-clip: text;
             background-clip: text;
@@ -179,7 +186,7 @@
         
         .subtitle {
             color: #C0C0C0;
-            font-size: 1.3rem;
+            font-size: 1.1rem;
             font-weight: 300;
             font-style: italic;
             letter-spacing: 1px;
@@ -217,23 +224,23 @@
             display: flex;
             flex-wrap: wrap;
             justify-content: center;
-            gap: 20px;
-            margin-bottom: 60px;
+            gap: 15px;
+            margin-bottom: 50px;
         }
         
         .btn-categoria {
             background-color: transparent;
             border: 2px solid rgba(212, 175, 55, 0.7);
             color: #FFFFFF;
-            padding: 14px 28px;
+            padding: 12px 24px;
             font-family: 'Cinzel', serif;
-            font-size: 1.1rem;
+            font-size: 1rem;
             cursor: pointer;
             transition: all 0.3s ease;
             text-decoration: none;
             position: relative;
             overflow: hidden;
-            min-width: 160px;
+            min-width: 140px;
             text-align: center;
         }
         
@@ -261,14 +268,14 @@
         
         /* SECCIONES DE CATEGORÍAS */
         .seccion-categoria {
-            margin-bottom: 100px;
-            scroll-margin-top: 30px;
+            margin-bottom: 70px;
+            scroll-margin-top: 20px;
         }
         
         .titulo-categoria {
-            font-size: 2.8rem;
-            margin-bottom: 40px;
-            padding-bottom: 15px;
+            font-size: 2.2rem;
+            margin-bottom: 30px;
+            padding-bottom: 10px;
             position: relative;
             text-align: center;
         }
@@ -279,25 +286,28 @@
             bottom: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 100px;
+            width: 80px;
             height: 3px;
             background: linear-gradient(to right, transparent, #D4AF37, transparent);
         }
         
-        /* GRID DE RECETAS */
+        /* GRID DE RECETAS - TARJETAS MÁS PEQUEÑAS */
         .grid-recetas {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-            gap: 35px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
         
         .tarjeta-receta {
             background: rgba(20, 20, 20, 0.7);
             border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 25px;
+            padding: 20px;
             transition: all 0.4s ease;
             position: relative;
             overflow: hidden;
+            height: 380px;
+            display: flex;
+            flex-direction: column;
         }
         
         .tarjeta-receta:before {
@@ -317,16 +327,16 @@
         }
         
         .tarjeta-receta:hover {
-            transform: translateY(-10px);
+            transform: translateY(-8px);
             border-color: rgba(212, 175, 55, 0.7);
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.5);
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
         }
         
         .imagen-receta {
             width: 100%;
-            height: 200px;
+            height: 150px;
             background-color: #1A1A1A;
-            margin-bottom: 20px;
+            margin-bottom: 15px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -334,6 +344,7 @@
             font-size: 14px;
             overflow: hidden;
             border: 1px solid rgba(212, 175, 55, 0.2);
+            flex-shrink: 0;
         }
         
         .imagen-receta img {
@@ -342,18 +353,49 @@
             object-fit: cover;
         }
         
+        .contenido-receta {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+        }
+        
         .titulo-receta {
-            font-size: 1.6rem;
-            margin-bottom: 12px;
+            font-size: 1.4rem;
+            margin-bottom: 10px;
             font-family: 'Playfair Display', serif;
+            line-height: 1.3;
+            flex-shrink: 0;
         }
         
         .descripcion-receta {
             color: #B0B0B0;
-            margin-bottom: 20px;
-            min-height: 60px;
-            font-size: 1rem;
-            line-height: 1.7;
+            margin-bottom: 15px;
+            font-size: 0.95rem;
+            line-height: 1.5;
+            flex: 1;
+            overflow: hidden;
+            display: -webkit-box;
+            -webkit-line-clamp: 3;
+            -webkit-box-orient: vertical;
+        }
+        
+        .btn-ver-receta {
+            background: transparent;
+            border: 1px solid #D4AF37;
+            color: #D4AF37;
+            padding: 8px 16px;
+            font-family: 'Cinzel', serif;
+            font-size: 0.9rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-align: center;
+            margin-top: auto;
+            flex-shrink: 0;
+        }
+        
+        .btn-ver-receta:hover {
+            background-color: #D4AF37;
+            color: #0A0A0A;
         }
         
         /* MODAL DE RECETA DETALLADA */
@@ -373,17 +415,17 @@
         .modal-contenido {
             background: rgba(15, 15, 15, 0.95);
             max-width: 900px;
-            margin: 40px auto;
+            margin: 30px auto;
             border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 40px;
+            padding: 30px;
             position: relative;
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
         
         .cerrar-modal {
             position: absolute;
-            top: 20px;
-            right: 20px;
+            top: 15px;
+            right: 15px;
             color: #D4AF37;
             font-size: 28px;
             cursor: pointer;
@@ -405,9 +447,9 @@
         
         .imagen-receta-grande {
             width: 100%;
-            height: 350px;
+            height: 300px;
             background-color: #1A1A1A;
-            margin-bottom: 25px;
+            margin-bottom: 20px;
             display: flex;
             align-items: center;
             justify-content: center;
@@ -424,8 +466,8 @@
         
         .detalles-receta {
             display: flex;
-            gap: 40px;
-            margin-top: 30px;
+            gap: 30px;
+            margin-top: 25px;
             flex-wrap: wrap;
         }
         
@@ -435,32 +477,33 @@
         }
         
         .detalles-receta h3 {
-            font-size: 1.8rem;
-            margin-bottom: 20px;
-            padding-bottom: 10px;
+            font-size: 1.6rem;
+            margin-bottom: 15px;
+            padding-bottom: 8px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
         }
         
         .detalles-receta ul, .detalles-receta ol {
-            padding-left: 25px;
+            padding-left: 20px;
             color: #C0C0C0;
         }
         
         .detalles-receta li {
-            margin-bottom: 12px;
-            font-size: 1.05rem;
-            line-height: 1.7;
+            margin-bottom: 10px;
+            font-size: 1rem;
+            line-height: 1.6;
         }
         
         .info-receta {
             display: flex;
-            gap: 30px;
-            margin: 25px 0;
+            gap: 20px;
+            margin: 20px 0;
             color: #B0B0B0;
             font-style: italic;
-            padding: 15px;
+            padding: 12px;
             background: rgba(212, 175, 55, 0.05);
             border-left: 3px solid #D4AF37;
+            flex-wrap: wrap;
         }
         
         /* LOGIN */
@@ -479,10 +522,10 @@
         
         .login-contenido {
             background: rgba(20, 20, 20, 0.98);
-            max-width: 500px;
-            margin: 100px auto;
+            max-width: 450px;
+            margin: 80px auto;
             border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 40px;
+            padding: 30px;
             position: relative;
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
             text-align: center;
@@ -499,15 +542,15 @@
             background-color: rgba(0, 0, 0, 0.95);
             z-index: 3000;
             overflow-y: auto;
-            padding: 40px 20px;
+            padding: 30px 15px;
         }
         
         .admin-contenido {
             background: rgba(20, 20, 20, 0.98);
-            max-width: 1200px;
+            max-width: 1100px;
             margin: 0 auto;
             border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 40px;
+            padding: 30px;
             position: relative;
             box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
         }
@@ -516,32 +559,33 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 30px;
-            padding-bottom: 20px;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
         }
         
         .admin-title {
-            font-size: 2.2rem;
+            font-size: 2rem;
         }
         
         .admin-tabs {
             display: flex;
-            gap: 10px;
-            margin-bottom: 30px;
+            gap: 8px;
+            margin-bottom: 25px;
             border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 10px;
+            padding-bottom: 8px;
+            flex-wrap: wrap;
         }
         
         .admin-tab {
             background: transparent;
             border: none;
             color: #B0B0B0;
-            padding: 10px 20px;
+            padding: 8px 16px;
             cursor: pointer;
             transition: all 0.3s ease;
             font-family: 'Cinzel', serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
         }
         
         .admin-tab.active {
@@ -564,44 +608,45 @@
         .admin-form {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
         }
         
         .form-group {
             display: flex;
             flex-direction: column;
-            gap: 8px;
+            gap: 6px;
         }
         
         .form-group label {
             color: #D4AF37;
             font-weight: 500;
+            font-size: 0.95rem;
         }
         
         .form-control {
             background: rgba(30, 30, 30, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.3);
             color: #FFFFFF;
-            padding: 12px 15px;
+            padding: 10px 12px;
             font-family: 'Lora', serif;
-            font-size: 1rem;
+            font-size: 0.95rem;
             transition: all 0.3s ease;
         }
         
         .form-control:focus {
             outline: none;
             border-color: #D4AF37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
+            box-shadow: 0 0 8px rgba(212, 175, 55, 0.2);
         }
         
         textarea.form-control {
-            min-height: 120px;
+            min-height: 100px;
             resize: vertical;
         }
         
         .form-row {
             display: flex;
-            gap: 20px;
+            gap: 15px;
         }
         
         .form-row .form-group {
@@ -609,8 +654,8 @@
         }
         
         .admin-recetas-list {
-            margin-top: 40px;
-            max-height: 400px;
+            margin-top: 30px;
+            max-height: 350px;
             overflow-y: auto;
             padding-right: 10px;
         }
@@ -618,29 +663,35 @@
         .admin-receta-item {
             background: rgba(30, 30, 30, 0.7);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 12px;
+            margin-bottom: 12px;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
         
         .admin-receta-info h4 {
-            margin-bottom: 5px;
+            margin-bottom: 4px;
+            font-size: 1.1rem;
+        }
+        
+        .admin-receta-info small {
+            font-size: 0.85rem;
         }
         
         .admin-receta-actions {
             display: flex;
-            gap: 10px;
+            gap: 8px;
         }
         
         .btn-eliminar {
             background: rgba(200, 50, 50, 0.2);
             border: 1px solid rgba(200, 50, 50, 0.5);
             color: #FF6B6B;
-            padding: 8px 15px;
+            padding: 6px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.85rem;
         }
         
         .btn-eliminar:hover {
@@ -651,9 +702,10 @@
             background: rgba(212, 175, 55, 0.2);
             border: 1px solid rgba(212, 175, 55, 0.5);
             color: #D4AF37;
-            padding: 8px 15px;
+            padding: 6px 12px;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.85rem;
         }
         
         .btn-editar:hover {
@@ -678,13 +730,14 @@
         
         .file-upload-label {
             display: block;
-            padding: 12px 15px;
+            padding: 10px 12px;
             background: rgba(30, 30, 30, 0.8);
             border: 1px solid rgba(212, 175, 55, 0.3);
             color: #B0B0B0;
             text-align: center;
             cursor: pointer;
             transition: all 0.3s ease;
+            font-size: 0.9rem;
         }
         
         .file-upload-label:hover {
@@ -694,34 +747,34 @@
         
         .imagen-preview {
             width: 100%;
-            max-height: 200px;
+            max-height: 150px;
             object-fit: contain;
-            margin-top: 10px;
+            margin-top: 8px;
             border: 1px solid rgba(212, 175, 55, 0.3);
             display: none;
         }
         
         .configuracion-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            margin-top: 15px;
         }
         
         .config-item {
             background: rgba(30, 30, 30, 0.7);
             border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 20px;
+            padding: 15px;
         }
         
         /* PIE DE PÁGINA */
         footer {
             text-align: center;
-            padding: 40px 0;
+            padding: 30px 0;
             border-top: 1px solid rgba(212, 175, 55, 0.3);
-            margin-top: 60px;
+            margin-top: 50px;
             color: #888;
-            font-size: 0.95rem;
+            font-size: 0.9rem;
             position: relative;
         }
         
@@ -731,7 +784,7 @@
             top: 0;
             left: 50%;
             transform: translateX(-50%);
-            width: 150px;
+            width: 120px;
             height: 1px;
             background: linear-gradient(to right, transparent, #D4AF37, transparent);
         }
@@ -739,43 +792,52 @@
         /* RESPONSIVE */
         @media (max-width: 992px) {
             h1 {
-                font-size: 2.8rem;
+                font-size: 2.2rem;
             }
             
             .menu-categorias {
-                gap: 15px;
+                gap: 12px;
             }
             
             .btn-categoria {
-                padding: 12px 20px;
-                font-size: 1rem;
-                min-width: 140px;
+                padding: 10px 18px;
+                font-size: 0.95rem;
+                min-width: 130px;
             }
             
             .admin-tabs {
                 flex-wrap: wrap;
             }
+            
+            .grid-recetas {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            }
         }
         
         @media (max-width: 768px) {
             h1 {
-                font-size: 2.2rem;
+                font-size: 1.8rem;
             }
             
             .logo-premium {
-                width: 100px;
-                height: 100px;
-                font-size: 2rem;
+                width: 80px;
+                height: 80px;
+                font-size: 1.6rem;
+            }
+            
+            .logo-premium:after {
+                width: 90px;
+                height: 90px;
             }
             
             .menu-categorias {
-                gap: 10px;
+                gap: 8px;
             }
             
             .btn-categoria {
-                padding: 10px 15px;
-                font-size: 0.9rem;
-                min-width: 120px;
+                padding: 8px 14px;
+                font-size: 0.85rem;
+                min-width: 110px;
             }
             
             .grid-recetas {
@@ -783,7 +845,7 @@
             }
             
             .modal-contenido, .admin-contenido, .login-contenido {
-                padding: 25px;
+                padding: 20px;
             }
             
             .detalles-receta > div {
@@ -792,17 +854,21 @@
             
             .form-row {
                 flex-direction: column;
-                gap: 15px;
+                gap: 12px;
             }
             
             .admin-receta-item {
                 flex-direction: column;
                 align-items: flex-start;
-                gap: 10px;
+                gap: 8px;
             }
             
             .admin-receta-actions {
                 align-self: flex-end;
+            }
+            
+            .configuracion-grid {
+                grid-template-columns: 1fr;
             }
         }
     </style>
@@ -818,7 +884,7 @@
     <!-- LOGIN -->
     <div id="login-panel" class="login-panel">
         <div class="login-contenido">
-            <h2 class="gold-text" style="margin-bottom: 30px;">Acceso Administrativo</h2>
+            <h2 class="gold-text" style="margin-bottom: 25px;">Acceso Administrativo</h2>
             <form id="login-form" class="admin-form">
                 <div class="form-group">
                     <label for="login-usuario">Usuario</label>
@@ -830,8 +896,10 @@
                     <input type="password" id="login-password" class="form-control" placeholder="Ingresa tu contraseña">
                 </div>
                 
-                <button type="submit" class="btn-gold" style="margin-top: 20px;">Iniciar Sesión</button>
-                <button type="button" id="btn-cerrar-login" class="btn-gold-outline" style="margin-top: 10px;">Cancelar</button>
+                <div class="form-row">
+                    <button type="submit" class="btn-gold">Iniciar Sesión</button>
+                    <button type="button" id="btn-cerrar-login" class="btn-gold-outline">Cancelar</button>
+                </div>
             </form>
         </div>
     </div>
@@ -848,61 +916,12 @@
     <main class="container">
         <!-- MENÚ DE SUBCATEGORÍAS -->
         <nav class="menu-categorias" id="menu-categorias">
-            <a href="#postres" class="btn-categoria">🍰 Postres</a>
-            <a href="#saladas" class="btn-categoria">🍲 Comidas Saladas</a>
-            <a href="#bebidas" class="btn-categoria">🥤 Bebidas</a>
-            <a href="#ensaladas" class="btn-categoria">🥗 Ensaladas</a>
-            <a href="#sopas" class="btn-categoria">🍛 Sopas y Cremas</a>
-            <a href="#reposteria" class="btn-categoria">🍪 Repostería</a>
+            <!-- Las categorías se cargarán dinámicamente -->
         </nav>
 
-        <!-- SECCIÓN POSTRES -->
-        <section id="postres" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🍰 POSTRES</h2>
-            <div class="grid-recetas" id="postres-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
-
-        <!-- SECCIÓN COMIDAS SALADAS -->
-        <section id="saladas" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🍲 COMIDAS SALADAS</h2>
-            <div class="grid-recetas" id="saladas-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
-
-        <!-- SECCIÓN BEBIDAS -->
-        <section id="bebidas" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🥤 BEBIDAS</h2>
-            <div class="grid-recetas" id="bebidas-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
-
-        <!-- SECCIÓN ENSALADAS -->
-        <section id="ensaladas" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🥗 ENSALADAS</h2>
-            <div class="grid-recetas" id="ensaladas-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
-
-        <!-- SECCIÓN SOPAS Y CREMAS -->
-        <section id="sopas" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🍛 SOPAS Y CREMAS</h2>
-            <div class="grid-recetas" id="sopas-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
-
-        <!-- SECCIÓN REPOSTERÍA -->
-        <section id="reposteria" class="seccion-categoria">
-            <h2 class="titulo-categoria gold-text">🍪 REPOSTERÍA</h2>
-            <div class="grid-recetas" id="reposteria-container">
-                <!-- Las recetas se cargarán aquí dinámicamente -->
-            </div>
-        </section>
+        <!-- SECCIONES DE CATEGORÍAS -->
+        <!-- Las secciones se crearán dinámicamente -->
+        <div id="secciones-container"></div>
     </main>
 
     <!-- MODAL PARA RECETA DETALLADA -->
@@ -944,7 +963,7 @@
     <div id="admin-panel" class="admin-panel">
         <div class="admin-contenido">
             <div class="admin-header">
-                <h2 class="admin-title gold-text">Panel de Administración Completo</h2>
+                <h2 class="admin-title gold-text">Panel de Administración</h2>
                 <button id="btn-cerrar-admin" class="btn-gold-outline">Cerrar Panel</button>
             </div>
             
@@ -970,7 +989,6 @@
                             <label for="receta-categoria">Categoría *</label>
                             <select id="receta-categoria" class="form-control" required>
                                 <option value="">Seleccione una categoría</option>
-                                <!-- Las categorías se cargarán dinámicamente -->
                             </select>
                         </div>
                     </div>
@@ -1002,23 +1020,24 @@
                     </div>
                     
                     <div class="form-group">
-                        <label for="receta-imagen">Imagen de la Receta</label>
+                        <label for="receta-imagen">Subir imagen desde tu ordenador</label>
                         <div class="file-upload">
                             <input type="file" id="receta-imagen" accept="image/*">
                             <label for="receta-imagen" class="file-upload-label">
-                                <i class="fas fa-cloud-upload-alt"></i> Subir imagen desde tu ordenador
+                                <i class="fas fa-cloud-upload-alt"></i> Seleccionar archivo (máx. 500KB)
                             </label>
                         </div>
                         <img id="imagen-preview" class="imagen-preview" alt="Vista previa">
-                        <small class="gold-accent">Tamaño máximo recomendado: 1MB. Formatos: JPG, PNG, GIF</small>
                     </div>
+                    
                     <div class="form-group">
-                        <label for="receta-imagen-url">O usa URL de imagen (recomendado)</label>
+                        <label for="receta-imagen-url">O usar URL de imagen (RECOMENDADO para GitHub Pages)</label>
                         <input type="text" id="receta-imagen-url" class="form-control" 
-                           placeholder="https://i.ibb.co/abc123/tu-imagen.jpg">
+                               placeholder="https://i.ibb.co/abc123/tu-imagen.jpg">
                         <small class="gold-accent">
-                            Sube imágenes a <a href="https://imgbb.com" target="_blank" style="color:#D4AF37;">imgbb.com</a> 
-                            y pega el enlace directo aquí
+                            📌 Recomendado: Sube imágenes a 
+                            <a href="https://imgbb.com" target="_blank" style="color:#D4AF37; text-decoration: underline;">imgbb.com</a> 
+                            (gratis) y pega el enlace directo aquí
                         </small>
                     </div>
                     
@@ -1028,7 +1047,7 @@
                     </div>
                 </form>
                 
-                <h3 class="gold-text" style="margin-top: 40px;">Recetas Existentes</h3>
+                <h3 class="gold-text" style="margin-top: 30px;">Recetas Existentes</h3>
                 <div id="admin-recetas-list" class="admin-recetas-list">
                     <!-- Lista de recetas se cargará aquí -->
                 </div>
@@ -1037,7 +1056,7 @@
             <!-- PESTAÑA CATEGORÍAS -->
             <div id="tab-categorias" class="tab-content">
                 <h3 class="gold-text">Administrar Categorías</h3>
-                <form id="form-categoria" class="admin-form" style="max-width: 600px;">
+                <form id="form-categoria" class="admin-form" style="max-width: 500px;">
                     <input type="hidden" id="categoria-id" value="">
                     
                     <div class="form-group">
@@ -1045,20 +1064,21 @@
                         <input type="text" id="categoria-nombre" class="form-control" placeholder="Ej: Postres" required>
                     </div>
                     
-                    <div class="form-group">
-                        <label for="categoria-icono">Icono (emoji o texto)</label>
-                        <input type="text" id="categoria-icono" class="form-control" placeholder="Ej: 🍰">
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="categoria-color">Color Personalizado (opcional)</label>
-                        <input type="color" id="categoria-color" class="form-control" value="#D4AF37">
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label for="categoria-icono">Icono (emoji o texto)</label>
+                            <input type="text" id="categoria-icono" class="form-control" placeholder="Ej: 🍰">
+                        </div>
+                        <div class="form-group">
+                            <label for="categoria-color">Color Personalizado</label>
+                            <input type="color" id="categoria-color" class="form-control" value="#D4AF37">
+                        </div>
                     </div>
                     
                     <button type="submit" class="btn-gold">Guardar Categoría</button>
                 </form>
                 
-                <h3 class="gold-text" style="margin-top: 40px;">Categorías Existentes</h3>
+                <h3 class="gold-text" style="margin-top: 30px;">Categorías Existentes</h3>
                 <div id="admin-categorias-list" class="admin-recetas-list">
                     <!-- Lista de categorías se cargará aquí -->
                 </div>
@@ -1073,11 +1093,11 @@
                         <form id="form-config-sitio" class="admin-form">
                             <div class="form-group">
                                 <label for="config-titulo">Título del Sitio</label>
-                                <input type="text" id="config-titulo" class="form-control" value="ZONA TOTAL">
+                                <input type="text" id="config-titulo" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="config-subtitulo">Subtítulo</label>
-                                <input type="text" id="config-subtitulo" class="form-control" value="Colección premium de recetas fáciles y organizadas.">
+                                <input type="text" id="config-subtitulo" class="form-control">
                             </div>
                             <button type="button" id="btn-guardar-config" class="btn-gold">Guardar Cambios</button>
                         </form>
@@ -1087,7 +1107,7 @@
                         <h4 class="gold-text">Logo del Sitio</h4>
                         <div class="form-group">
                             <label>Logo Actual</label>
-                            <div id="logo-preview" class="logo-premium" style="margin: 10px auto; width: 80px; height: 80px; font-size: 1.8rem;">
+                            <div id="logo-preview" class="logo-premium" style="margin: 10px auto; width: 70px; height: 70px; font-size: 1.5rem;">
                                 <i class="fas fa-utensils"></i>
                             </div>
                         </div>
@@ -1108,14 +1128,14 @@
                         <form id="form-config-credenciales" class="admin-form">
                             <div class="form-group">
                                 <label for="config-usuario">Usuario Administrador</label>
-                                <input type="text" id="config-usuario" class="form-control" value="anelis" readonly>
+                                <input type="text" id="config-usuario" class="form-control">
                             </div>
                             <div class="form-group">
                                 <label for="config-password">Contraseña</label>
-                                <input type="password" id="config-password" class="form-control" value="94052348012">
+                                <input type="password" id="config-password" class="form-control">
                             </div>
                             <small class="gold-accent">Para cambiar la contraseña, modifica el valor y guarda</small>
-                            <button type="button" id="btn-guardar-credenciales" class="btn-gold" style="margin-top: 15px;">Actualizar Credenciales</button>
+                            <button type="button" id="btn-guardar-credenciales" class="btn-gold" style="margin-top: 10px;">Actualizar Credenciales</button>
                         </form>
                     </div>
                 </div>
@@ -1171,12 +1191,12 @@
                     
                     <div class="config-item">
                         <h4 class="gold-text">Vista Previa</h4>
-                        <div style="background: rgba(30,30,30,0.7); padding: 20px; border: 1px solid rgba(212,175,55,0.3);">
-                            <h4 style="font-family: 'Cinzel', serif; color: #D4AF37;">Título de Ejemplo</h4>
-                            <p style="font-family: 'Lora', serif; color: #C0C0C0;">Este es un texto de ejemplo que muestra cómo se verá el contenido con las fuentes seleccionadas.</p>
-                            <button style="background: transparent; border: 2px solid #D4AF37; color: #D4AF37; padding: 8px 16px; margin-top: 10px;">Botón de Ejemplo</button>
+                        <div style="background: rgba(30,30,30,0.7); padding: 15px; border: 1px solid rgba(212,175,55,0.3); margin-bottom: 10px;">
+                            <h4 style="font-family: 'Cinzel', serif; color: #D4AF37; margin-bottom: 10px;">Título de Ejemplo</h4>
+                            <p style="font-family: 'Lora', serif; color: #C0C0C0; margin-bottom: 10px;">Este es un texto de ejemplo que muestra cómo se verá el contenido con las fuentes seleccionadas.</p>
+                            <button style="background: transparent; border: 2px solid #D4AF37; color: #D4AF37; padding: 6px 12px;">Botón de Ejemplo</button>
                         </div>
-                        <button type="button" id="btn-restaurar-apariencia" class="btn-gold-outline" style="margin-top: 15px;">Restaurar Valores Predeterminados</button>
+                        <button type="button" id="btn-restaurar-apariencia" class="btn-gold-outline">Restaurar Valores Predeterminados</button>
                     </div>
                 </div>
             </div>
@@ -1192,13 +1212,7 @@
     </footer>
 
     <script>
-        // SISTEMA COMPLETO DE ADMINISTRACIÓN
-        
-        // CREDENCIALES POR DEFECTO
-        const CREDENCIALES = {
-            usuario: "anelis",
-            password: "94052348012"
-        };
+        // SISTEMA COMPLETO DE ADMINISTRACIÓN - VERSIÓN ESTABLE PARA GITHUB PAGES
         
         // CLAVES PARA ALMACENAMIENTO LOCAL
         const STORAGE_KEYS = {
@@ -1206,7 +1220,9 @@
             CATEGORIAS: 'zonaTotalCategorias',
             CONFIG: 'zonaTotalConfig',
             CREDENCIALES: 'zonaTotalCredenciales',
-            APARIENCIA: 'zonaTotalApariencia'
+            APARIENCIA: 'zonaTotalApariencia',
+            LOGO: 'zonaTotalLogo',
+            SESSION: 'zonaTotalSession'
         };
         
         // CONFIGURACIÓN POR DEFECTO
@@ -1214,7 +1230,11 @@
             titulo: "ZONA TOTAL",
             subtitulo: "Colección premium de recetas fáciles y organizadas.",
             footerTexto: "Zona Total © 2025",
-            footerSubtitulo: "Plataforma privada de contenido premium.",
+            footerSubtitulo: "Plataforma privada de contenido premium."
+        };
+        
+        // APARIENCIA POR DEFECTO
+        const aparienciaDefault = {
             colores: {
                 dorado: "#D4AF37",
                 fondo: "#0A0A0A",
@@ -1226,19 +1246,25 @@
             }
         };
         
-        // CATEGORÍAS POR DEFECTO
-        const categoriasDefault = {
-            postres: { id: 'postres', nombre: "Postres", icono: "🍰", color: "#D4AF37" },
-            saladas: { id: 'saladas', nombre: "Comidas Saladas", icono: "🍲", color: "#D4AF37" },
-            bebidas: { id: 'bebidas', nombre: "Bebidas", icono: "🥤", color: "#D4AF37" },
-            ensaladas: { id: 'ensaladas', nombre: "Ensaladas", icono: "🥗", color: "#D4AF37" },
-            sopas: { id: 'sopas', nombre: "Sopas y Cremas", icono: "🍛", color: "#D4AF37" },
-            reposteria: { id: 'reposteria', nombre: "Repostería", icono: "🍪", color: "#D4AF37" }
+        // CREDENCIALES POR DEFECTO
+        const credencialesDefault = {
+            usuario: "anelis",
+            password: "94052348012"
         };
         
-        // RECETAS POR DEFECTO
-        const recetasDefault = {
-            1: {
+        // CATEGORÍAS POR DEFECTO
+        const categoriasDefault = [
+            { id: 'postres', nombre: "Postres", icono: "🍰", color: "#D4AF37", orden: 1 },
+            { id: 'saladas', nombre: "Comidas Saladas", icono: "🍲", color: "#D4AF37", orden: 2 },
+            { id: 'bebidas', nombre: "Bebidas", icono: "🥤", color: "#D4AF37", orden: 3 },
+            { id: 'ensaladas', nombre: "Ensaladas", icono: "🥗", color: "#D4AF37", orden: 4 },
+            { id: 'sopas', nombre: "Sopas y Cremas", icono: "🍛", color: "#D4AF37", orden: 5 },
+            { id: 'reposteria', nombre: "Repostería", icono: "🍪", color: "#D4AF37", orden: 6 }
+        ];
+        
+        // RECETAS POR DEFECTO (con imágenes de ejemplo de IMGBB)
+        const recetasDefault = [
+            {
                 id: 1,
                 titulo: "Tarta de Chocolate Intenso",
                 descripcion: "Deliciosa tarta de chocolate negro con base de galleta y crema batida. Perfecta para ocasiones especiales.",
@@ -1247,26 +1273,75 @@
                 categoria: "postres",
                 ingredientes: ["200g de galletas digestive", "100g de mantequilla derretida", "300g de chocolate negro 70%", "200ml de nata para montar", "3 huevos", "100g de azúcar", "Una pizca de sal"],
                 preparacion: ["Triturar las galletas y mezclar con la mantequilla derretida. Presionar en el molde para formar la base.", "Derretir el chocolate a baño maría o en microondas a potencia baja.", "Batir los huevos con el azúcar hasta que espumen.", "Mezclar el chocolate derretido con la nata y luego incorporar a la mezcla de huevos.", "Verter sobre la base de galletas y hornear a 180°C durante 25-30 minutos.", "Dejar enfriar completamente antes de desmoldar y servir."],
-                imagen: null
+                imagen: "https://i.ibb.co/7vqXK3L/chocolate-cake.jpg",
+                fechaCreacion: Date.now()
+            },
+            {
+                id: 2,
+                titulo: "Lasagna Tradicional Italiana",
+                descripcion: "Capas de pasta, salsa boloñesa y bechamel gratinadas al horno.",
+                tiempo: "120 min",
+                porciones: "6 personas",
+                categoria: "saladas",
+                ingredientes: ["12 láminas de pasta para lasaña", "500g de carne picada mixta", "1 cebolla picada", "2 zanahorias picadas", "2 tallos de apio picados", "800g de tomate triturado", "100g de queso parmesano", "300g de mozzarella", "Para la bechamel: 50g mantequilla, 50g harina, 500ml leche"],
+                preparacion: ["Sofreír la cebolla, zanahoria y apio hasta que estén tiernos.", "Añadir la carne y cocinar hasta que pierda el color rojo.", "Incorporar el tomate triturado y cocinar a fuego lento 45 minutos.", "Preparar la bechamel derritiendo la mantequilla, añadiendo harina y luego la leche poco a poco.", "Montar la lasaña alternando pasta, salsa boloñesa, bechamel y queso.", "Hornear a 180°C durante 35-40 minutos hasta que esté dorada."],
+                imagen: "https://i.ibb.co/8c6TQyP/lasagna.jpg",
+                fechaCreacion: Date.now() - 1000000
+            },
+            {
+                id: 3,
+                titulo: "Limonada de Fresa y Menta",
+                descripcion: "Refrescante combinación de limón, fresas y hojas de menta fresca.",
+                tiempo: "15 min",
+                porciones: "4 personas",
+                categoria: "bebidas",
+                ingredientes: ["8 limones", "300g de fresas", "Un puñado de hojas de menta fresca", "100g de azúcar (o al gusto)", "1 litro de agua fría", "Hielo al gusto"],
+                preparacion: ["Exprimir los limones para obtener su jugo.", "Licuar las fresas con un poco de agua hasta obtener un puré.", "En una jarra grande, mezclar el jugo de limón, el puré de fresas y el azúcar hasta disolver.", "Añadir el agua fría y las hojas de menta ligeramente machacadas.", "Refrigerar por al menos 30 minutos antes de servir.", "Servir con hielo y decorar con una fresa y una hoja de menta."],
+                imagen: "https://i.ibb.co/7yJwz3L/lemonade.jpg",
+                fechaCreacion: Date.now() - 2000000
             }
-        };
+        ];
         
-        // FUNCIONES DE ALMACENAMIENTO
+        // FUNCIONES DE ALMACENAMIENTO SEGURO
         function obtenerDatos(clave, porDefecto) {
-            const datosGuardados = localStorage.getItem(clave);
-            return datosGuardados ? JSON.parse(datosGuardados) : porDefecto;
+            try {
+                if (typeof localStorage === 'undefined') {
+                    console.warn('localStorage no disponible, usando datos por defecto');
+                    return Array.isArray(porDefecto) ? [...porDefecto] : { ...porDefecto };
+                }
+                
+                const datosGuardados = localStorage.getItem(clave);
+                if (datosGuardados) {
+                    const parsed = JSON.parse(datosGuardados);
+                    if (parsed !== null && typeof parsed === 'object') {
+                        return parsed;
+                    }
+                }
+            } catch (e) {
+                console.error('Error al cargar datos de ' + clave + ':', e);
+            }
+            return Array.isArray(porDefecto) ? [...porDefecto] : { ...porDefecto };
         }
         
         function guardarDatos(clave, datos) {
-            localStorage.setItem(clave, JSON.stringify(datos));
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    localStorage.setItem(clave, JSON.stringify(datos));
+                    return true;
+                }
+            } catch (e) {
+                console.error('Error al guardar datos en ' + clave + ':', e);
+            }
+            return false;
         }
         
         // CARGAR TODOS LOS DATOS
         let config = obtenerDatos(STORAGE_KEYS.CONFIG, configDefault);
         let categorias = obtenerDatos(STORAGE_KEYS.CATEGORIAS, categoriasDefault);
         let recetas = obtenerDatos(STORAGE_KEYS.RECETAS, recetasDefault);
-        let credenciales = obtenerDatos(STORAGE_KEYS.CREDENCIALES, CREDENCIALES);
-        let apariencia = obtenerDatos(STORAGE_KEYS.APARIENCIA, configDefault);
+        let credenciales = obtenerDatos(STORAGE_KEYS.CREDENCIALES, credencialesDefault);
+        let apariencia = obtenerDatos(STORAGE_KEYS.APARIENCIA, aparienciaDefault);
+        let session = obtenerDatos(STORAGE_KEYS.SESSION, { logueado: false });
         
         // REFERENCIAS A ELEMENTOS DEL DOM
         const loginPanel = document.getElementById('login-panel');
@@ -1280,234 +1355,335 @@
             logo: document.getElementById('logo-premium'),
             footerTexto: document.getElementById('texto-footer'),
             footerSubtitulo: document.getElementById('subtitulo-footer'),
-            menuCategorias: document.getElementById('menu-categorias')
-        };
-        
-        // CONTENEDORES DE RECETAS
-        const contenedores = {
-            postres: document.getElementById('postres-container'),
-            saladas: document.getElementById('saladas-container'),
-            bebidas: document.getElementById('bebidas-container'),
-            ensaladas: document.getElementById('ensaladas-container'),
-            sopas: document.getElementById('sopas-container'),
-            reposteria: document.getElementById('reposteria-container')
+            menuCategorias: document.getElementById('menu-categorias'),
+            seccionesContainer: document.getElementById('secciones-container')
         };
         
         // VARIABLES DE ESTADO
-        let adminLogueado = false;
+        let adminLogueado = session.logueado || false;
         let editandoRecetaId = null;
         let editandoCategoriaId = null;
         
+        // SISTEMA DE IMÁGENES MEJORADO
+        const sistemaImagenes = {
+            esUrl: function(texto) {
+                return texto && (texto.startsWith('http://') || texto.startsWith('https://') || texto.startsWith('//'));
+            },
+            
+            esBase64: function(texto) {
+                return texto && texto.startsWith('data:image');
+            },
+            
+            mostrarImagen: function(elemento, imagen, titulo) {
+                if (!imagen) {
+                    elemento.innerHTML = `<div style="display: flex; align-items: center; justify-content: center; height: 100%; background: linear-gradient(135deg, #D4AF3720, transparent);">
+                        <i class="fas fa-utensils" style="font-size: 3rem; color: #D4AF37;"></i>
+                    </div>`;
+                    return;
+                }
+                
+                if (this.esUrl(imagen)) {
+                    elemento.innerHTML = `<img src="${imagen}" alt="${titulo}" 
+                        onerror="this.onerror=null; this.src=''; this.parentElement.innerHTML='<div style=\'display: flex; align-items: center; justify-content: center; height: 100%;\'><i class=\'fas fa-image\' style=\'font-size: 2rem; color: #666;\'></i></div>'">`;
+                } else if (this.esBase64(imagen)) {
+                    elemento.innerHTML = `<img src="${imagen}" alt="${titulo}">`;
+                }
+            },
+            
+            optimizarYConvertirImagen: function(file, callback) {
+                if (!file) {
+                    callback(null);
+                    return;
+                }
+                
+                if (!file.type.match('image.*')) {
+                    alert('Por favor, sube solo imágenes (JPG, PNG, GIF)');
+                    callback(null);
+                    return;
+                }
+                
+                if (file.size > 500 * 1024) {
+                    if (confirm('La imagen es muy grande (>500KB). ¿Quieres optimizarla automáticamente?')) {
+                        this.optimizarTamanoImagen(file, callback);
+                    } else {
+                        alert('Por favor, sube una imagen menor a 500KB');
+                        callback(null);
+                    }
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    callback(e.target.result);
+                };
+                reader.onerror = function() {
+                    alert('Error al leer la imagen');
+                    callback(null);
+                };
+                reader.readAsDataURL(file);
+            },
+            
+            optimizarTamanoImagen: function(file, callback) {
+                const img = new Image();
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                
+                img.onload = function() {
+                    let width = img.width;
+                    let height = img.height;
+                    const maxWidth = 800;
+                    
+                    if (width > maxWidth) {
+                        height = (height * maxWidth) / width;
+                        width = maxWidth;
+                    }
+                    
+                    canvas.width = width;
+                    canvas.height = height;
+                    
+                    ctx.drawImage(img, 0, 0, width, height);
+                    
+                    const imagenOptimizada = canvas.toDataURL('image/jpeg', 0.7);
+                    callback(imagenOptimizada);
+                };
+                
+                img.onerror = function() {
+                    alert('Error al procesar la imagen');
+                    callback(null);
+                };
+                
+                img.src = URL.createObjectURL(file);
+            }
+        };
+        
         // INICIALIZAR LA APLICACIÓN
         document.addEventListener('DOMContentLoaded', () => {
+            console.log('Inicializando Zona Total...');
+            inicializarLogo();
             aplicarConfiguracion();
-            renderizarCategoriasMenu();
+            renderizarCategorias();
             renderizarRecetas();
             inicializarPanelAdmin();
-            
-            // Verificar si ya está logueado (para desarrollo)
-            const session = sessionStorage.getItem('adminLogueado');
-            if (session === 'true') {
-                adminLogueado = true;
-            }
+            verificarSesion();
+            inicializarEventListeners();
+            console.log('Aplicación inicializada correctamente');
         });
+        
+        // INICIALIZAR LOGO
+        function inicializarLogo() {
+            try {
+                if (typeof localStorage !== 'undefined') {
+                    const logoGuardado = localStorage.getItem(STORAGE_KEYS.LOGO);
+                    if (logoGuardado && sistemaImagenes.esBase64(logoGuardado)) {
+                        elementosPagina.logo.innerHTML = `<img src="${logoGuardado}" alt="Logo Zona Total" style="width: 100%; height: 100%; object-fit: cover;">`;
+                        return;
+                    }
+                }
+            } catch (e) {
+                console.error('Error al cargar logo:', e);
+            }
+            elementosPagina.logo.innerHTML = '<i class="fas fa-utensils"></i>';
+        }
+        
+        // VERIFICAR SESIÓN ACTIVA
+        function verificarSesion() {
+            if (adminLogueado) {
+                document.getElementById('btn-admin-login').innerHTML = '<i class="fas fa-user-cog"></i> Panel Admin';
+            }
+        }
         
         // APLICAR CONFIGURACIÓN
         function aplicarConfiguracion() {
-            // Aplicar textos
-            elementosPagina.titulo.textContent = config.titulo;
-            elementosPagina.subtitulo.textContent = config.subtitulo;
-            elementosPagina.footerTexto.textContent = config.footerTexto;
-            elementosPagina.footerSubtitulo.textContent = config.footerSubtitulo;
+            if (config.titulo) elementosPagina.titulo.textContent = config.titulo;
+            if (config.subtitulo) elementosPagina.subtitulo.textContent = config.subtitulo;
+            if (config.footerTexto) elementosPagina.footerTexto.textContent = config.footerTexto;
+            if (config.footerSubtitulo) elementosPagina.footerSubtitulo.textContent = config.footerSubtitulo;
             
-            // Aplicar colores si existen en apariencia
             if (apariencia.colores) {
-                document.documentElement.style.setProperty('--color-dorado', apariencia.colores.dorado);
-                document.documentElement.style.setProperty('--color-fondo', apariencia.colores.fondo);
-                document.documentElement.style.setProperty('--color-texto', apariencia.colores.texto);
-                
-                // Actualizar estilos en tiempo real
                 const estilo = document.createElement('style');
+                estilo.id = 'estilos-dinamicos';
                 estilo.textContent = `
-                    .gold-text, .titulo-categoria, .admin-title, .admin-tab.active {
+                    .gold-text, .titulo-categoria, .admin-title, .admin-tab.active, .titulo-receta {
                         color: ${apariencia.colores.dorado} !important;
-                    }
-                    body {
-                        background-color: ${apariencia.colores.fondo};
-                        color: ${apariencia.colores.texto};
                     }
                     .btn-gold {
                         background: linear-gradient(135deg, ${apariencia.colores.dorado}, ${oscurecerColor(apariencia.colores.dorado, 20)});
                     }
-                    .btn-gold-outline, .btn-categoria, .btn-admin {
+                    .btn-gold-outline, .btn-categoria, .btn-admin, .btn-ver-receta {
                         border-color: ${apariencia.colores.dorado};
                         color: ${apariencia.colores.dorado};
                     }
-                    .btn-gold-outline:hover, .btn-categoria:hover, .btn-admin:hover {
+                    .btn-gold-outline:hover, .btn-categoria:hover, .btn-admin:hover, .btn-ver-receta:hover {
                         background-color: ${apariencia.colores.dorado};
                         color: ${apariencia.colores.fondo};
                     }
+                    .tarjeta-receta:before {
+                        background: ${apariencia.colores.dorado};
+                    }
+                    .titulo-categoria:after {
+                        background: linear-gradient(to right, transparent, ${apariencia.colores.dorado}, transparent);
+                    }
                 `;
+                
+                const estilosAnteriores = document.getElementById('estilos-dinamicos');
+                if (estilosAnteriores) {
+                    estilosAnteriores.remove();
+                }
+                
                 document.head.appendChild(estilo);
             }
-            
-            // Aplicar fuentes
-            if (apariencia.fuentes) {
-                const link = document.createElement('link');
-                link.rel = 'stylesheet';
+        }
+        
+        // FUNCIÓN PARA OSCURECER COLOR
+        function oscurecerColor(color, porcentaje) {
+            try {
+                let r = parseInt(color.slice(1, 3), 16);
+                let g = parseInt(color.slice(3, 5), 16);
+                let b = parseInt(color.slice(5, 7), 16);
                 
-                let fontUrl = '';
-                if (apariencia.fuentes.titulos === 'Cinzel') {
-                    fontUrl = 'https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&display=swap';
-                } else if (apariencia.fuentes.titulos === 'Playfair Display') {
-                    fontUrl = 'https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;700&display=swap';
-                } else if (apariencia.fuentes.titulos === 'Oswald') {
-                    fontUrl = 'https://fonts.googleapis.com/css2?family=Oswald:wght@400;600&display=swap';
-                } else if (apariencia.fuentes.titulos === 'Montserrat') {
-                    fontUrl = 'https://fonts.googleapis.com/css2?family=Montserrat:wght@400;600&display=swap';
-                }
+                r = Math.floor(r * (100 - porcentaje) / 100);
+                g = Math.floor(g * (100 - porcentaje) / 100);
+                b = Math.floor(b * (100 - porcentaje) / 100);
                 
-                if (fontUrl) {
-                    link.href = fontUrl;
-                    document.head.appendChild(link);
-                    
-                    // Aplicar fuentes a los elementos
-                    document.querySelectorAll('h1, h2, h3, h4, .btn-categoria, .admin-title').forEach(el => {
-                        el.style.fontFamily = `'${apariencia.fuentes.titulos}', serif`;
-                    });
-                }
-                
-                // Fuente para texto
-                let fontTextoUrl = '';
-                if (apariencia.fuentes.texto === 'Lora') {
-                    fontTextoUrl = 'https://fonts.googleapis.com/css2?family=Lora:wght@400;500;600&display=swap';
-                } else if (apariencia.fuentes.texto === 'Roboto') {
-                    fontTextoUrl = 'https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500&display=swap';
-                } else if (apariencia.fuentes.texto === 'Open Sans') {
-                    fontTextoUrl = 'https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;600&display=swap';
-                } else if (apariencia.fuentes.texto === 'Merriweather') {
-                    fontTextoUrl = 'https://fonts.googleapis.com/css2?family=Merriweather:wght@300;400;700&display=swap';
-                }
-                
-                if (fontTextoUrl) {
-                    const linkTexto = document.createElement('link');
-                    linkTexto.rel = 'stylesheet';
-                    linkTexto.href = fontTextoUrl;
-                    document.head.appendChild(linkTexto);
-                    
-                    document.querySelectorAll('body, p, .descripcion-receta, .form-control').forEach(el => {
-                        el.style.fontFamily = `'${apariencia.fuentes.texto}', serif`;
-                    });
-                }
+                return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
+            } catch (e) {
+                return '#B8941F';
             }
         }
         
-        // FUNCIÓN PARA OSCURECER COLOR (para gradientes)
-        function oscurecerColor(color, porcentaje) {
-            let r = parseInt(color.slice(1, 3), 16);
-            let g = parseInt(color.slice(3, 5), 16);
-            let b = parseInt(color.slice(5, 7), 16);
+        // RENDERIZAR CATEGORÍAS
+        function renderizarCategorias() {
+            console.log('Renderizando categorías:', categorias.length);
             
-            r = Math.floor(r * (100 - porcentaje) / 100);
-            g = Math.floor(g * (100 - porcentaje) / 100);
-            b = Math.floor(b * (100 - porcentaje) / 100);
+            categorias.sort((a, b) => (a.orden || 999) - (b.orden || 999));
             
-            return `#${r.toString(16).padStart(2, '0')}${g.toString(16).padStart(2, '0')}${b.toString(16).padStart(2, '0')}`;
-        }
-        
-        // RENDERIZAR CATEGORÍAS EN EL MENÚ
-        function renderizarCategoriasMenu() {
             elementosPagina.menuCategorias.innerHTML = '';
+            elementosPagina.seccionesContainer.innerHTML = '';
             
-            Object.values(categorias).forEach(cat => {
+            categorias.forEach(cat => {
                 const enlace = document.createElement('a');
                 enlace.href = `#${cat.id}`;
                 enlace.className = 'btn-categoria';
                 enlace.innerHTML = `${cat.icono || ''} ${cat.nombre}`;
-                elementosPagina.menuCategorias.appendChild(enlace);
-            });
-            
-            // Actualizar también las secciones
-            Object.values(categorias).forEach(cat => {
-                const seccion = document.getElementById(cat.id);
-                if (seccion) {
-                    const titulo = seccion.querySelector('.titulo-categoria');
-                    if (titulo) {
-                        titulo.innerHTML = `${cat.icono || ''} ${cat.nombre.toUpperCase()}`;
-                        if (cat.color && cat.color !== "#D4AF37") {
-                            titulo.style.color = cat.color;
-                        }
-                    }
+                if (cat.color && cat.color !== "#D4AF37") {
+                    enlace.style.borderColor = cat.color;
+                    enlace.style.color = cat.color;
                 }
+                elementosPagina.menuCategorias.appendChild(enlace);
+                
+                const seccion = document.createElement('section');
+                seccion.id = cat.id;
+                seccion.className = 'seccion-categoria';
+                
+                const titulo = document.createElement('h2');
+                titulo.className = 'titulo-categoria gold-text';
+                titulo.innerHTML = `${cat.icono || ''} ${cat.nombre.toUpperCase()}`;
+                if (cat.color && cat.color !== "#D4AF37") {
+                    titulo.style.color = cat.color;
+                }
+                
+                const contenedor = document.createElement('div');
+                contenedor.className = 'grid-recetas';
+                contenedor.id = `${cat.id}-container`;
+                
+                seccion.appendChild(titulo);
+                seccion.appendChild(contenedor);
+                elementosPagina.seccionesContainer.appendChild(seccion);
             });
         }
         
         // RENDERIZAR RECETAS
         function renderizarRecetas() {
-            // Limpiar contenedores
-            Object.values(contenedores).forEach(contenedor => {
+            console.log('Renderizando recetas:', recetas.length);
+            
+            categorias.forEach(cat => {
+                const contenedor = document.getElementById(`${cat.id}-container`);
                 if (contenedor) contenedor.innerHTML = '';
             });
             
-            // Agrupar recetas por categoría
-            const recetasPorCategoria = {};
-            Object.values(categorias).forEach(cat => {
-                recetasPorCategoria[cat.id] = [];
-            });
+            recetas.sort((a, b) => (b.fechaCreacion || 0) - (a.fechaCreacion || 0));
             
-            Object.values(recetas).forEach(receta => {
-                if (recetasPorCategoria[receta.categoria]) {
-                    recetasPorCategoria[receta.categoria].push(receta);
+            let recetasRenderizadas = 0;
+            
+            recetas.forEach(receta => {
+                const categoria = categorias.find(c => c.id === receta.categoria);
+                if (!categoria) {
+                    console.warn('Receta sin categoría válida:', receta.titulo);
+                    return;
                 }
-            });
-            
-            // Renderizar recetas en cada categoría
-            Object.entries(recetasPorCategoria).forEach(([categoriaId, recetasCat]) => {
-                const contenedor = contenedores[categoriaId];
-                if (contenedor) {
-                    recetasCat.forEach(receta => {
-                        const tarjeta = crearTarjetaReceta(receta);
-                        contenedor.appendChild(tarjeta);
-                    });
+                
+                const contenedor = document.getElementById(`${receta.categoria}-container`);
+                if (!contenedor) {
+                    console.warn('Contenedor no encontrado para categoría:', receta.categoria);
+                    return;
                 }
+                
+                const tarjeta = crearTarjetaReceta(receta, categoria);
+                contenedor.appendChild(tarjeta);
+                recetasRenderizadas++;
             });
             
-            // Actualizar lista en panel admin
+            console.log('Recetas renderizadas:', recetasRenderizadas);
+            
+            if (recetasRenderizadas === 0) {
+                const primeraCategoria = categorias[0];
+                if (primeraCategoria) {
+                    const contenedor = document.getElementById(`${primeraCategoria.id}-container`);
+                    if (contenedor) {
+                        contenedor.innerHTML = `
+                            <div style="grid-column: 1/-1; text-align: center; padding: 40px;">
+                                <h3 class="gold-text">No hay recetas todavía</h3>
+                                <p class="gold-accent">Usa el Panel Admin para agregar tu primera receta</p>
+                                <button id="btn-iniciar-admin" class="btn-gold" style="margin-top: 20px;">
+                                    <i class="fas fa-user-cog"></i> Agregar Recetas
+                                </button>
+                            </div>
+                        `;
+                        
+                        document.getElementById('btn-iniciar-admin').addEventListener('click', () => {
+                            document.getElementById('btn-admin-login').click();
+                        });
+                    }
+                }
+            }
+            
             actualizarListaRecetasAdmin();
         }
         
         // CREAR TARJETA DE RECETA
-        function crearTarjetaReceta(receta) {
+        function crearTarjetaReceta(receta, categoria) {
             const div = document.createElement('div');
             div.className = 'tarjeta-receta';
             div.dataset.id = receta.id;
             
-            const categoria = categorias[receta.categoria];
             const colorCategoria = categoria?.color || '#D4AF37';
             
-            let imagenHTML = '<div class="imagen-receta">';
-            if (fileInput.files && fileInput.files[0]) {
-    optimizarYConvertirImagen(fileInput.files[0], function(base64) {
-        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, base64);
-    });
-} else {
-    // Verificar si hay URL
-    const imagenUrl = document.getElementById('receta-imagen-url').value.trim();
-    if (imagenUrl) {
-        // Usar URL en lugar de Base64
-        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenUrl);
-    } else {
-        // Usar imagen existente o null
-        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenBase64);
-    }
-}
+            let imagenHTML = '';
+            if (receta.imagen) {
+                imagenHTML = `<div class="imagen-receta" id="img-${receta.id}"></div>`;
+            } else {
+                imagenHTML = `<div class="imagen-receta" style="background: linear-gradient(135deg, ${colorCategoria}20, transparent);">
+                    <i class="fas fa-utensils" style="font-size: 3rem; color: ${colorCategoria}"></i>
+                </div>`;
+            }
             
             div.innerHTML = `
                 ${imagenHTML}
-                <h3 class="titulo-receta" style="color: ${colorCategoria}">${receta.titulo}</h3>
-                <p class="descripcion-receta">${receta.descripcion}</p>
-                <button class="btn-gold-outline btn-ver-receta">Ver receta</button>
+                <div class="contenido-receta">
+                    <h3 class="titulo-receta" style="color: ${colorCategoria}">${receta.titulo}</h3>
+                    <p class="descripcion-receta">${receta.descripcion}</p>
+                    <button class="btn-ver-receta">Ver receta</button>
+                </div>
             `;
+            
+            if (receta.imagen) {
+                setTimeout(() => {
+                    const imgElement = div.querySelector('.imagen-receta');
+                    if (imgElement) {
+                        sistemaImagenes.mostrarImagen(imgElement, receta.imagen, receta.titulo);
+                    }
+                }, 100);
+            }
             
             div.querySelector('.btn-ver-receta').addEventListener('click', () => {
                 mostrarRecetaModal(receta.id);
@@ -1518,10 +1694,13 @@
         
         // MOSTRAR RECETA EN MODAL
         function mostrarRecetaModal(id) {
-            const receta = recetas[id];
-            if (!receta) return;
+            const receta = recetas.find(r => r.id === id);
+            if (!receta) {
+                alert('Receta no encontrada');
+                return;
+            }
             
-            const categoria = categorias[receta.categoria];
+            const categoria = categorias.find(c => c.id === receta.categoria);
             
             document.getElementById('modal-titulo').textContent = receta.titulo;
             document.getElementById('modal-descripcion').textContent = receta.descripcion;
@@ -1529,31 +1708,28 @@
             document.getElementById('modal-porciones').textContent = `👥 Porciones: ${receta.porciones}`;
             document.getElementById('modal-categoria').textContent = `📁 Categoría: ${categoria?.nombre || receta.categoria}`;
             
-            // Actualizar imagen
             const modalImagen = document.getElementById('modal-imagen');
-            if (receta.imagen) {
-                modalImagen.innerHTML = `<img src="${receta.imagen}" alt="${receta.titulo}" onerror="this.parentElement.innerHTML='<span>Imagen no disponible</span>'">`;
-            } else {
-                modalImagen.innerHTML = `<span>${receta.titulo}</span>`;
-            }
+            sistemaImagenes.mostrarImagen(modalImagen, receta.imagen, receta.titulo);
             
-            // Actualizar ingredientes
             const ingredientesList = document.getElementById('modal-ingredientes');
             ingredientesList.innerHTML = '';
-            receta.ingredientes.forEach(ingrediente => {
-                const li = document.createElement('li');
-                li.textContent = ingrediente;
-                ingredientesList.appendChild(li);
-            });
+            if (receta.ingredientes && Array.isArray(receta.ingredientes)) {
+                receta.ingredientes.forEach(ingrediente => {
+                    const li = document.createElement('li');
+                    li.textContent = ingrediente;
+                    ingredientesList.appendChild(li);
+                });
+            }
             
-            // Actualizar preparación
             const preparacionList = document.getElementById('modal-preparacion');
             preparacionList.innerHTML = '';
-            receta.preparacion.forEach(paso => {
-                const li = document.createElement('li');
-                li.textContent = paso;
-                preparacionList.appendChild(li);
-            });
+            if (receta.preparacion && Array.isArray(receta.preparacion)) {
+                receta.preparacion.forEach(paso => {
+                    const li = document.createElement('li');
+                    li.textContent = paso;
+                    preparacionList.appendChild(li);
+                });
+            }
             
             modal.style.display = 'block';
             document.body.style.overflow = 'hidden';
@@ -1561,23 +1737,22 @@
         
         // INICIALIZAR PANEL ADMIN
         function inicializarPanelAdmin() {
-            // Cargar categorías en el select
+            console.log('Inicializando panel admin...');
+            
             const selectCategoria = document.getElementById('receta-categoria');
             selectCategoria.innerHTML = '<option value="">Seleccione una categoría</option>';
-            Object.values(categorias).forEach(cat => {
+            categorias.forEach(cat => {
                 const option = document.createElement('option');
                 option.value = cat.id;
                 option.textContent = cat.nombre;
                 selectCategoria.appendChild(option);
             });
             
-            // Cargar datos de configuración
-            document.getElementById('config-titulo').value = config.titulo;
-            document.getElementById('config-subtitulo').value = config.subtitulo;
-            document.getElementById('config-usuario').value = credenciales.usuario;
-            document.getElementById('config-password').value = credenciales.password;
+            document.getElementById('config-titulo').value = config.titulo || '';
+            document.getElementById('config-subtitulo').value = config.subtitulo || '';
+            document.getElementById('config-usuario').value = credenciales.usuario || '';
+            document.getElementById('config-password').value = credenciales.password || '';
             
-            // Cargar configuración de apariencia
             if (apariencia.colores) {
                 document.getElementById('config-color-dorado').value = apariencia.colores.dorado;
                 document.getElementById('config-color-fondo').value = apariencia.colores.fondo;
@@ -1589,25 +1764,25 @@
                 document.getElementById('config-fuente-texto').value = apariencia.fuentes.texto;
             }
             
-            // Inicializar lista de categorías en admin
             actualizarListaCategoriasAdmin();
+            
+            console.log('Panel admin inicializado');
         }
         
         // ACTUALIZAR LISTA DE RECETAS EN ADMIN
         function actualizarListaRecetasAdmin() {
             const lista = document.getElementById('admin-recetas-list');
+            if (!lista) return;
+            
             lista.innerHTML = '';
             
-            // Ordenar recetas por ID (más recientes primero)
-            const recetasOrdenadas = Object.values(recetas).sort((a, b) => b.id - a.id);
-            
-            if (recetasOrdenadas.length === 0) {
+            if (recetas.length === 0) {
                 lista.innerHTML = '<p class="gold-accent" style="text-align: center; padding: 20px;">No hay recetas agregadas todavía.</p>';
                 return;
             }
             
-            recetasOrdenadas.forEach(receta => {
-                const categoria = categorias[receta.categoria];
+            recetas.forEach(receta => {
+                const categoria = categorias.find(c => c.id === receta.categoria);
                 const item = document.createElement('div');
                 item.className = 'admin-receta-item';
                 item.innerHTML = `
@@ -1624,15 +1799,14 @@
                 lista.appendChild(item);
             });
             
-            // Añadir eventos
-            document.querySelectorAll('.btn-editar').forEach(btn => {
+            document.querySelectorAll('#admin-recetas-list .btn-editar').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.dataset.id);
                     cargarRecetaParaEditar(id);
                 });
             });
             
-            document.querySelectorAll('.btn-eliminar').forEach(btn => {
+            document.querySelectorAll('#admin-recetas-list .btn-eliminar').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const id = parseInt(this.dataset.id);
                     eliminarReceta(id);
@@ -1643,9 +1817,11 @@
         // ACTUALIZAR LISTA DE CATEGORÍAS EN ADMIN
         function actualizarListaCategoriasAdmin() {
             const lista = document.getElementById('admin-categorias-list');
+            if (!lista) return;
+            
             lista.innerHTML = '';
             
-            Object.values(categorias).forEach(cat => {
+            categorias.forEach(cat => {
                 const item = document.createElement('div');
                 item.className = 'admin-receta-item';
                 item.innerHTML = `
@@ -1655,14 +1831,13 @@
                     </div>
                     <div class="admin-receta-actions">
                         <button class="btn-editar" data-categoria="${cat.id}">Editar</button>
-                        ${Object.keys(categorias).length > 1 ? `<button class="btn-eliminar" data-categoria="${cat.id}">Eliminar</button>` : ''}
+                        ${categorias.length > 1 ? `<button class="btn-eliminar" data-categoria="${cat.id}">Eliminar</button>` : ''}
                     </div>
                 `;
                 
                 lista.appendChild(item);
             });
             
-            // Añadir eventos
             document.querySelectorAll('#admin-categorias-list .btn-editar').forEach(btn => {
                 btn.addEventListener('click', function() {
                     const catId = this.dataset.categoria;
@@ -1680,7 +1855,7 @@
         
         // CARGAR RECETA PARA EDITAR
         function cargarRecetaParaEditar(id) {
-            const receta = recetas[id];
+            const receta = recetas.find(r => r.id === id);
             if (!receta) return;
             
             editandoRecetaId = id;
@@ -1693,26 +1868,23 @@
             document.getElementById('receta-porciones').value = receta.porciones;
             document.getElementById('receta-ingredientes').value = receta.ingredientes.join('; ');
             document.getElementById('receta-preparacion').value = receta.preparacion.join('; ');
+            document.getElementById('receta-imagen-url').value = sistemaImagenes.esUrl(receta.imagen) ? receta.imagen : '';
             
-            // Mostrar imagen si existe
             const preview = document.getElementById('imagen-preview');
-            if (receta.imagen) {
+            if (receta.imagen && sistemaImagenes.esBase64(receta.imagen)) {
                 preview.src = receta.imagen;
                 preview.style.display = 'block';
             } else {
                 preview.style.display = 'none';
             }
             
-            // Cambiar a pestaña de recetas
             cambiarTab('recetas');
-            
-            // Scroll al formulario
             document.getElementById('form-receta').scrollIntoView({ behavior: 'smooth' });
         }
         
         // CARGAR CATEGORÍA PARA EDITAR
         function cargarCategoriaParaEditar(id) {
-            const categoria = categorias[id];
+            const categoria = categorias.find(c => c.id === id);
             if (!categoria) return;
             
             editandoCategoriaId = id;
@@ -1722,7 +1894,6 @@
             document.getElementById('categoria-icono').value = categoria.icono || '';
             document.getElementById('categoria-color').value = categoria.color || '#D4AF37';
             
-            // Cambiar a pestaña de categorías
             cambiarTab('categorias');
         }
         
@@ -1732,27 +1903,28 @@
                 return;
             }
             
-            delete recetas[id];
-            guardarDatos(STORAGE_KEYS.RECETAS, recetas);
-            renderizarRecetas();
-            
-            if (editandoRecetaId === id) {
-                cancelarEdicionReceta();
+            const indice = recetas.findIndex(r => r.id === id);
+            if (indice !== -1) {
+                recetas.splice(indice, 1);
+                guardarDatos(STORAGE_KEYS.RECETAS, recetas);
+                renderizarRecetas();
+                
+                if (editandoRecetaId === id) {
+                    cancelarEdicionReceta();
+                }
+                
+                alert('Receta eliminada exitosamente');
             }
-            
-            alert('Receta eliminada exitosamente');
         }
         
         // ELIMINAR CATEGORÍA
         function eliminarCategoria(id) {
-            // Verificar que no sea la única categoría
-            if (Object.keys(categorias).length <= 1) {
+            if (categorias.length <= 1) {
                 alert('No puedes eliminar la única categoría existente.');
                 return;
             }
             
-            // Verificar que no haya recetas en esta categoría
-            const recetasEnCategoria = Object.values(recetas).filter(r => r.categoria === id);
+            const recetasEnCategoria = recetas.filter(r => r.categoria === id);
             if (recetasEnCategoria.length > 0) {
                 alert(`No puedes eliminar esta categoría porque tiene ${recetasEnCategoria.length} recetas asociadas. Primero mueve o elimina esas recetas.`);
                 return;
@@ -1762,27 +1934,29 @@
                 return;
             }
             
-            delete categorias[id];
-            guardarDatos(STORAGE_KEYS.CATEGORIAS, categorias);
-            renderizarCategoriasMenu();
-            actualizarListaCategoriasAdmin();
-            
-            // Actualizar select de categorías en formulario de recetas
-            const selectCategoria = document.getElementById('receta-categoria');
-            selectCategoria.innerHTML = '<option value="">Seleccione una categoría</option>';
-            Object.values(categorias).forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = cat.nombre;
-                selectCategoria.appendChild(option);
-            });
-            
-            if (editandoCategoriaId === id) {
-                editandoCategoriaId = null;
-                document.getElementById('form-categoria').reset();
+            const indice = categorias.findIndex(c => c.id === id);
+            if (indice !== -1) {
+                categorias.splice(indice, 1);
+                guardarDatos(STORAGE_KEYS.CATEGORIAS, categorias);
+                renderizarCategorias();
+                actualizarListaCategoriasAdmin();
+                
+                const selectCategoria = document.getElementById('receta-categoria');
+                selectCategoria.innerHTML = '<option value="">Seleccione una categoría</option>';
+                categorias.forEach(cat => {
+                    const option = document.createElement('option');
+                    option.value = cat.id;
+                    option.textContent = cat.nombre;
+                    selectCategoria.appendChild(option);
+                });
+                
+                if (editandoCategoriaId === id) {
+                    editandoCategoriaId = null;
+                    document.getElementById('form-categoria').reset();
+                }
+                
+                alert('Categoría eliminada exitosamente');
             }
-            
-            alert('Categoría eliminada exitosamente');
         }
         
         // CANCELAR EDICIÓN DE RECETA
@@ -1790,130 +1964,330 @@
             editandoRecetaId = null;
             document.getElementById('form-receta').reset();
             document.getElementById('receta-id').value = '';
+            document.getElementById('receta-imagen-url').value = '';
             document.getElementById('imagen-preview').style.display = 'none';
         }
         
         // CAMBIAR PESTAÑA EN PANEL ADMIN
         function cambiarTab(tabId) {
-            // Ocultar todas las pestañas
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
+            document.querySelectorAll('.tab-content').forEach(tab => tab.classList.remove('active'));
+            document.querySelectorAll('.admin-tab').forEach(btn => btn.classList.remove('active'));
             
-            // Remover activo de todos los botones
-            document.querySelectorAll('.admin-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
+            const tabElement = document.getElementById(`tab-${tabId}`);
+            const tabButton = document.querySelector(`.admin-tab[data-tab="${tabId}"]`);
             
-            // Mostrar pestaña seleccionada
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            // Activar botón correspondiente
-            document.querySelector(`.admin-tab[data-tab="${tabId}"]`).classList.add('active');
+            if (tabElement) tabElement.classList.add('active');
+            if (tabButton) tabButton.classList.add('active');
         }
         
-        // CONVERTIR IMAGEN A BASE64
-        function convertirImagenABase64(file, callback) {
-            const reader = new FileReader();
-            reader.onload = function(e) {
-                callback(e.target.result);
-            };
-            reader.readAsDataURL(file);
-        }
-        
-        // EVENT LISTENERS
-        
-        // Mostrar login al hacer clic en botón admin
-        document.getElementById('btn-admin-login').addEventListener('click', () => {
-            if (!adminLogueado) {
-                loginPanel.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            } else {
-                adminPanel.style.display = 'block';
-                document.body.style.overflow = 'hidden';
-            }
-        });
-        
-        // Login
-        document.getElementById('login-form').addEventListener('submit', (e) => {
-            e.preventDefault();
+        // INICIALIZAR EVENT LISTENERS
+        function inicializarEventListeners() {
+            console.log('Inicializando event listeners...');
             
-            const usuario = document.getElementById('login-usuario').value;
-            const password = document.getElementById('login-password').value;
-            
-            if (usuario === credenciales.usuario && password === credenciales.password) {
-                adminLogueado = true;
-                sessionStorage.setItem('adminLogueado', 'true');
-                loginPanel.style.display = 'none';
-                adminPanel.style.display = 'block';
-                document.getElementById('login-form').reset();
-            } else {
-                alert('Usuario o contraseña incorrectos');
-            }
-        });
-        
-        // Cerrar login
-        document.getElementById('btn-cerrar-login').addEventListener('click', () => {
-            loginPanel.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Cerrar admin panel
-        document.getElementById('btn-cerrar-admin').addEventListener('click', () => {
-            adminPanel.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Cerrar modal receta
-        document.querySelector('.cerrar-modal').addEventListener('click', () => {
-            modal.style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-        
-        // Cerrar modal al hacer clic fuera
-        modal.addEventListener('click', (e) => {
-            if (e.target === modal) {
-                modal.style.display = 'none';
-                document.body.style.overflow = 'auto';
-            }
-        });
-        
-        // Cambiar pestañas admin
-        document.querySelectorAll('.admin-tab').forEach(tab => {
-            tab.addEventListener('click', function() {
-                const tabId = this.dataset.tab;
-                cambiarTab(tabId);
-            });
-        });
-        
-        // Formulario receta
-        document.getElementById('form-receta').addEventListener('submit', (e) => {
-            e.preventDefault();
-            
-            const id = editandoRecetaId || Date.now();
-            const titulo = document.getElementById('receta-titulo').value;
-            const descripcion = document.getElementById('receta-descripcion').value;
-            const tiempo = document.getElementById('receta-tiempo').value;
-            const porciones = document.getElementById('receta-porciones').value;
-            const categoria = document.getElementById('receta-categoria').value;
-            const ingredientes = document.getElementById('receta-ingredientes').value.split(';').map(i => i.trim()).filter(i => i);
-            const preparacion = document.getElementById('receta-preparacion').value.split(';').map(p => p.trim()).filter(p => p);
-            
-            // Obtener imagen
-            const fileInput = document.getElementById('receta-imagen');
-            let imagenBase64 = recetas[id]?.imagen || null;
-            
-            if (fileInput.files && fileInput.files[0]) {
-                convertirImagenABase64(fileInput.files[0], function(base64) {
-                    guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, base64);
+            const btnAdminLogin = document.getElementById('btn-admin-login');
+            if (btnAdminLogin) {
+                btnAdminLogin.addEventListener('click', () => {
+                    if (!adminLogueado) {
+                        loginPanel.style.display = 'block';
+                        document.body.style.overflow = 'hidden';
+                    } else {
+                        adminPanel.style.display = 'block';
+                        document.body.style.overflow = 'hidden';
+                    }
                 });
-            } else {
-                guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenBase64);
             }
-        });
+            
+            const loginForm = document.getElementById('login-form');
+            if (loginForm) {
+                loginForm.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const usuario = document.getElementById('login-usuario').value;
+                    const password = document.getElementById('login-password').value;
+                    
+                    if (usuario === credenciales.usuario && password === credenciales.password) {
+                        adminLogueado = true;
+                        session.logueado = true;
+                        guardarDatos(STORAGE_KEYS.SESSION, session);
+                        
+                        if (btnAdminLogin) {
+                            btnAdminLogin.innerHTML = '<i class="fas fa-user-cog"></i> Panel Admin';
+                        }
+                        
+                        loginPanel.style.display = 'none';
+                        adminPanel.style.display = 'block';
+                        loginForm.reset();
+                        alert('¡Bienvenida Anelis!');
+                    } else {
+                        alert('Usuario o contraseña incorrectos');
+                    }
+                });
+            }
+            
+            const btnCerrarLogin = document.getElementById('btn-cerrar-login');
+            if (btnCerrarLogin) {
+                btnCerrarLogin.addEventListener('click', () => {
+                    loginPanel.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+            
+            const btnCerrarAdmin = document.getElementById('btn-cerrar-admin');
+            if (btnCerrarAdmin) {
+                btnCerrarAdmin.addEventListener('click', () => {
+                    adminPanel.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+            
+            const cerrarModal = document.querySelector('.cerrar-modal');
+            if (cerrarModal) {
+                cerrarModal.addEventListener('click', () => {
+                    modal.style.display = 'none';
+                    document.body.style.overflow = 'auto';
+                });
+            }
+            
+            if (modal) {
+                modal.addEventListener('click', (e) => {
+                    if (e.target === modal) {
+                        modal.style.display = 'none';
+                        document.body.style.overflow = 'auto';
+                    }
+                });
+            }
+            
+            document.querySelectorAll('.admin-tab').forEach(tab => {
+                tab.addEventListener('click', function() {
+                    const tabId = this.dataset.tab;
+                    cambiarTab(tabId);
+                });
+            });
+            
+            const formReceta = document.getElementById('form-receta');
+            if (formReceta) {
+                formReceta.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const id = editandoRecetaId || Date.now();
+                    const titulo = document.getElementById('receta-titulo').value.trim();
+                    const descripcion = document.getElementById('receta-descripcion').value.trim();
+                    const tiempo = document.getElementById('receta-tiempo').value.trim();
+                    const porciones = document.getElementById('receta-porciones').value.trim();
+                    const categoria = document.getElementById('receta-categoria').value;
+                    const ingredientes = document.getElementById('receta-ingredientes').value.split(';').map(i => i.trim()).filter(i => i);
+                    const preparacion = document.getElementById('receta-preparacion').value.split(';').map(p => p.trim()).filter(p => p);
+                    
+                    if (!titulo || !descripcion || !tiempo || !porciones || !categoria || ingredientes.length === 0 || preparacion.length === 0) {
+                        alert('Por favor completa todos los campos obligatorios (*)');
+                        return;
+                    }
+                    
+                    const fileInput = document.getElementById('receta-imagen');
+                    const imagenUrl = document.getElementById('receta-imagen-url').value.trim();
+                    const recetaExistente = recetas.find(r => r.id === id);
+                    let imagenFinal = recetaExistente?.imagen || null;
+                    
+                    if (fileInput.files && fileInput.files[0]) {
+                        sistemaImagenes.optimizarYConvertirImagen(fileInput.files[0], function(base64) {
+                            guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, base64);
+                        });
+                    } else if (imagenUrl) {
+                        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenUrl);
+                    } else {
+                        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenFinal);
+                    }
+                });
+            }
+            
+            document.getElementById('btn-cancelar-edicion').addEventListener('click', cancelarEdicionReceta);
+            
+            document.getElementById('receta-imagen').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const preview = document.getElementById('imagen-preview');
+                        preview.src = e.target.result;
+                        preview.style.display = 'block';
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            const formCategoria = document.getElementById('form-categoria');
+            if (formCategoria) {
+                formCategoria.addEventListener('submit', (e) => {
+                    e.preventDefault();
+                    
+                    const id = editandoCategoriaId || document.getElementById('categoria-nombre').value.toLowerCase().replace(/\s+/g, '_');
+                    const nombre = document.getElementById('categoria-nombre').value.trim();
+                    const icono = document.getElementById('categoria-icono').value.trim();
+                    const color = document.getElementById('categoria-color').value;
+                    
+                    if (!nombre) {
+                        alert('Por favor ingresa un nombre para la categoría');
+                        return;
+                    }
+                    
+                    const categoriaData = { 
+                        id, 
+                        nombre, 
+                        icono, 
+                        color,
+                        orden: categorias.length + 1
+                    };
+                    
+                    if (editandoCategoriaId) {
+                        const indice = categorias.findIndex(c => c.id === id);
+                        if (indice !== -1) {
+                            categoriaData.orden = categorias[indice].orden;
+                            categorias[indice] = categoriaData;
+                        }
+                    } else {
+                        if (categorias.find(c => c.id === id)) {
+                            alert('Ya existe una categoría con ese nombre. Por favor usa un nombre diferente.');
+                            return;
+                        }
+                        categorias.push(categoriaData);
+                    }
+                    
+                    if (guardarDatos(STORAGE_KEYS.CATEGORIAS, categorias)) {
+                        renderizarCategorias();
+                        actualizarListaCategoriasAdmin();
+                        
+                        const selectCategoria = document.getElementById('receta-categoria');
+                        selectCategoria.innerHTML = '<option value="">Seleccione una categoría</option>';
+                        categorias.forEach(cat => {
+                            const option = document.createElement('option');
+                            option.value = cat.id;
+                            option.textContent = cat.nombre;
+                            selectCategoria.appendChild(option);
+                        });
+                        
+                        alert(editandoCategoriaId ? 'Categoría actualizada exitosamente' : 'Categoría agregada exitosamente');
+                        
+                        document.getElementById('form-categoria').reset();
+                        editandoCategoriaId = null;
+                    } else {
+                        alert('Error al guardar la categoría. Inténtalo de nuevo.');
+                    }
+                });
+            }
+            
+            document.getElementById('btn-guardar-config').addEventListener('click', function() {
+                config.titulo = document.getElementById('config-titulo').value.trim() || configDefault.titulo;
+                config.subtitulo = document.getElementById('config-subtitulo').value.trim() || configDefault.subtitulo;
+                
+                if (guardarDatos(STORAGE_KEYS.CONFIG, config)) {
+                    aplicarConfiguracion();
+                    alert('Configuración del sitio actualizada');
+                } else {
+                    alert('Error al guardar la configuración');
+                }
+            });
+            
+            document.getElementById('btn-guardar-credenciales').addEventListener('click', function() {
+                const nuevoUsuario = document.getElementById('config-usuario').value.trim();
+                const nuevoPassword = document.getElementById('config-password').value.trim();
+                
+                if (!nuevoUsuario || !nuevoPassword) {
+                    alert('Por favor ingresa un usuario y contraseña válidos');
+                    return;
+                }
+                
+                credenciales.usuario = nuevoUsuario;
+                credenciales.password = nuevoPassword;
+                
+                if (guardarDatos(STORAGE_KEYS.CREDENCIALES, credenciales)) {
+                    alert('Credenciales actualizadas. Deberás iniciar sesión nuevamente.');
+                    adminLogueado = false;
+                    session.logueado = false;
+                    guardarDatos(STORAGE_KEYS.SESSION, session);
+                    adminPanel.style.display = 'none';
+                    document.getElementById('btn-admin-login').innerHTML = '<i class="fas fa-user-cog"></i> Admin';
+                } else {
+                    alert('Error al actualizar las credenciales');
+                }
+            });
+            
+            document.getElementById('btn-aplicar-colores').addEventListener('click', function() {
+                apariencia.colores = {
+                    dorado: document.getElementById('config-color-dorado').value,
+                    fondo: document.getElementById('config-color-fondo').value,
+                    texto: document.getElementById('config-color-texto').value
+                };
+                
+                if (guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia)) {
+                    aplicarConfiguracion();
+                    alert('Colores aplicados exitosamente');
+                } else {
+                    alert('Error al guardar los colores');
+                }
+            });
+            
+            document.getElementById('btn-aplicar-fuentes').addEventListener('click', function() {
+                apariencia.fuentes = {
+                    titulos: document.getElementById('config-fuente-titulos').value,
+                    texto: document.getElementById('config-fuente-texto').value
+                };
+                
+                if (guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia)) {
+                    aplicarConfiguracion();
+                    alert('Fuentes aplicadas exitosamente');
+                } else {
+                    alert('Error al guardar las fuentes');
+                }
+            });
+            
+            document.getElementById('btn-restaurar-apariencia').addEventListener('click', function() {
+                if (confirm('¿Restaurar la apariencia a los valores predeterminados? Se perderán los cambios personalizados.')) {
+                    apariencia = { ...aparienciaDefault };
+                    if (guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia)) {
+                        aplicarConfiguracion();
+                        inicializarPanelAdmin();
+                        alert('Apariencia restaurada a valores predeterminados');
+                    }
+                }
+            });
+            
+            document.getElementById('config-logo').addEventListener('change', function(e) {
+                const file = e.target.files[0];
+                if (file) {
+                    sistemaImagenes.optimizarYConvertirImagen(file, function(base64) {
+                        if (base64) {
+                            localStorage.setItem(STORAGE_KEYS.LOGO, base64);
+                            
+                            const logoDiv = document.getElementById('logo-premium');
+                            logoDiv.innerHTML = `<img src="${base64}" alt="Logo Zona Total" style="width: 100%; height: 100%; object-fit: cover;">`;
+                            
+                            const logoPreview = document.getElementById('logo-preview');
+                            logoPreview.innerHTML = `<img src="${base64}" alt="Logo Preview" style="width: 100%; height: 100%; object-fit: cover;">`;
+                            
+                            alert('Logo actualizado exitosamente');
+                        }
+                    });
+                }
+            });
+            
+            document.getElementById('logo-preview').addEventListener('click', function() {
+                if (confirm('¿Restaurar el logo por defecto?')) {
+                    localStorage.removeItem(STORAGE_KEYS.LOGO);
+                    elementosPagina.logo.innerHTML = '<i class="fas fa-utensils"></i>';
+                    
+                    const logoPreview = document.getElementById('logo-preview');
+                    logoPreview.innerHTML = '<i class="fas fa-utensils"></i>';
+                    
+                    alert('Logo restaurado a valores predeterminados');
+                }
+            });
+            
+            console.log('Event listeners inicializados');
+        }
         
+        // FUNCIÓN PARA GUARDAR RECETA
         function guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagen) {
-            recetas[id] = {
+            const recetaData = {
                 id,
                 titulo,
                 descripcion,
@@ -1922,151 +2296,46 @@
                 categoria,
                 ingredientes,
                 preparacion,
-                imagen
+                imagen,
+                fechaCreacion: Date.now()
             };
             
-            guardarDatos(STORAGE_KEYS.RECETAS, recetas);
-            renderizarRecetas();
-            
-            alert(editandoRecetaId ? 'Receta actualizada exitosamente' : 'Receta agregada exitosamente');
-            
-            if (!editandoRecetaId) {
-                document.getElementById('form-receta').reset();
+            if (editandoRecetaId) {
+                const indice = recetas.findIndex(r => r.id === id);
+                if (indice !== -1) {
+                    recetas[indice] = recetaData;
+                }
+            } else {
+                recetas.push(recetaData);
             }
             
-            editandoRecetaId = null;
-            document.getElementById('imagen-preview').style.display = 'none';
+            if (guardarDatos(STORAGE_KEYS.RECETAS, recetas)) {
+                renderizarRecetas();
+                alert(editandoRecetaId ? 'Receta actualizada exitosamente' : 'Receta agregada exitosamente');
+                
+                if (!editandoRecetaId) {
+                    document.getElementById('form-receta').reset();
+                }
+                
+                editandoRecetaId = null;
+                document.getElementById('imagen-preview').style.display = 'none';
+                document.getElementById('receta-imagen-url').value = '';
+            } else {
+                alert('Error al guardar la receta. Inténtalo de nuevo.');
+            }
         }
         
-        // Cancelar edición receta
-        document.getElementById('btn-cancelar-edicion').addEventListener('click', cancelarEdicionReceta);
-        
-        // Preview de imagen
-        document.getElementById('receta-imagen').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(e) {
-                    const preview = document.getElementById('imagen-preview');
-                    preview.src = e.target.result;
-                    preview.style.display = 'block';
-                };
-                reader.readAsDataURL(file);
-            }
-        });
-        
-        // Formulario categoría
-        document.getElementById('form-categoria').addEventListener('submit', (e) => {
-            e.preventDefault();
+        // INICIALIZACIÓN ADICIONAL
+        window.addEventListener('load', function() {
+            console.log('Página completamente cargada');
             
-            const id = editandoCategoriaId || document.getElementById('categoria-nombre').value.toLowerCase().replace(/\s+/g, '_');
-            const nombre = document.getElementById('categoria-nombre').value;
-            const icono = document.getElementById('categoria-icono').value;
-            const color = document.getElementById('categoria-color').value;
-            
-            categorias[id] = { id, nombre, icono, color };
-            
-            guardarDatos(STORAGE_KEYS.CATEGORIAS, categorias);
-            renderizarCategoriasMenu();
-            actualizarListaCategoriasAdmin();
-            
-            // Actualizar select de categorías en formulario de recetas
-            const selectCategoria = document.getElementById('receta-categoria');
-            selectCategoria.innerHTML = '<option value="">Seleccione una categoría</option>';
-            Object.values(categorias).forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = cat.nombre;
-                selectCategoria.appendChild(option);
-            });
-            
-            alert(editandoCategoriaId ? 'Categoría actualizada exitosamente' : 'Categoría agregada exitosamente');
-            
-            document.getElementById('form-categoria').reset();
-            editandoCategoriaId = null;
-        });
-        
-        // Guardar configuración del sitio
-        document.getElementById('btn-guardar-config').addEventListener('click', function() {
-            config.titulo = document.getElementById('config-titulo').value;
-            config.subtitulo = document.getElementById('config-subtitulo').value;
-            
-            guardarDatos(STORAGE_KEYS.CONFIG, config);
-            aplicarConfiguracion();
-            
-            alert('Configuración del sitio actualizada');
-        });
-        
-        // Guardar credenciales
-        document.getElementById('btn-guardar-credenciales').addEventListener('click', function() {
-            credenciales.usuario = document.getElementById('config-usuario').value;
-            credenciales.password = document.getElementById('config-password').value;
-            
-            guardarDatos(STORAGE_KEYS.CREDENCIALES, credenciales);
-            
-            alert('Credenciales actualizadas. Deberás iniciar sesión nuevamente.');
-            adminLogueado = false;
-            sessionStorage.removeItem('adminLogueado');
-            adminPanel.style.display = 'none';
-        });
-        
-        // Aplicar colores
-        document.getElementById('btn-aplicar-colores').addEventListener('click', function() {
-            apariencia.colores = {
-                dorado: document.getElementById('config-color-dorado').value,
-                fondo: document.getElementById('config-color-fondo').value,
-                texto: document.getElementById('config-color-texto').value
-            };
-            
-            guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia);
-            aplicarConfiguracion();
-            
-            alert('Colores aplicados exitosamente');
-        });
-        
-        // Aplicar fuentes
-        document.getElementById('btn-aplicar-fuentes').addEventListener('click', function() {
-            apariencia.fuentes = {
-                titulos: document.getElementById('config-fuente-titulos').value,
-                texto: document.getElementById('config-fuente-texto').value
-            };
-            
-            guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia);
-            aplicarConfiguracion();
-            
-            alert('Fuentes aplicadas exitosamente');
-        });
-        
-        // Restaurar apariencia predeterminada
-        document.getElementById('btn-restaurar-apariencia').addEventListener('click', function() {
-            if (confirm('¿Restaurar la apariencia a los valores predeterminados? Se perderán los cambios personalizados.')) {
-                apariencia = { ...configDefault };
-                guardarDatos(STORAGE_KEYS.APARIENCIA, apariencia);
-                aplicarConfiguracion();
-                inicializarPanelAdmin();
-                
-                alert('Apariencia restaurada a valores predeterminados');
-            }
-        });
-        
-        // Subir logo
-        document.getElementById('config-logo').addEventListener('change', function(e) {
-            const file = e.target.files[0];
-            if (file) {
-                convertirImagenABase64(file, function(base64) {
-                    // Guardar logo en configuración
-                    config.logo = base64;
-                    guardarDatos(STORAGE_KEYS.CONFIG, config);
-                    
-                    // Actualizar logo en página
-                    const logoDiv = document.getElementById('logo-premium');
-                    logoDiv.innerHTML = `<img src="${base64}" alt="Logo Zona Total" style="width: 100%; height: 100%; object-fit: cover; border-radius: 50%;">`;
-                    
-                    alert('Logo actualizado exitosamente');
-                });
-            }
+            setTimeout(() => {
+                if (document.querySelectorAll('.tarjeta-receta').length === 0 && recetas.length > 0) {
+                    console.log('Forzando re-renderizado...');
+                    renderizarRecetas();
+                }
+            }, 1000);
         });
     </script>
 </body>
-
 </html>
