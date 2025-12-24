@@ -1486,11 +1486,21 @@
             const colorCategoria = categoria?.color || '#D4AF37';
             
             let imagenHTML = '<div class="imagen-receta">';
-            if (receta.imagen) {
-                imagenHTML = `<div class="imagen-receta"><img src="${receta.imagen}" alt="${receta.titulo}" onerror="this.parentElement.innerHTML='<span>Imagen no disponible</span>'"></div>`;
-            } else {
-                imagenHTML = `<div class="imagen-receta" style="background: linear-gradient(135deg, ${colorCategoria}20, transparent);"><span style="color: ${colorCategoria}">${receta.titulo}</span></div>`;
-            }
+            if (fileInput.files && fileInput.files[0]) {
+    optimizarYConvertirImagen(fileInput.files[0], function(base64) {
+        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, base64);
+    });
+} else {
+    // Verificar si hay URL
+    const imagenUrl = document.getElementById('receta-imagen-url').value.trim();
+    if (imagenUrl) {
+        // Usar URL en lugar de Base64
+        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenUrl);
+    } else {
+        // Usar imagen existente o null
+        guardarReceta(id, titulo, descripcion, tiempo, porciones, categoria, ingredientes, preparacion, imagenBase64);
+    }
+}
             
             div.innerHTML = `
                 ${imagenHTML}
