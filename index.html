@@ -3,1791 +3,352 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Zona Total - Recetas y Cocina Premium</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600;700&family=Lora:wght@400;500;600&family=Playfair+Display:wght@400;500;700&display=swap" rel="stylesheet">
+    <title>Academia Élite - Cursos Premium</title>
+    <link rel="stylesheet" href="styles.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <style>
-        /* RESET Y ESTILOS GENERALES */
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        
-        html {
-            scroll-behavior: smooth;
-        }
-        
-        body {
-            font-family: 'Lora', serif;
-            background-color: #0A0A0A;
-            color: #FFFFFF;
-            line-height: 1.6;
-            background-image: linear-gradient(rgba(10,10,10,0.95), rgba(10,10,10,0.95));
-        }
-        
-        h1, h2, h3, h4 {
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            letter-spacing: 1.5px;
-        }
-        
-        .container {
-            width: 90%;
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-        
-        /* ESTILOS DORADO PREMIUM */
-        .gold-text {
-            color: #D4AF37 !important;
-            text-shadow: 0 0 10px rgba(212, 175, 55, 0.3);
-        }
-        
-        .gold-border {
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            box-shadow: 0 0 15px rgba(212, 175, 55, 0.2);
-        }
-        
-        .gold-accent {
-            color: #F4E4A6 !important;
-        }
-        
-        .btn-gold {
-            background: linear-gradient(135deg, #D4AF37, #B8941F);
-            color: #0A0A0A;
-            border: none;
-            padding: 12px 28px;
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            z-index: 1;
-            letter-spacing: 1px;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-        }
-        
-        .btn-gold:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.3);
-        }
-        
-        .btn-gold-outline {
-            background: transparent;
-            border: 2px solid #D4AF37;
-            color: #D4AF37;
-            padding: 10px 24px;
-            font-family: 'Cinzel', serif;
-            font-weight: 600;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            display: inline-block;
-            text-align: center;
-            text-decoration: none;
-        }
-        
-        .btn-gold-outline:hover {
-            background-color: #D4AF37;
-            color: #0A0A0A;
-        }
-        
-        /* ENCABEZADO PREMIUM */
-        header {
-            text-align: center;
-            padding: 40px 0 30px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            margin-bottom: 30px;
-            position: relative;
-        }
-        
-        .logo-premium {
-            width: 100px;
-            height: 100px;
-            margin: 0 auto 20px;
-            border: 2px solid #D4AF37;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #D4AF37;
-            font-size: 2rem;
-            background: rgba(10, 10, 10, 0.8);
-            box-shadow: 0 0 20px rgba(212, 175, 55, 0.4);
-            position: relative;
-            overflow: hidden;
-        }
-        
-        .logo-premium img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        h1 {
-            font-size: 2.8rem;
-            margin-bottom: 10px;
-            background: linear-gradient(to right, #D4AF37, #F4E4A6, #D4AF37);
-            -webkit-background-clip: text;
-            background-clip: text;
-            color: transparent;
-            background-size: 200% auto;
-            animation: shimmer 3s linear infinite;
-        }
-        
-        @keyframes shimmer {
-            to {
-                background-position: 200% center;
-            }
-        }
-        
-        .subtitle {
-            color: #C0C0C0;
-            font-size: 1.1rem;
-            font-weight: 300;
-            font-style: italic;
-            letter-spacing: 1px;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        /* BARRA DE ADMIN */
-        .admin-bar {
-            position: fixed;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-        }
-        
-        .btn-admin {
-            background: rgba(10, 10, 10, 0.9);
-            border: 1px solid #D4AF37;
-            color: #D4AF37;
-            padding: 8px 16px;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            border-radius: 4px;
-            display: inline-block;
-        }
-        
-        .btn-admin:hover {
-            background: #D4AF37;
-            color: #0A0A0A;
-        }
-        
-        /* LOGIN */
-        .login-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-            padding: 40px 20px;
-            overflow-y: auto;
-        }
-        
-        .login-contenido {
-            background: rgba(20, 20, 20, 0.98);
-            max-width: 450px;
-            margin: 80px auto;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 30px;
-            position: relative;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-            text-align: center;
-        }
-        
-        /* PANEL DE ADMINISTRACIÓN COMPLETO */
-        .admin-panel {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 3000;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .admin-contenido {
-            background: rgba(20, 20, 20, 0.98);
-            max-width: 1200px;
-            margin: 0 auto;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 30px;
-            position: relative;
-            box-shadow: 0 0 50px rgba(212, 175, 55, 0.2);
-        }
-        
-        .admin-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 25px;
-            padding-bottom: 15px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-        }
-        
-        .admin-title {
-            font-size: 2rem;
-            color: #D4AF37;
-        }
-        
-        .admin-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            border-bottom: 1px solid rgba(212, 175, 55, 0.3);
-            padding-bottom: 10px;
-            flex-wrap: wrap;
-        }
-        
-        .admin-tab {
-            background: transparent;
-            border: none;
-            color: #B0B0B0;
-            padding: 10px 20px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            display: inline-block;
-        }
-        
-        .admin-tab.active {
-            color: #D4AF37;
-            border-bottom: 2px solid #D4AF37;
-        }
-        
-        .admin-tab:hover {
-            color: #D4AF37;
-        }
-        
-        .tab-content {
-            display: none;
-        }
-        
-        .tab-content.active {
-            display: block;
-        }
-        
-        /* FORMULARIOS */
-        .admin-form {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-        }
-        
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-        
-        .form-group label {
-            color: #D4AF37;
-            font-weight: 500;
-        }
-        
-        .form-control {
-            background: rgba(30, 30, 30, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #FFFFFF;
-            padding: 12px 15px;
-            font-family: 'Lora', serif;
-            font-size: 1rem;
-            transition: all 0.3s ease;
-            width: 100%;
-        }
-        
-        .form-control:focus {
-            outline: none;
-            border-color: #D4AF37;
-            box-shadow: 0 0 10px rgba(212, 175, 55, 0.2);
-        }
-        
-        textarea.form-control {
-            min-height: 120px;
-            resize: vertical;
-        }
-        
-        .form-row {
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-        }
-        
-        .form-row .form-group {
-            flex: 1;
-            min-width: 250px;
-        }
-        
-        /* MENÚ DE CATEGORÍAS */
-        .menu-categorias {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 15px;
-            margin-bottom: 50px;
-        }
-        
-        .btn-categoria {
-            background-color: transparent;
-            border: 2px solid rgba(212, 175, 55, 0.7);
-            color: #FFFFFF;
-            padding: 12px 24px;
-            font-family: 'Cinzel', serif;
-            font-size: 1rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-decoration: none;
-            position: relative;
-            min-width: 140px;
-            text-align: center;
-            display: inline-block;
-        }
-        
-        .btn-categoria:hover {
-            border-color: #D4AF37;
-            color: #D4AF37;
-            transform: translateY(-3px);
-            box-shadow: 0 10px 20px rgba(212, 175, 55, 0.2);
-        }
-        
-        /* SECCIONES DE RECETAS */
-        .seccion-categoria {
-            margin-bottom: 70px;
-            scroll-margin-top: 20px;
-        }
-        
-        .titulo-categoria {
-            font-size: 2.2rem;
-            margin-bottom: 30px;
-            padding-bottom: 10px;
-            position: relative;
-            text-align: center;
-            color: #D4AF37;
-        }
-        
-        .titulo-categoria:after {
-            content: '';
-            position: absolute;
-            bottom: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 80px;
-            height: 3px;
-            background: linear-gradient(to right, transparent, #D4AF37, transparent);
-        }
-        
-        /* GRID DE RECETAS */
-        .grid-recetas {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-            gap: 25px;
-        }
-        
-        .tarjeta-receta {
-            background: rgba(20, 20, 20, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            padding: 20px;
-            transition: all 0.4s ease;
-            position: relative;
-            overflow: hidden;
-            height: 380px;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .tarjeta-receta:hover {
-            transform: translateY(-8px);
-            border-color: rgba(212, 175, 55, 0.7);
-            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
-        }
-        
-        .imagen-receta {
-            width: 100%;
-            height: 150px;
-            background-color: #1A1A1A;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-            border: 1px solid rgba(212, 175, 55, 0.2);
-        }
-        
-        .imagen-receta img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        .contenido-receta {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-        }
-        
-        .titulo-receta {
-            font-size: 1.4rem;
-            margin-bottom: 10px;
-            font-family: 'Playfair Display', serif;
-            line-height: 1.3;
-            color: #D4AF37;
-        }
-        
-        .descripcion-receta {
-            color: #B0B0B0;
-            margin-bottom: 15px;
-            font-size: 0.95rem;
-            line-height: 1.5;
-            flex: 1;
-            overflow: hidden;
-            display: -webkit-box;
-            -webkit-line-clamp: 3;
-            -webkit-box-orient: vertical;
-        }
-        
-        .btn-ver-receta {
-            background: transparent;
-            border: 1px solid #D4AF37;
-            color: #D4AF37;
-            padding: 8px 16px;
-            font-family: 'Cinzel', serif;
-            font-size: 0.9rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            text-align: center;
-            margin-top: auto;
-            display: inline-block;
-        }
-        
-        .btn-ver-receta:hover {
-            background-color: #D4AF37;
-            color: #0A0A0A;
-        }
-        
-        /* MODAL DE RECETA */
-        .modal {
-            display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.95);
-            z-index: 2000;
-            overflow-y: auto;
-            padding: 20px;
-        }
-        
-        .modal-contenido {
-            background: rgba(15, 15, 15, 0.95);
-            max-width: 900px;
-            margin: 30px auto;
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            padding: 30px;
-            position: relative;
-        }
-        
-        .cerrar-modal {
-            position: absolute;
-            top: 15px;
-            right: 15px;
-            color: #D4AF37;
-            font-size: 28px;
-            cursor: pointer;
-            background: none;
-            border: none;
-            z-index: 10;
-            width: 40px;
-            height: 40px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .cerrar-modal:hover {
-            background: rgba(212, 175, 55, 0.1);
-        }
-        
-        /* LISTAS EN ADMIN */
-        .admin-lista {
-            margin-top: 30px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding-right: 10px;
-        }
-        
-        .admin-item {
-            background: rgba(30, 30, 30, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 12px;
-            margin-bottom: 12px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .admin-item-info h4 {
-            margin-bottom: 4px;
-            font-size: 1.1rem;
-            color: #D4AF37;
-        }
-        
-        .admin-item-info small {
-            font-size: 0.85rem;
-            color: #F4E4A6;
-        }
-        
-        .admin-item-actions {
-            display: flex;
-            gap: 8px;
-        }
-        
-        .btn-eliminar {
-            background: rgba(200, 50, 50, 0.2);
-            border: 1px solid rgba(200, 50, 50, 0.5);
-            color: #FF6B6B;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-        }
-        
-        .btn-eliminar:hover {
-            background: rgba(200, 50, 50, 0.4);
-        }
-        
-        .btn-editar {
-            background: rgba(212, 175, 55, 0.2);
-            border: 1px solid rgba(212, 175, 55, 0.5);
-            color: #D4AF37;
-            padding: 6px 12px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            font-size: 0.85rem;
-        }
-        
-        .btn-editar:hover {
-            background: rgba(212, 175, 55, 0.4);
-        }
-        
-        /* SUBIDA DE ARCHIVOS */
-        .file-upload {
-            position: relative;
-            display: inline-block;
-            width: 100%;
-        }
-        
-        .file-upload input[type="file"] {
-            position: absolute;
-            left: 0;
-            top: 0;
-            opacity: 0;
-            width: 100%;
-            height: 100%;
-            cursor: pointer;
-        }
-        
-        .file-upload-label {
-            display: block;
-            padding: 10px 12px;
-            background: rgba(30, 30, 30, 0.8);
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            color: #B0B0B0;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        
-        .file-upload-label:hover {
-            border-color: #D4AF37;
-            color: #D4AF37;
-        }
-        
-        .imagen-preview {
-            width: 100%;
-            max-height: 150px;
-            object-fit: contain;
-            margin-top: 8px;
-            border: 1px solid rgba(212, 175, 55, 0.3);
-            display: none;
-        }
-        
-        /* CONFIGURACIÓN GRID */
-        .configuracion-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-            gap: 20px;
-            margin-top: 20px;
-        }
-        
-        .config-item {
-            background: rgba(30, 30, 30, 0.7);
-            border: 1px solid rgba(212, 175, 55, 0.2);
-            padding: 20px;
-        }
-        
-        /* PIE DE PÁGINA */
-        footer {
-            text-align: center;
-            padding: 30px 0;
-            border-top: 1px solid rgba(212, 175, 55, 0.3);
-            margin-top: 50px;
-            color: #888;
-            font-size: 0.9rem;
-            position: relative;
-        }
-        
-        footer:before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            width: 120px;
-            height: 1px;
-            background: linear-gradient(to right, transparent, #D4AF37, transparent);
-        }
-        
-        /* RESPONSIVE */
-        @media (max-width: 768px) {
-            h1 {
-                font-size: 2rem;
-            }
-            
-            .logo-premium {
-                width: 80px;
-                height: 80px;
-                font-size: 1.6rem;
-            }
-            
-            .menu-categorias {
-                gap: 8px;
-            }
-            
-            .btn-categoria {
-                padding: 8px 14px;
-                font-size: 0.85rem;
-                min-width: 110px;
-            }
-            
-            .grid-recetas {
-                grid-template-columns: 1fr;
-            }
-            
-            .admin-contenido, .login-contenido {
-                padding: 20px;
-            }
-            
-            .form-row {
-                flex-direction: column;
-                gap: 12px;
-            }
-            
-            .admin-item {
-                flex-direction: column;
-                align-items: flex-start;
-                gap: 8px;
-            }
-            
-            .admin-item-actions {
-                align-self: flex-end;
-            }
-            
-            .configuracion-grid {
-                grid-template-columns: 1fr;
-            }
-        }
-    </style>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
 </head>
 <body>
-    <!-- BARRA DE ADMIN -->
-    <div class="admin-bar">
-        <button id="btn-admin-login" class="btn-admin">
-            <i class="fas fa-user-cog"></i> Admin
-        </button>
-    </div>
-
-    <!-- LOGIN -->
-    <div id="login-panel" class="login-panel">
-        <div class="login-contenido">
-            <h2 class="gold-text" style="margin-bottom: 25px;">Acceso Administrativo</h2>
-            <form id="login-form" class="admin-form">
-                <div class="form-group">
-                    <label for="login-usuario">Usuario</label>
-                    <input type="text" id="login-usuario" class="form-control" placeholder="Ingresa tu usuario">
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-gem"></i>
+                    </div>
+                    <span class="logo-text">Academia Élite</span>
                 </div>
                 
-                <div class="form-group">
-                    <label for="login-password">Contraseña</label>
-                    <input type="password" id="login-password" class="form-control" placeholder="Ingresa tu contraseña">
-                </div>
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Inicio</a></li>
+                    <li><a href="#courses" class="nav-link">Cursos</a></li>
+                    <li><a href="#about" class="nav-link">Nosotros</a></li>
+                    <li><a href="#contact" class="nav-link">Contacto</a></li>
+                    <li><a href="#" id="admin-access-btn" class="nav-link admin-access">
+                        <i class="fas fa-lock"></i> Admin
+                    </a></li>
+                </ul>
                 
-                <div class="form-row">
-                    <button type="submit" class="btn-gold">Iniciar Sesión</button>
-                    <button type="button" id="btn-cerrar-login" class="btn-gold-outline">Cancelar</button>
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
                 </div>
-            </form>
+            </nav>
         </div>
-    </div>
-
-    <!-- ENCABEZADO -->
-    <header class="container">
-        <div id="logo-premium" class="logo-premium">
-            <i class="fas fa-utensils"></i>
-        </div>
-        <h1 id="titulo-principal">ZONA TOTAL</h1>
-        <p id="subtitulo-principal" class="subtitle">Colección premium de recetas fáciles y organizadas.</p>
     </header>
 
-    <main class="container">
-        <!-- MENÚ DE CATEGORÍAS -->
-        <nav class="menu-categorias" id="menu-categorias">
-            <!-- Se cargará dinámicamente -->
-        </nav>
-
-        <!-- SECCIONES DE RECETAS -->
-        <div id="secciones-container"></div>
-    </main>
-
-    <!-- MODAL DE RECETA DETALLADA -->
-    <div id="modal-receta" class="modal">
-        <div class="modal-contenido">
-            <button class="cerrar-modal">&times;</button>
-            <div id="modal-imagen" class="imagen-receta" style="height: 300px;"></div>
-            <h2 id="modal-titulo" class="gold-text">Título de la receta</h2>
-            <p id="modal-descripcion" class="gold-accent">Descripción corta de la receta.</p>
-            
-            <div style="display: flex; gap: 20px; margin: 20px 0; color: #B0B0B0; font-style: italic; padding: 12px; background: rgba(212, 175, 55, 0.05); border-left: 3px solid #D4AF37;">
-                <div id="modal-tiempo">⏱️ Tiempo: 30 min</div>
-                <div id="modal-porciones">👥 Porciones: 4 personas</div>
-                <div id="modal-categoria">📁 Categoría: Postres</div>
-            </div>
-            
-            <div style="display: flex; gap: 30px; margin-top: 25px; flex-wrap: wrap;">
-                <div style="flex: 1; min-width: 300px;">
-                    <h3 class="gold-text">Ingredientes</h3>
-                    <ul id="modal-ingredientes" style="padding-left: 20px; color: #C0C0C0;">
-                        <li>Ingrediente 1</li>
-                        <li>Ingrediente 2</li>
-                    </ul>
-                </div>
-                <div style="flex: 1; min-width: 300px;">
-                    <h3 class="gold-text">Preparación</h3>
-                    <ol id="modal-preparacion" style="padding-left: 20px; color: #C0C0C0;">
-                        <li>Paso 1 de la preparación</li>
-                        <li>Paso 2 de la preparación</li>
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PANEL DE ADMINISTRACIÓN COMPLETO -->
-    <div id="admin-panel" class="admin-panel">
-        <div class="admin-contenido">
-            <div class="admin-header">
-                <h2 class="admin-title">Panel de Administración</h2>
-                <button id="btn-cerrar-admin" class="btn-gold-outline">Cerrar Panel</button>
-            </div>
-            
-            <div class="admin-tabs">
-                <button class="admin-tab active" data-tab="recetas">📋 Recetas</button>
-                <button class="admin-tab" data-tab="categorias">📂 Categorías</button>
-                <button class="admin-tab" data-tab="configuracion">⚙️ Configuración</button>
-                <button class="admin-tab" data-tab="apariencia">🎨 Apariencia</button>
-            </div>
-            
-            <!-- PESTAÑA RECETAS -->
-            <div id="tab-recetas" class="tab-content active">
-                <h3 class="gold-text">Agregar/Editar Receta</h3>
-                <form id="form-receta" class="admin-form">
-                    <input type="hidden" id="receta-id" value="">
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="receta-titulo">Título de la Receta *</label>
-                            <input type="text" id="receta-titulo" class="form-control" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="receta-categoria">Categoría *</label>
-                            <select id="receta-categoria" class="form-control" required>
-                                <option value="">Seleccione una categoría</option>
-                            </select>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receta-descripcion">Descripción Corta *</label>
-                        <textarea id="receta-descripcion" class="form-control" required></textarea>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="receta-tiempo">Tiempo de Preparación *</label>
-                            <input type="text" id="receta-tiempo" class="form-control" placeholder="Ej: 45 min" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="receta-porciones">Porciones *</label>
-                            <input type="text" id="receta-porciones" class="form-control" placeholder="Ej: 4 personas" required>
-                        </div>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receta-ingredientes">Ingredientes * (separados por punto y coma)</label>
-                        <textarea id="receta-ingredientes" class="form-control" placeholder="Ej: 200g de harina; 2 huevos; 100ml de leche" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receta-preparacion">Preparación * (pasos separados por punto y coma)</label>
-                        <textarea id="receta-preparacion" class="form-control" placeholder="Ej: Mezclar todos los ingredientes; Hornear a 180°C por 25 minutos" required></textarea>
-                    </div>
-                    
-                    <div class="form-group">
-                        <label for="receta-imagen-url">URL de la Imagen (Recomendado)</label>
-                        <input type="text" id="receta-imagen-url" class="form-control" 
-                               placeholder="https://i.ibb.co/abc123/tu-imagen.jpg">
-                        <small class="gold-accent">
-                            Sube imágenes a <a href="https://imgbb.com" target="_blank" style="color:#D4AF37;">imgbb.com</a> 
-                            y pega el enlace directo aquí
-                        </small>
-                    </div>
-                    
-                    <div class="form-row">
-                        <button type="submit" class="btn-gold">Guardar Receta</button>
-                        <button type="button" id="btn-cancelar-edicion" class="btn-gold-outline">Cancelar Edición</button>
-                    </div>
-                </form>
-                
-                <h3 class="gold-text" style="margin-top: 30px;">Recetas Existentes</h3>
-                <div id="admin-recetas-list" class="admin-lista">
-                    <!-- Se cargará dinámicamente -->
-                </div>
-            </div>
-            
-            <!-- PESTAÑA CATEGORÍAS -->
-            <div id="tab-categorias" class="tab-content">
-                <h3 class="gold-text">Administrar Categorías</h3>
-                <form id="form-categoria" class="admin-form" style="max-width: 600px;">
-                    <input type="hidden" id="categoria-id" value="">
-                    
-                    <div class="form-group">
-                        <label for="categoria-nombre">Nombre de la Categoría *</label>
-                        <input type="text" id="categoria-nombre" class="form-control" placeholder="Ej: Postres" required>
-                    </div>
-                    
-                    <div class="form-row">
-                        <div class="form-group">
-                            <label for="categoria-icono">Icono (emoji)</label>
-                            <input type="text" id="categoria-icono" class="form-control" placeholder="Ej: 🍰">
-                        </div>
-                        <div class="form-group">
-                            <label for="categoria-color">Color Personalizado</label>
-                            <input type="color" id="categoria-color" class="form-control" value="#D4AF37">
-                        </div>
-                    </div>
-                    
-                    <button type="submit" class="btn-gold">Guardar Categoría</button>
-                </form>
-                
-                <h3 class="gold-text" style="margin-top: 30px;">Categorías Existentes</h3>
-                <div id="admin-categorias-list" class="admin-lista">
-                    <!-- Se cargará dinámicamente -->
-                </div>
-            </div>
-            
-            <!-- PESTAÑA CONFIGURACIÓN -->
-            <div id="tab-configuracion" class="tab-content">
-                <h3 class="gold-text">Configuración General</h3>
-                <div class="configuracion-grid">
-                    <div class="config-item">
-                        <h4 class="gold-text">Información del Sitio</h4>
-                        <form id="form-config-sitio" class="admin-form">
-                            <div class="form-group">
-                                <label for="config-titulo">Título del Sitio</label>
-                                <input type="text" id="config-titulo" class="form-control" value="ZONA TOTAL">
-                            </div>
-                            <div class="form-group">
-                                <label for="config-subtitulo">Subtítulo</label>
-                                <input type="text" id="config-subtitulo" class="form-control" value="Colección premium de recetas fáciles y organizadas.">
-                            </div>
-                            <button type="button" id="btn-guardar-config" class="btn-gold">Guardar Cambios</button>
-                        </form>
-                    </div>
-                    
-                    <div class="config-item">
-                        <h4 class="gold-text">Logo del Sitio</h4>
-                        <div class="form-group">
-                            <label>Logo Actual</label>
-                            <div id="logo-preview" class="logo-premium" style="margin: 10px auto; width: 80px; height: 80px; font-size: 1.8rem;">
-                                <i class="fas fa-utensils"></i>
-                            </div>
-                        </div>
-                        <div class="form-group">
-                            <label>Cambiar Logo</label>
-                            <div class="file-upload">
-                                <input type="file" id="config-logo" accept="image/*">
-                                <label for="config-logo" class="file-upload-label">
-                                    <i class="fas fa-image"></i> Subir nuevo logo
-                                </label>
-                            </div>
-                            <small class="gold-accent">Tamaño recomendado: 200x200px</small>
-                        </div>
-                    </div>
-                    
-                    <div class="config-item">
-                        <h4 class="gold-text">Credenciales de Acceso</h4>
-                        <form id="form-config-credenciales" class="admin-form">
-                            <div class="form-group">
-                                <label for="config-usuario">Usuario Administrador</label>
-                                <input type="text" id="config-usuario" class="form-control" value="anelis">
-                            </div>
-                            <div class="form-group">
-                                <label for="config-password">Contraseña</label>
-                                <input type="password" id="config-password" class="form-control" value="94052348012">
-                            </div>
-                            <button type="button" id="btn-guardar-credenciales" class="btn-gold">Actualizar Credenciales</button>
-                        </form>
-                    </div>
-                </div>
-            </div>
-            
-            <!-- PESTAÑA APARIENCIA -->
-            <div id="tab-apariencia" class="tab-content">
-                <h3 class="gold-text">Personalizar Apariencia</h3>
-                <div class="configuracion-grid">
-                    <div class="config-item">
-                        <h4 class="gold-text">Colores Principales</h4>
-                        <form id="form-config-colores" class="admin-form">
-                            <div class="form-group">
-                                <label for="config-color-dorado">Color Dorado Principal</label>
-                                <input type="color" id="config-color-dorado" class="form-control" value="#D4AF37">
-                            </div>
-                            <div class="form-group">
-                                <label for="config-color-fondo">Color de Fondo</label>
-                                <input type="color" id="config-color-fondo" class="form-control" value="#0A0A0A">
-                            </div>
-                            <div class="form-group">
-                                <label for="config-color-texto">Color de Texto</label>
-                                <input type="color" id="config-color-texto" class="form-control" value="#FFFFFF">
-                            </div>
-                            <button type="button" id="btn-aplicar-colores" class="btn-gold">Aplicar Colores</button>
-                        </form>
-                    </div>
-                    
-                    <div class="config-item">
-                        <h4 class="gold-text">Fuentes Tipográficas</h4>
-                        <form id="form-config-fuentes" class="admin-form">
-                            <div class="form-group">
-                                <label for="config-fuente-titulos">Fuente para Títulos</label>
-                                <select id="config-fuente-titulos" class="form-control">
-                                    <option value="Cinzel">Cinzel</option>
-                                    <option value="Playfair Display">Playfair Display</option>
-                                    <option value="Oswald">Oswald</option>
-                                    <option value="Montserrat">Montserrat</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label for="config-fuente-texto">Fuente para Texto</label>
-                                <select id="config-fuente-texto" class="form-control">
-                                    <option value="Lora">Lora</option>
-                                    <option value="Roboto">Roboto</option>
-                                    <option value="Open Sans">Open Sans</option>
-                                    <option value="Merriweather">Merriweather</option>
-                                </select>
-                            </div>
-                            <button type="button" id="btn-aplicar-fuentes" class="btn-gold">Aplicar Fuentes</button>
-                        </form>
-                    </div>
-                    
-                    <div class="config-item">
-                        <h4 class="gold-text">Vista Previa</h4>
-                        <div style="background: rgba(30,30,30,0.7); padding: 20px; border: 1px solid rgba(212,175,55,0.3); margin-bottom: 15px;">
-                            <h4 style="font-family: 'Cinzel', serif; color: #D4AF37; margin-bottom: 10px;">Título de Ejemplo</h4>
-                            <p style="font-family: 'Lora', serif; color: #C0C0C0; margin-bottom: 10px;">Este es un texto de ejemplo que muestra cómo se verá el contenido con las fuentes seleccionadas.</p>
-                            <button style="background: transparent; border: 2px solid #D4AF37; color: #D4AF37; padding: 8px 16px;">Botón de Ejemplo</button>
-                        </div>
-                        <button type="button" id="btn-restaurar-apariencia" class="btn-gold-outline">Restaurar Valores Predeterminados</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- PIE DE PÁGINA -->
-    <footer>
+    <!-- Hero Section -->
+    <section class="hero" id="home">
         <div class="container">
-            <p id="texto-footer">Zona Total © 2025</p>
-            <p id="subtitulo-footer" class="gold-accent">Plataforma privada de contenido premium.</p>
+            <div class="hero-logo">
+                <div class="hero-logo-default">
+                    <i class="fas fa-gem"></i>
+                    <h1 class="hero-logo-text">Academia Élite</h1>
+                </div>
+                <img src="" alt="Logo personalizado" class="hero-logo-img" id="hero-logo-img">
+            </div>
+            
+            <div class="hero-content">
+                <h1 class="hero-title">Excelencia Educativa <span class="gold-gradient">Premium</span></h1>
+                <p class="hero-subtitle">Descubre nuestra colección exclusiva de cursos certificados. Domina habilidades de alto valor con instructores expertos y contenido de calidad excepcional.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#courses" class="btn btn-primary">Explorar Cursos</a>
+                    <a href="#about" class="btn btn-secondary">Conocer Más</a>
+                </div>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-courses">0</div>
+                    <div class="stat-text">Cursos Disponibles</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">100%</div>
+                    <div class="stat-text">Certificados</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">24/7</div>
+                    <div class="stat-text">Acceso</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Courses Section -->
+    <section class="courses-section" id="courses">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Cursos Exclusivos</h2>
+                <p class="section-subtitle">Filtra y encuentra el curso perfecto para tu crecimiento profesional</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-buttons" id="filter-buttons">
+                    <!-- Filters will be generated dynamically -->
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Buscar cursos...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <!-- Courses Grid -->
+            <div class="courses-grid" id="courses-grid">
+                <!-- Courses will be loaded dynamically -->
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">¿Por Qué Elegirnos?</h2>
+                <p class="section-subtitle">Excelencia educativa sin compromisos</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-award"></i>
+                        </div>
+                        <h3>Certificación Premium</h3>
+                        <p>Todos nuestros cursos incluyen certificados reconocidos que validan tus nuevas habilidades.</p>
+                    </div>
+                    
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-chalkboard-teacher"></i>
+                        </div>
+                        <h3>Instructores Expertos</h3>
+                        <p>Aprende de profesionales con años de experiencia en sus respectivas industrias.</p>
+                    </div>
+                    
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-laptop-code"></i>
+                        </div>
+                        <h3>Contenido Actualizado</h3>
+                        <p>Mantente a la vanguardia con material educativo constantemente renovado.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer" id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Academia Élite</h3>
+                    <p>Excelencia educativa para profesionales exigentes. Cursos premium con certificación y contenido de alta calidad.</p>
+                </div>
+                
+                <div class="footer-info">
+                    <p><i class="fas fa-envelope"></i> contacto@academiaelite.com</p>
+                    <p><i class="fas fa-phone"></i> +1 (555) 123-4567</p>
+                    <p><i class="fas fa-map-marker-alt"></i> Av. Premium 123, Ciudad Élite</p>
+                    <p><i class="fas fa-clock"></i> Soporte 24/7 para estudiantes</p>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Academia Élite. Todos los derechos reservados.</p>
+                <p class="footer-note">Plataforma educativa premium para profesionales exigentes</p>
+            </div>
         </div>
     </footer>
 
-    <script>
-        // SISTEMA COMPLETO Y 100% FUNCIONAL
-        
-        // DATOS INICIALES
-        const datosIniciales = {
-            config: {
-                titulo: "ZONA TOTAL",
-                subtitulo: "Colección premium de recetas fáciles y organizadas.",
-                footerTexto: "Zona Total © 2025",
-                footerSubtitulo: "Plataforma privada de contenido premium.",
-                usuario: "anelis",
-                password: "94052348012"
-            },
-            apariencia: {
-                colores: {
-                    dorado: "#D4AF37",
-                    fondo: "#0A0A0A",
-                    texto: "#FFFFFF"
-                },
-                fuentes: {
-                    titulos: "Cinzel",
-                    texto: "Lora"
-                }
-            },
-            categorias: [
-                { id: 'postres', nombre: "Postres", icono: "🍰", color: "#D4AF37", orden: 1 },
-                { id: 'saladas', nombre: "Comidas Saladas", icono: "🍲", color: "#D4AF37", orden: 2 },
-                { id: 'bebidas', nombre: "Bebidas", icono: "🥤", color: "#D4AF37", orden: 3 },
-                { id: 'ensaladas', nombre: "Ensaladas", icono: "🥗", color: "#D4AF37", orden: 4 },
-                { id: 'sopas', nombre: "Sopas y Cremas", icono: "🍛", color: "#D4AF37", orden: 5 },
-                { id: 'reposteria', nombre: "Repostería", icono: "🍪", color: "#D4AF37", orden: 6 }
-            ],
-            recetas: [
-                {
-                    id: 1,
-                    titulo: "Tarta de Chocolate Intenso",
-                    descripcion: "Deliciosa tarta de chocolate negro con base de galleta y crema batida. Perfecta para ocasiones especiales.",
-                    tiempo: "60 min",
-                    porciones: "8 personas",
-                    categoria: "postres",
-                    ingredientes: ["200g de galletas digestive", "100g de mantequilla derretida", "300g de chocolate negro 70%", "200ml de nata para montar", "3 huevos", "100g de azúcar", "Una pizca de sal"],
-                    preparacion: ["Triturar las galletas y mezclar con la mantequilla derretida.", "Derretir el chocolate a baño maría.", "Batir los huevos con el azúcar hasta que espumen.", "Mezclar el chocolate derretido con la nata.", "Verter sobre la base de galletas y hornear a 180°C.", "Dejar enfriar completamente antes de servir."],
-                    imagen: "https://i.ibb.co/7vqXK3L/chocolate-cake.jpg",
-                    fechaCreacion: Date.now()
-                },
-                {
-                    id: 2,
-                    titulo: "Lasagna Tradicional Italiana",
-                    descripcion: "Capas de pasta, salsa boloñesa y bechamel gratinadas al horno.",
-                    tiempo: "120 min",
-                    porciones: "6 personas",
-                    categoria: "saladas",
-                    ingredientes: ["12 láminas de pasta para lasaña", "500g de carne picada mixta", "1 cebolla picada", "2 zanahorias picadas", "2 tallos de apio picados", "800g de tomate triturado", "100g de queso parmesano", "300g de mozzarella"],
-                    preparacion: ["Sofreír la cebolla, zanahoria y apio.", "Añadir la carne y cocinar.", "Incorporar el tomate triturado.", "Preparar la bechamel.", "Montar la lasaña alternando capas.", "Hornear a 180°C hasta que esté dorada."],
-                    imagen: "https://i.ibb.co/8c6TQyP/lasagna.jpg",
-                    fechaCreacion: Date.now() - 1000000
-                }
-            ],
-            session: { logueado: false },
-            logo: null
-        };
-        
-        // CARGAR DATOS
-        let datos = JSON.parse(JSON.stringify(datosIniciales));
-        
-        try {
-            const datosGuardados = localStorage.getItem('zonaTotalDatosCompletos');
-            if (datosGuardados) {
-                const parsed = JSON.parse(datosGuardados);
-                if (parsed) datos = parsed;
-            }
-        } catch (e) {
-            console.log('Usando datos iniciales');
-        }
-        
-        // GUARDAR DATOS
-        function guardarDatos() {
-            try {
-                localStorage.setItem('zonaTotalDatosCompletos', JSON.stringify(datos));
-                return true;
-            } catch (e) {
-                console.error('Error al guardar:', e);
-                return false;
-            }
-        }
-        
-        // INICIALIZAR
-        document.addEventListener('DOMContentLoaded', function() {
-            console.log('Iniciando aplicación...');
-            cargarLogo();
-            aplicarConfiguracion();
-            renderizarTodo();
-            inicializarEventListeners();
-            console.log('Aplicación lista');
-        });
-        
-        // CARGAR LOGO
-        function cargarLogo() {
-            try {
-                const logoGuardado = localStorage.getItem('zonaTotalLogo');
-                if (logoGuardado) {
-                    datos.logo = logoGuardado;
-                    const logoDiv = document.getElementById('logo-premium');
-                    logoDiv.innerHTML = `<img src="${logoGuardado}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;">`;
-                }
-            } catch (e) {
-                console.log('Usando logo por defecto');
-            }
-        }
-        
-        // APLICAR CONFIGURACIÓN
-        function aplicarConfiguracion() {
-            // Textos
-            document.getElementById('titulo-principal').textContent = datos.config.titulo;
-            document.getElementById('subtitulo-principal').textContent = datos.config.subtitulo;
-            document.getElementById('texto-footer').textContent = datos.config.footerTexto;
-            document.getElementById('subtitulo-footer').textContent = datos.config.footerSubtitulo;
-            
-            // Configuración en formularios
-            document.getElementById('config-titulo').value = datos.config.titulo;
-            document.getElementById('config-subtitulo').value = datos.config.subtitulo;
-            document.getElementById('config-usuario').value = datos.config.usuario;
-            document.getElementById('config-password').value = datos.config.password;
-            
-            // Apariencia
-            if (datos.apariencia.colores) {
-                document.getElementById('config-color-dorado').value = datos.apariencia.colores.dorado;
-                document.getElementById('config-color-fondo').value = datos.apariencia.colores.fondo;
-                document.getElementById('config-color-texto').value = datos.apariencia.colores.texto;
-            }
-            
-            if (datos.apariencia.fuentes) {
-                document.getElementById('config-fuente-titulos').value = datos.apariencia.fuentes.titulos;
-                document.getElementById('config-fuente-texto').value = datos.apariencia.fuentes.texto;
-            }
-        }
-        
-        // RENDERIZAR TODO
-        function renderizarTodo() {
-            renderizarCategorias();
-            renderizarRecetas();
-            actualizarListaRecetasAdmin();
-            actualizarListaCategoriasAdmin();
-            llenarSelectCategorias();
-        }
-        
-        // RENDERIZAR CATEGORÍAS
-        function renderizarCategorias() {
-            const menu = document.getElementById('menu-categorias');
-            const secciones = document.getElementById('secciones-container');
-            
-            if (!menu || !secciones) return;
-            
-            menu.innerHTML = '';
-            secciones.innerHTML = '';
-            
-            // Ordenar categorías
-            datos.categorias.sort((a, b) => a.orden - b.orden);
-            
-            datos.categorias.forEach(cat => {
-                // Botón en menú
-                const btn = document.createElement('a');
-                btn.href = `#${cat.id}`;
-                btn.className = 'btn-categoria';
-                btn.innerHTML = `${cat.icono} ${cat.nombre}`;
-                btn.style.borderColor = cat.color;
-                btn.style.color = cat.color;
-                menu.appendChild(btn);
+    <!-- Course Modal -->
+    <div class="modal-overlay" id="course-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-course-title">Curso Detallado</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div id="modal-course-content">
+                    <!-- Course details will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <button class="btn btn-primary" id="enroll-btn">Inscribirse Ahora</button>
+                    <button class="btn btn-secondary" id="close-modal-btn">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-overlay" id="admin-overlay">
+        <div class="admin-container">
+            <!-- Admin Login -->
+            <div class="admin-login" id="admin-login">
+                <div class="login-header">
+                    <h3><i class="fas fa-lock"></i> Acceso Administrativo</h3>
+                    <p>Ingresa tus credenciales para acceder al panel de administración</p>
+                </div>
                 
-                // Sección
-                const section = document.createElement('section');
-                section.id = cat.id;
-                section.className = 'seccion-categoria';
-                
-                const titulo = document.createElement('h2');
-                titulo.className = 'titulo-categoria';
-                titulo.innerHTML = `${cat.icono} ${cat.nombre.toUpperCase()}`;
-                titulo.style.color = cat.color;
-                
-                const contenedor = document.createElement('div');
-                contenedor.className = 'grid-recetas';
-                contenedor.id = `contenedor-${cat.id}`;
-                
-                section.appendChild(titulo);
-                section.appendChild(contenedor);
-                secciones.appendChild(section);
-            });
-        }
-        
-        // RENDERIZAR RECETAS
-        function renderizarRecetas() {
-            datos.categorias.forEach(cat => {
-                const contenedor = document.getElementById(`contenedor-${cat.id}`);
-                if (!contenedor) return;
-                
-                contenedor.innerHTML = '';
-                
-                const recetasCat = datos.recetas.filter(r => r.categoria === cat.id);
-                recetasCat.sort((a, b) => b.fechaCreacion - a.fechaCreacion);
-                
-                recetasCat.forEach(receta => {
-                    const tarjeta = document.createElement('div');
-                    tarjeta.className = 'tarjeta-receta';
-                    tarjeta.dataset.id = receta.id;
+                <form class="login-form" id="login-form">
+                    <div class="form-group">
+                        <label for="admin-username">Usuario</label>
+                        <input type="text" id="admin-username" required>
+                    </div>
                     
-                    let imagenHTML = '';
-                    if (receta.imagen && receta.imagen.startsWith('http')) {
-                        imagenHTML = `<div class="imagen-receta"><img src="${receta.imagen}" alt="${receta.titulo}" onerror="this.onerror=null; this.parentElement.innerHTML='<i class=\'fas fa-utensils\' style=\'font-size: 3rem; color: ${cat.color};\'></i>'"></div>`;
-                    } else {
-                        imagenHTML = `<div class="imagen-receta" style="background: linear-gradient(135deg, ${cat.color}20, transparent);">
-                            <i class="fas fa-utensils" style="font-size: 3rem; color: ${cat.color};"></i>
-                        </div>`;
-                    }
+                    <div class="form-group">
+                        <label for="admin-password">Contraseña</label>
+                        <input type="password" id="admin-password" required>
+                    </div>
                     
-                    tarjeta.innerHTML = `
-                        ${imagenHTML}
-                        <div class="contenido-receta">
-                            <h3 class="titulo-receta">${receta.titulo}</h3>
-                            <p class="descripcion-receta">${receta.descripcion}</p>
-                            <button class="btn-ver-receta" data-id="${receta.id}">Ver receta</button>
+                    <div class="form-actions">
+                        <button type="submit" class="btn btn-primary">Ingresar</button>
+                        <button type="button" class="btn btn-secondary" id="cancel-login-btn">Cancelar</button>
+                    </div>
+                </form>
+                
+                <div class="login-hint" id="login-hint">
+                    <p><strong>Credenciales de prueba:</strong></p>
+                    <p>Usuario: <code>admin</code></p>
+                    <p>Contraseña: <code>admin123</code></p>
+                    <p class="hint-note">Estas credenciales son solo para demostración</p>
+                </div>
+                
+                <button id="show-creds-btn" class="btn btn-small">Mostrar Credenciales</button>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div class="admin-panel" id="admin-panel" style="display: none;">
+                <div class="admin-header">
+                    <h3><i class="fas fa-cogs"></i> Panel de Administración</h3>
+                    <button class="btn btn-small" id="logout-btn">Cerrar Sesión</button>
+                </div>
+                
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="courses-tab">Cursos</button>
+                    <button class="tab-btn" data-tab="add-course-tab">Agregar Curso</button>
+                    <button class="tab-btn" data-tab="categories-tab">Categorías</button>
+                    <button class="tab-btn" data-tab="branding-tab">Branding</button>
+                </div>
+                
+                <!-- Courses Management Tab -->
+                <div class="tab-content active" id="courses-tab">
+                    <h4>Gestión de Cursos</h4>
+                    <div class="admin-courses-list" id="admin-courses-list">
+                        <!-- Courses will be loaded here -->
+                    </div>
+                </div>
+                
+                <!-- Add Course Tab -->
+                <div class="tab-content" id="add-course-tab">
+                    <h4>Agregar Nuevo Curso</h4>
+                    <form id="add-course-form">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="new-course-title">Título del Curso *</label>
+                                <input type="text" id="new-course-title" required>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-course-platform">Plataforma *</label>
+                                <select id="new-course-platform" required>
+                                    <option value="">Seleccionar plataforma</option>
+                                    <option value="Udemy">Udemy</option>
+                                    <option value="Coursera">Coursera</option>
+                                    <option value="Platzi">Platzi</option>
+                                    <option value="EdX">EdX</option>
+                                    <option value="Otro">Otro</option>
+                                </select>
+                            </div>
                         </div>
-                    `;
-                    
-                    contenedor.appendChild(tarjeta);
-                });
-            });
-            
-            // Eventos para botones "Ver receta"
-            document.querySelectorAll('.btn-ver-receta').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    mostrarRecetaModal(id);
-                });
-            });
-        }
-        
-        // MOSTRAR MODAL DE RECETA
-        function mostrarRecetaModal(id) {
-            const receta = datos.recetas.find(r => r.id === id);
-            if (!receta) return;
-            
-            const categoria = datos.categorias.find(c => c.id === receta.categoria);
-            const modal = document.getElementById('modal-receta');
-            
-            document.getElementById('modal-titulo').textContent = receta.titulo;
-            document.getElementById('modal-descripcion').textContent = receta.descripcion;
-            document.getElementById('modal-tiempo').textContent = `⏱️ Tiempo: ${receta.tiempo}`;
-            document.getElementById('modal-porciones').textContent = `👥 Porciones: ${receta.porciones}`;
-            document.getElementById('modal-categoria').textContent = `📁 Categoría: ${categoria?.nombre || receta.categoria}`;
-            
-            // Imagen
-            const modalImagen = document.getElementById('modal-imagen');
-            if (receta.imagen && receta.imagen.startsWith('http')) {
-                modalImagen.innerHTML = `<img src="${receta.imagen}" alt="${receta.titulo}" onerror="this.onerror=null; this.src='';">`;
-            } else {
-                modalImagen.innerHTML = `<i class="fas fa-utensils" style="font-size: 5rem; color: #D4AF37;"></i>`;
-            }
-            
-            // Ingredientes
-            const ingredientesList = document.getElementById('modal-ingredientes');
-            ingredientesList.innerHTML = '';
-            receta.ingredientes.forEach(ing => {
-                const li = document.createElement('li');
-                li.textContent = ing;
-                ingredientesList.appendChild(li);
-            });
-            
-            // Preparación
-            const preparacionList = document.getElementById('modal-preparacion');
-            preparacionList.innerHTML = '';
-            receta.preparacion.forEach(paso => {
-                const li = document.createElement('li');
-                li.textContent = paso;
-                preparacionList.appendChild(li);
-            });
-            
-            modal.style.display = 'block';
-            document.body.style.overflow = 'hidden';
-        }
-        
-        // LLENAR SELECT DE CATEGORÍAS
-        function llenarSelectCategorias() {
-            const select = document.getElementById('receta-categoria');
-            if (!select) return;
-            
-            select.innerHTML = '<option value="">Seleccione una categoría</option>';
-            datos.categorias.forEach(cat => {
-                const option = document.createElement('option');
-                option.value = cat.id;
-                option.textContent = cat.nombre;
-                select.appendChild(option);
-            });
-        }
-        
-        // ACTUALIZAR LISTA DE RECETAS EN ADMIN
-        function actualizarListaRecetasAdmin() {
-            const lista = document.getElementById('admin-recetas-list');
-            if (!lista) return;
-            
-            lista.innerHTML = '';
-            
-            if (datos.recetas.length === 0) {
-                lista.innerHTML = '<p style="text-align: center; color: #F4E4A6; padding: 20px;">No hay recetas todavía.</p>';
-                return;
-            }
-            
-            // Ordenar por fecha (más recientes primero)
-            const recetasOrdenadas = [...datos.recetas].sort((a, b) => b.fechaCreacion - a.fechaCreacion);
-            
-            recetasOrdenadas.forEach(receta => {
-                const cat = datos.categorias.find(c => c.id === receta.categoria);
-                const item = document.createElement('div');
-                item.className = 'admin-item';
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label for="new-course-category">Categoría *</label>
+                                <select id="new-course-category" required>
+                                    <!-- Categories will be populated dynamically -->
+                                </select>
+                            </div>
+                            <div class="form-group">
+                                <label for="new-course-link">Enlace o ID *</label>
+                                <input type="text" id="new-course-link" required>
+                                <span class="form-hint">Enlace externo o ID del curso</span>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label for="new-course-description">Descripción *</label>
+                            <textarea id="new-course-description" rows="4" required></textarea>
+                        </div>
+                        
+                        <div class="form-group">
+                            <div class="checkbox-group">
+                                <input type="checkbox" id="new-course-certificate" checked>
+                                <label for="new-course-certificate">Incluye certificado</label>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button type="submit" class="btn btn-primary">Agregar Curso</button>
+                            <button type="reset" class="btn btn-secondary">Limpiar</button>
+                        </div>
+                    </form>
+                </div>
                 
-                item.innerHTML = `
-                    <div class="admin-item-info">
-                        <h4>${receta.titulo}</h4>
-                        <small>${cat?.nombre || receta.categoria} • ${receta.tiempo} • ${receta.porciones}</small>
+                <!-- Categories Management Tab -->
+                <div class="tab-content" id="categories-tab">
+                    <h4>Gestión de Categorías</h4>
+                    <div class="categories-management">
+                        <div class="categories-list-container">
+                            <h5>Categorías Actuales</h5>
+                            <ul class="categories-list" id="categories-list">
+                                <!-- Categories will be loaded here -->
+                            </ul>
+                        </div>
+                        
+                        <div class="add-category">
+                            <h5>Agregar Nueva Categoría</h5>
+                            <div class="form-group">
+                                <input type="text" id="new-category-input" placeholder="Nombre de la categoría">
+                                <button class="btn btn-primary" id="add-category-btn">Agregar</button>
+                            </div>
+                        </div>
                     </div>
-                    <div class="admin-item-actions">
-                        <button class="btn-editar" data-id="${receta.id}">Editar</button>
-                        <button class="btn-eliminar" data-id="${receta.id}">Eliminar</button>
+                </div>
+                
+                <!-- Branding Tab -->
+                <div class="tab-content" id="branding-tab">
+                    <h4>Personalización de Marca</h4>
+                    <div class="branding-management">
+                        <div class="form-group">
+                            <label for="logo-url">URL del Logo Personalizado</label>
+                            <input type="text" id="logo-url" placeholder="https://ejemplo.com/logo.png">
+                            <span class="form-hint">Ingresa la URL completa de la imagen del logo</span>
+                        </div>
+                        
+                        <div class="logo-preview">
+                            <h5>Vista Previa del Logo</h5>
+                            <div class="preview-container">
+                                <img id="logo-preview-img" src="" alt="Logo personalizado">
+                                <p class="preview-text" id="default-logo-text">Logo predeterminado</p>
+                            </div>
+                        </div>
+                        
+                        <div class="form-actions">
+                            <button class="btn btn-primary" id="save-logo-btn">Guardar Logo</button>
+                            <button class="btn btn-secondary" id="reset-logo-btn">Restablecer Logo</button>
+                        </div>
                     </div>
-                `;
-                
-                lista.appendChild(item);
-            });
-            
-            // Event listeners
-            lista.querySelectorAll('.btn-editar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    cargarRecetaParaEditar(id);
-                });
-            });
-            
-            lista.querySelectorAll('.btn-eliminar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const id = parseInt(this.dataset.id);
-                    if (confirm('¿Estás seguro de eliminar esta receta?')) {
-                        eliminarReceta(id);
-                    }
-                });
-            });
-        }
-        
-        // ACTUALIZAR LISTA DE CATEGORÍAS EN ADMIN
-        function actualizarListaCategoriasAdmin() {
-            const lista = document.getElementById('admin-categorias-list');
-            if (!lista) return;
-            
-            lista.innerHTML = '';
-            
-            datos.categorias.forEach(cat => {
-                const item = document.createElement('div');
-                item.className = 'admin-item';
-                
-                item.innerHTML = `
-                    <div class="admin-item-info">
-                        <h4>${cat.icono} ${cat.nombre}</h4>
-                        <small>ID: ${cat.id} • Color: <span style="color: ${cat.color}">${cat.color}</span></small>
-                    </div>
-                    <div class="admin-item-actions">
-                        <button class="btn-editar" data-categoria="${cat.id}">Editar</button>
-                        ${datos.categorias.length > 1 ? `<button class="btn-eliminar" data-categoria="${cat.id}">Eliminar</button>` : ''}
-                    </div>
-                `;
-                
-                lista.appendChild(item);
-            });
-            
-            // Event listeners
-            lista.querySelectorAll('.btn-editar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const catId = this.dataset.categoria;
-                    cargarCategoriaParaEditar(catId);
-                });
-            });
-            
-            lista.querySelectorAll('.btn-eliminar').forEach(btn => {
-                btn.addEventListener('click', function() {
-                    const catId = this.dataset.categoria;
-                    if (confirm('¿Estás seguro de eliminar esta categoría?')) {
-                        eliminarCategoria(catId);
-                    }
-                });
-            });
-        }
-        
-        // CARGAR RECETA PARA EDITAR
-        function cargarRecetaParaEditar(id) {
-            const receta = datos.recetas.find(r => r.id === id);
-            if (!receta) return;
-            
-            document.getElementById('receta-id').value = receta.id;
-            document.getElementById('receta-titulo').value = receta.titulo;
-            document.getElementById('receta-categoria').value = receta.categoria;
-            document.getElementById('receta-descripcion').value = receta.descripcion;
-            document.getElementById('receta-tiempo').value = receta.tiempo;
-            document.getElementById('receta-porciones').value = receta.porciones;
-            document.getElementById('receta-ingredientes').value = receta.ingredientes.join('; ');
-            document.getElementById('receta-preparacion').value = receta.preparacion.join('; ');
-            document.getElementById('receta-imagen-url').value = receta.imagen || '';
-            
-            cambiarTab('recetas');
-            document.getElementById('form-receta').scrollIntoView({ behavior: 'smooth' });
-        }
-        
-        // CARGAR CATEGORÍA PARA EDITAR
-        function cargarCategoriaParaEditar(id) {
-            const categoria = datos.categorias.find(c => c.id === id);
-            if (!categoria) return;
-            
-            document.getElementById('categoria-id').value = categoria.id;
-            document.getElementById('categoria-nombre').value = categoria.nombre;
-            document.getElementById('categoria-icono').value = categoria.icono;
-            document.getElementById('categoria-color').value = categoria.color;
-            
-            cambiarTab('categorias');
-        }
-        
-        // ELIMINAR RECETA
-        function eliminarReceta(id) {
-            datos.recetas = datos.recetas.filter(r => r.id !== id);
-            guardarDatos();
-            renderizarRecetas();
-            actualizarListaRecetasAdmin();
-            alert('Receta eliminada exitosamente');
-        }
-        
-        // ELIMINAR CATEGORÍA
-        function eliminarCategoria(id) {
-            if (datos.categorias.length <= 1) {
-                alert('Debe haber al menos una categoría');
-                return;
-            }
-            
-            const recetasEnCategoria = datos.recetas.filter(r => r.categoria === id);
-            if (recetasEnCategoria.length > 0) {
-                alert('No se puede eliminar: hay recetas en esta categoría');
-                return;
-            }
-            
-            datos.categorias = datos.categorias.filter(c => c.id !== id);
-            guardarDatos();
-            renderizarTodo();
-            alert('Categoría eliminada exitosamente');
-        }
-        
-        // CAMBIAR PESTAÑA
-        function cambiarTab(tabId) {
-            // Ocultar todas
-            document.querySelectorAll('.tab-content').forEach(tab => {
-                tab.classList.remove('active');
-            });
-            
-            // Desactivar botones
-            document.querySelectorAll('.admin-tab').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            
-            // Mostrar pestaña seleccionada
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            
-            // Activar botón
-            document.querySelector(`.admin-tab[data-tab="${tabId}"]`).classList.add('active');
-        }
-        
-        // INICIALIZAR EVENT LISTENERS
-        function inicializarEventListeners() {
-            console.log('Configurando event listeners...');
-            
-            // BOTÓN ADMIN
-            document.getElementById('btn-admin-login').addEventListener('click', function() {
-                if (datos.session.logueado) {
-                    document.getElementById('admin-panel').style.display = 'block';
-                    document.body.style.overflow = 'hidden';
-                } else {
-                    document.getElementById('login-panel').style.display = 'block';
-                    document.body.style.overflow = 'hidden';
-                }
-            });
-            
-            // LOGIN
-            document.getElementById('login-form').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const usuario = document.getElementById('login-usuario').value;
-                const password = document.getElementById('login-password').value;
-                
-                if (usuario === datos.config.usuario && password === datos.config.password) {
-                    datos.session.logueado = true;
-                    document.getElementById('login-panel').style.display = 'none';
-                    document.getElementById('admin-panel').style.display = 'block';
-                    document.getElementById('btn-admin-login').innerHTML = '<i class="fas fa-user-cog"></i> Panel Admin';
-                    alert('¡Bienvenida Anelis!');
-                } else {
-                    alert('Usuario o contraseña incorrectos');
-                }
-            });
-            
-            // CERRAR LOGIN
-            document.getElementById('btn-cerrar-login').addEventListener('click', function() {
-                document.getElementById('login-panel').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // CERRAR PANEL ADMIN
-            document.getElementById('btn-cerrar-admin').addEventListener('click', function() {
-                document.getElementById('admin-panel').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // CERRAR MODAL RECETA
-            document.querySelector('.cerrar-modal').addEventListener('click', function() {
-                document.getElementById('modal-receta').style.display = 'none';
-                document.body.style.overflow = 'auto';
-            });
-            
-            // CERRAR MODAL AL HACER CLIC FUERA
-            document.getElementById('modal-receta').addEventListener('click', function(e) {
-                if (e.target === this) {
-                    this.style.display = 'none';
-                    document.body.style.overflow = 'auto';
-                }
-            });
-            
-            // TABS
-            document.querySelectorAll('.admin-tab').forEach(tab => {
-                tab.addEventListener('click', function() {
-                    const tabId = this.dataset.tab;
-                    cambiarTab(tabId);
-                });
-            });
-            
-            // FORMULARIO RECETA
-            document.getElementById('form-receta').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const id = document.getElementById('receta-id').value || Date.now();
-                const titulo = document.getElementById('receta-titulo').value.trim();
-                const descripcion = document.getElementById('receta-descripcion').value.trim();
-                const tiempo = document.getElementById('receta-tiempo').value.trim();
-                const porciones = document.getElementById('receta-porciones').value.trim();
-                const categoria = document.getElementById('receta-categoria').value;
-                const ingredientes = document.getElementById('receta-ingredientes').value.split(';').map(i => i.trim()).filter(i => i);
-                const preparacion = document.getElementById('receta-preparacion').value.split(';').map(p => p.trim()).filter(p => p);
-                const imagen = document.getElementById('receta-imagen-url').value.trim();
-                
-                // Validar
-                if (!titulo || !descripcion || !tiempo || !porciones || !categoria || ingredientes.length === 0 || preparacion.length === 0) {
-                    alert('Completa todos los campos obligatorios (*)');
-                    return;
-                }
-                
-                const recetaData = {
-                    id: parseInt(id),
-                    titulo,
-                    descripcion,
-                    tiempo,
-                    porciones,
-                    categoria,
-                    ingredientes,
-                    preparacion,
-                    imagen: imagen || null,
-                    fechaCreacion: Date.now()
-                };
-                
-                const index = datos.recetas.findIndex(r => r.id === recetaData.id);
-                if (index !== -1) {
-                    datos.recetas[index] = recetaData;
-                    alert('Receta actualizada exitosamente');
-                } else {
-                    datos.recetas.push(recetaData);
-                    alert('Receta agregada exitosamente');
-                }
-                
-                guardarDatos();
-                renderizarTodo();
-                
-                // Limpiar formulario
-                this.reset();
-                document.getElementById('receta-id').value = '';
-            });
-            
-            // CANCELAR EDICIÓN RECETA
-            document.getElementById('btn-cancelar-edicion').addEventListener('click', function() {
-                document.getElementById('form-receta').reset();
-                document.getElementById('receta-id').value = '';
-                alert('Edición cancelada');
-            });
-            
-            // FORMULARIO CATEGORÍA
-            document.getElementById('form-categoria').addEventListener('submit', function(e) {
-                e.preventDefault();
-                
-                const id = document.getElementById('categoria-id').value || 
-                          document.getElementById('categoria-nombre').value.toLowerCase().replace(/\s+/g, '_');
-                const nombre = document.getElementById('categoria-nombre').value.trim();
-                const icono = document.getElementById('categoria-icono').value.trim();
-                const color = document.getElementById('categoria-color').value;
-                
-                if (!nombre) {
-                    alert('Nombre de categoría requerido');
-                    return;
-                }
-                
-                const categoriaData = {
-                    id,
-                    nombre,
-                    icono: icono || '🍽️',
-                    color,
-                    orden: datos.categorias.length + 1
-                };
-                
-                const index = datos.categorias.findIndex(c => c.id === id);
-                if (index !== -1) {
-                    categoriaData.orden = datos.categorias[index].orden;
-                    datos.categorias[index] = categoriaData;
-                    alert('Categoría actualizada exitosamente');
-                } else {
-                    datos.categorias.push(categoriaData);
-                    alert('Categoría agregada exitosamente');
-                }
-                
-                guardarDatos();
-                renderizarTodo();
-                
-                // Limpiar
-                this.reset();
-                document.getElementById('categoria-id').value = '';
-            });
-            
-            // GUARDAR CONFIGURACIÓN
-            document.getElementById('btn-guardar-config').addEventListener('click', function() {
-                datos.config.titulo = document.getElementById('config-titulo').value;
-                datos.config.subtitulo = document.getElementById('config-subtitulo').value;
-                
-                guardarDatos();
-                aplicarConfiguracion();
-                alert('Configuración guardada exitosamente');
-            });
-            
-            // GUARDAR CREDENCIALES
-            document.getElementById('btn-guardar-credenciales').addEventListener('click', function() {
-                const nuevoUsuario = document.getElementById('config-usuario').value.trim();
-                const nuevoPassword = document.getElementById('config-password').value.trim();
-                
-                if (!nuevoUsuario || !nuevoPassword) {
-                    alert('Usuario y contraseña requeridos');
-                    return;
-                }
-                
-                datos.config.usuario = nuevoUsuario;
-                datos.config.password = nuevoPassword;
-                datos.session.logueado = false;
-                
-                guardarDatos();
-                alert('Credenciales actualizadas. Reinicia sesión.');
-                
-                document.getElementById('admin-panel').style.display = 'none';
-                document.getElementById('btn-admin-login').innerHTML = '<i class="fas fa-user-cog"></i> Admin';
-            });
-            
-            // APLICAR COLORES
-            document.getElementById('btn-aplicar-colores').addEventListener('click', function() {
-                datos.apariencia.colores = {
-                    dorado: document.getElementById('config-color-dorado').value,
-                    fondo: document.getElementById('config-color-fondo').value,
-                    texto: document.getElementById('config-color-texto').value
-                };
-                
-                guardarDatos();
-                alert('Colores aplicados exitosamente');
-            });
-            
-            // APLICAR FUENTES
-            document.getElementById('btn-aplicar-fuentes').addEventListener('click', function() {
-                datos.apariencia.fuentes = {
-                    titulos: document.getElementById('config-fuente-titulos').value,
-                    texto: document.getElementById('config-fuente-texto').value
-                };
-                
-                guardarDatos();
-                alert('Fuentes aplicadas exitosamente');
-            });
-            
-            // RESTAURAR APARIENCIA
-            document.getElementById('btn-restaurar-apariencia').addEventListener('click', function() {
-                if (confirm('¿Restaurar apariencia a valores predeterminados?')) {
-                    datos.apariencia = JSON.parse(JSON.stringify(datosIniciales.apariencia));
-                    guardarDatos();
-                    aplicarConfiguracion();
-                    alert('Apariencia restaurada');
-                }
-            });
-            
-            // SUBIR LOGO
-            document.getElementById('config-logo').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (!file) return;
-                
-                if (!file.type.match('image.*')) {
-                    alert('Solo se permiten imágenes');
-                    return;
-                }
-                
-                if (file.size > 2 * 1024 * 1024) {
-                    alert('La imagen es muy grande (máximo 2MB)');
-                    return;
-                }
-                
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const base64 = event.target.result;
-                    datos.logo = base64;
-                    localStorage.setItem('zonaTotalLogo', base64);
-                    
-                    // Actualizar logo en página
-                    const logoDiv = document.getElementById('logo-premium');
-                    logoDiv.innerHTML = `<img src="${base64}" alt="Logo" style="width: 100%; height: 100%; object-fit: cover;">`;
-                    
-                    // Actualizar preview
-                    const preview = document.getElementById('logo-preview');
-                    preview.innerHTML = `<img src="${base64}" alt="Logo Preview" style="width: 100%; height: 100%; object-fit: cover;">`;
-                    
-                    alert('Logo actualizado exitosamente');
-                };
-                
-                reader.readAsDataURL(file);
-            });
-            
-            // RESTAURAR LOGO
-            document.getElementById('logo-preview').addEventListener('click', function() {
-                if (confirm('¿Restaurar logo por defecto?')) {
-                    datos.logo = null;
-                    localStorage.removeItem('zonaTotalLogo');
-                    
-                    const logoDiv = document.getElementById('logo-premium');
-                    logoDiv.innerHTML = '<i class="fas fa-utensils"></i>';
-                    
-                    this.innerHTML = '<i class="fas fa-utensils"></i>';
-                    
-                    alert('Logo restaurado a valor por defecto');
-                }
-            });
-            
-            console.log('Event listeners configurados correctamente');
-        }
-    </script>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
 </body>
 </html>
