@@ -98,9 +98,27 @@
                 </div>
             </div>
             
+            <!-- Loading State -->
+            <div id="loading-courses" class="loading-state" style="text-align: center; padding: 40px; display: none;">
+                <div class="loading-spinner" style="font-size: 3rem; color: var(--primary-gold); margin-bottom: 20px;">
+                    <i class="fas fa-spinner fa-spin"></i>
+                </div>
+                <p style="color: var(--text-secondary);">Cargando cursos...</p>
+            </div>
+            
+            <!-- Error State -->
+            <div id="error-courses" class="error-state" style="display: none;">
+                <div style="text-align: center; padding: 40px; background-color: rgba(255, 107, 107, 0.1); border-radius: 8px; border-left: 4px solid #ff6b6b;">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; color: #ff6b6b; margin-bottom: 20px;"></i>
+                    <h3 style="margin-bottom: 10px;">Error al cargar los cursos</h3>
+                    <p style="color: var(--text-secondary); margin-bottom: 20px;" id="error-message"></p>
+                    <button class="btn btn-primary" id="retry-load-btn">Reintentar</button>
+                </div>
+            </div>
+            
             <!-- Courses Grid -->
             <div class="courses-grid" id="courses-grid">
-                <!-- Courses will be loaded dynamically -->
+                <!-- Courses will be loaded dynamically from Google Sheets -->
             </div>
         </div>
     </section>
@@ -233,7 +251,6 @@
                 <div class="admin-tabs">
                     <button class="tab-btn active" data-tab="courses-tab">Cursos</button>
                     <button class="tab-btn" data-tab="add-course-tab">Agregar Curso</button>
-                    <button class="tab-btn" data-tab="categories-tab">Categorías</button>
                     <button class="tab-btn" data-tab="branding-tab">Branding</button>
                 </div>
                 
@@ -241,7 +258,7 @@
                 <div class="tab-content active" id="courses-tab">
                     <h4>Gestión de Cursos</h4>
                     <div class="admin-courses-list" id="admin-courses-list">
-                        <!-- Courses will be loaded here -->
+                        <!-- Courses will be loaded from Google Sheets -->
                     </div>
                 </div>
                 
@@ -271,7 +288,7 @@
                             <div class="form-group">
                                 <label for="new-course-category">Categoría *</label>
                                 <select id="new-course-category" required>
-                                    <!-- Categories will be populated dynamically -->
+                                    <option value="">Cargando categorías...</option>
                                 </select>
                             </div>
                             <div class="form-group">
@@ -294,31 +311,12 @@
                         </div>
                         
                         <div class="form-actions">
-                            <button type="submit" class="btn btn-primary">Agregar Curso</button>
+                            <button type="submit" class="btn btn-primary">Agregar a Google Sheets</button>
                             <button type="reset" class="btn btn-secondary">Limpiar</button>
                         </div>
                     </form>
-                </div>
-                
-                <!-- Categories Management Tab -->
-                <div class="tab-content" id="categories-tab">
-                    <h4>Gestión de Categorías</h4>
-                    <div class="categories-management">
-                        <div class="categories-list-container">
-                            <h5>Categorías Actuales</h5>
-                            <ul class="categories-list" id="categories-list">
-                                <!-- Categories will be loaded here -->
-                            </ul>
-                        </div>
-                        
-                        <div class="add-category">
-                            <h5>Agregar Nueva Categoría</h5>
-                            <div class="form-group">
-                                <input type="text" id="new-category-input" placeholder="Nombre de la categoría">
-                                <button class="btn btn-primary" id="add-category-btn">Agregar</button>
-                            </div>
-                        </div>
-                    </div>
+                    
+                    <div id="form-status" style="margin-top: 20px;"></div>
                 </div>
                 
                 <!-- Branding Tab -->
@@ -349,6 +347,16 @@
         </div>
     </div>
 
+    <!-- Configuración de Google Apps Script -->
+    <script>
+        // Configuración de Google Apps Script
+        const GOOGLE_SCRIPT_URL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vRJpv1h9XBYo7gJPLBx4U_1IiRkf0v-y2W2Z_o-O3V67aPSqAzvBdAomO7SPy-dVSYw3cyUwD3C0oVJ/pub?output=csv';
+        
+        // Opcional: Si tu script está publicado como web app, asegúrate de configurar:
+        // 1. Ejecutar la app como: "Yo (tu cuenta)"
+        // 2. Quién tiene acceso: "Cualquier persona, incluso anónimos"
+    </script>
+    
     <script src="script.js"></script>
 </body>
 </html>
