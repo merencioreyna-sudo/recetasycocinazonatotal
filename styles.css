@@ -1147,6 +1147,30 @@ h2.section-title {
     }
 }
 
+/* Añade esto al final del archivo CSS, antes de los media queries */
+
+/* Estados de carga y error */
+.loading-state {
+    text-align: center;
+    padding: 60px 20px;
+}
+
+.loading-spinner {
+    font-size: 3rem;
+    color: var(--primary-gold);
+    margin-bottom: 20px;
+}
+
+.error-state {
+    padding: 40px 20px;
+}
+
+.error-state .btn {
+    margin-top: 20px;
+}
+
+/* Para mantener el mismo CSS que ya tenías, solo agregué las clases anteriores */
+
 @media (max-width: 576px) {
     .courses-grid {
         grid-template-columns: 1fr;
