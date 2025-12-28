@@ -1,0 +1,486 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Zona Total Recetas - Tu fuente de recetas de cocina</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&family=Dancing+Script:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+    <!-- Header & Navigation -->
+    <header class="header">
+        <div class="container">
+            <nav class="navbar">
+                <div class="logo">
+                    <div class="logo-icon">
+                        <i class="fas fa-utensils"></i>
+                    </div>
+                    <span class="logo-text">Zona Total Recetas</span>
+                </div>
+                
+                <ul class="nav-menu">
+                    <li><a href="#home" class="nav-link active">Inicio</a></li>
+                    <li><a href="#recipes" class="nav-link">Recetas</a></li>
+                    <li><a href="#categories" class="nav-link">Categorías</a></li>
+                    <li><a href="#about" class="nav-link">Acerca</a></li>
+                    <li><a href="#" id="admin-access-btn" class="nav-link admin-access">
+                        <i class="fas fa-database"></i> Gestión
+                    </a></li>
+                </ul>
+                
+                <div class="hamburger">
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                    <span class="bar"></span>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero" id="home">
+        <div class="container">
+            <div class="hero-content">
+                <h1 class="hero-title">Descubre el <span class="accent-gradient">Sabor Perfecto</span></h1>
+                <p class="hero-subtitle">Explora nuestra colección de recetas exclusivas, desde postres irresistibles hasta platos principales que sorprenderán a todos.</p>
+                
+                <div class="hero-buttons">
+                    <a href="#recipes" class="btn btn-primary">Ver Recetas</a>
+                    <a href="#categories" class="btn btn-secondary">Explorar Categorías</a>
+                </div>
+            </div>
+            
+            <div class="hero-stats">
+                <div class="stat">
+                    <div class="stat-number" id="total-recipes">0</div>
+                    <div class="stat-text">Recetas Disponibles</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number">5</div>
+                    <div class="stat-text">Categorías</div>
+                </div>
+                <div class="stat">
+                    <div class="stat-number"><i class="fas fa-cloud"></i></div>
+                    <div class="stat-text">Google Sheets</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories Section -->
+    <section class="categories-section" id="categories">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Categorías de Recetas</h2>
+                <p class="section-subtitle">Encuentra la receta perfecta según tu preferencia</p>
+            </div>
+            
+            <div class="categories-grid">
+                <div class="category-card" data-category="postres">
+                    <div class="category-icon">
+                        <i class="fas fa-ice-cream"></i>
+                    </div>
+                    <h3>Postres</h3>
+                    <p>Deliciosos dulces y postres para endulzar tu día</p>
+                    <span class="recipe-count" id="count-postres">0 recetas</span>
+                </div>
+                
+                <div class="category-card" data-category="comidas-saladas">
+                    <div class="category-icon">
+                        <i class="fas fa-drumstick-bite"></i>
+                    </div>
+                    <h3>Comidas Saladas</h3>
+                    <p>Platos principales y guarniciones sabrosas</p>
+                    <span class="recipe-count" id="count-comidas-saladas">0 recetas</span>
+                </div>
+                
+                <div class="category-card" data-category="bebidas">
+                    <div class="category-icon">
+                        <i class="fas fa-glass-martini-alt"></i>
+                    </div>
+                    <h3>Bebidas</h3>
+                    <p>Refrescantes bebidas y cócteles para toda ocasión</p>
+                    <span class="recipe-count" id="count-bebidas">0 recetas</span>
+                </div>
+                
+                <div class="category-card" data-category="sopas-y-cremas">
+                    <div class="category-icon">
+                        <i class="fas fa-mortar-pestle"></i>
+                    </div>
+                    <h3>Sopas y Cremas</h3>
+                    <p>Reconfortantes sopas y cremas para días fríos</p>
+                    <span class="recipe-count" id="count-sopas-y-cremas">0 recetas</span>
+                </div>
+                
+                <div class="category-card" data-category="reposteria">
+                    <div class="category-icon">
+                        <i class="fas fa-birthday-cake"></i>
+                    </div>
+                    <h3>Repostería</h3>
+                    <p>Pasteles, panes y productos de horno artesanales</p>
+                    <span class="recipe-count" id="count-reposteria">0 recetas</span>
+                </div>
+            </div>
+            
+            <div class="data-source-info">
+                <i class="fas fa-database"></i>
+                <p>Datos cargados desde <strong>Google Sheets</strong> - Actualización automática</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Recipes Section -->
+    <section class="recipes-section" id="recipes">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Nuestras Recetas</h2>
+                <p class="section-subtitle">Filtra y encuentra la receta perfecta para cada ocasión</p>
+            </div>
+            
+            <!-- Filters -->
+            <div class="filters">
+                <div class="filter-buttons" id="filter-buttons">
+                    <!-- Filters will be generated dynamically -->
+                </div>
+                
+                <div class="search-box">
+                    <input type="text" id="search-input" placeholder="Buscar recetas por nombre o ingredientes...">
+                    <i class="fas fa-search"></i>
+                </div>
+            </div>
+            
+            <!-- Loading State -->
+            <div id="loading-recipes" class="loading-state">
+                <div class="loading-spinner">
+                    <i class="fas fa-utensil-spoon fa-spin"></i>
+                </div>
+                <p>Cargando recetas desde Google Sheets...</p>
+                <div class="loading-progress">
+                    <div class="progress-bar"></div>
+                </div>
+            </div>
+            
+            <!-- Error State -->
+            <div id="error-recipes" class="error-state">
+                <div class="error-content">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <h3>Error al cargar las recetas</h3>
+                    <p id="error-message"></p>
+                    <div class="error-actions">
+                        <button class="btn btn-primary" id="retry-load-btn">
+                            <i class="fas fa-redo"></i> Reintentar
+                        </button>
+                        <button class="btn btn-secondary" id="use-sample-btn">
+                            <i class="fas fa-utensils"></i> Usar Recetas de Ejemplo
+                        </button>
+                    </div>
+                    <div class="error-tips">
+                        <p><strong>Consejo:</strong> Verifica que tu Google Sheets esté compartido públicamente</p>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recipes Grid -->
+            <div class="recipes-grid" id="recipes-grid">
+                <!-- Recipes will be loaded dynamically from Google Sheets -->
+            </div>
+            
+            <!-- No Results -->
+            <div id="no-results" class="no-results-state" style="display: none;">
+                <div class="no-results-content">
+                    <i class="fas fa-search"></i>
+                    <h3>No se encontraron recetas</h3>
+                    <p>Intenta con otros términos de búsqueda o selecciona otra categoría.</p>
+                    <button onclick="clearSearch()" class="btn btn-primary">
+                        <i class="fas fa-times"></i> Limpiar búsqueda
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- About Section -->
+    <section class="about-section" id="about">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Sobre Zona Total Recetas</h2>
+                <p class="section-subtitle">Pasión por la cocina compartida</p>
+            </div>
+            
+            <div class="about-content">
+                <div class="about-grid">
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-seedling"></i>
+                        </div>
+                        <h3>Ingredientes Frescos</h3>
+                        <p>Todas nuestras recetas utilizan ingredientes frescos y de calidad para mejores resultados.</p>
+                    </div>
+                    
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-clock"></i>
+                        </div>
+                        <h3>Tiempos Precisos</h3>
+                        <p>Instrucciones detalladas con tiempos exactos para resultados perfectos cada vez.</p>
+                    </div>
+                    
+                    <div class="about-card">
+                        <div class="about-icon">
+                            <i class="fas fa-cloud"></i>
+                        </div>
+                        <h3>Base de Datos en Cloud</h3>
+                        <p>Todas las recetas almacenadas en Google Sheets para fácil actualización.</p>
+                    </div>
+                </div>
+                
+                <div class="tech-info">
+                    <div class="tech-card">
+                        <i class="fab fa-google"></i>
+                        <h4>Google Sheets</h4>
+                        <p>Base de datos en la nube</p>
+                    </div>
+                    <div class="tech-card">
+                        <i class="fas fa-mobile-alt"></i>
+                        <h4>Responsive</h4>
+                        <p>Compatible con todos los dispositivos</p>
+                    </div>
+                    <div class="tech-card">
+                        <i class="fas fa-sync-alt"></i>
+                        <h4>Actualización Automática</h4>
+                        <p>Cambios en tiempo real</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <h3>Zona Total Recetas</h3>
+                    <p>Tu fuente confiable de recetas de cocina probadas y aprobadas por chefs y hogares.</p>
+                    <div class="footer-source">
+                        <i class="fas fa-database"></i>
+                        <span>Base de datos: Google Sheets</span>
+                    </div>
+                </div>
+                
+                <div class="footer-info">
+                    <h4>Información</h4>
+                    <p><i class="fas fa-info-circle"></i> Recetas cargadas desde Google Sheets</p>
+                    <p><i class="fas fa-sync-alt"></i> Actualización automática al recargar</p>
+                    <p><i class="fas fa-share-alt"></i> Comparte tus recetas favoritas</p>
+                    <p><i class="fas fa-heart"></i> Hecho para amantes de la cocina</p>
+                </div>
+                
+                <div class="footer-categories">
+                    <h4>Categorías</h4>
+                    <ul>
+                        <li><i class="fas fa-ice-cream"></i> Postres</li>
+                        <li><i class="fas fa-drumstick-bite"></i> Comidas Saladas</li>
+                        <li><i class="fas fa-glass-martini-alt"></i> Bebidas</li>
+                        <li><i class="fas fa-mortar-pestle"></i> Sopas y Cremas</li>
+                        <li><i class="fas fa-birthday-cake"></i> Repostería</li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="footer-bottom">
+                <p>&copy; 2024 Zona Total Recetas. Todos los derechos reservados.</p>
+                <p class="footer-note">
+                    <i class="fas fa-cloud"></i> Powered by Google Sheets | 
+                    <i class="fas fa-code"></i> Desarrollado con HTML5, CSS3 & JavaScript
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Recipe Modal -->
+    <div class="modal-overlay" id="recipe-modal">
+        <div class="modal-container">
+            <div class="modal-header">
+                <h3 id="modal-recipe-title">Detalles de la Receta</h3>
+                <button class="modal-close" id="modal-close">&times;</button>
+            </div>
+            <div class="modal-content">
+                <div id="modal-recipe-content">
+                    <!-- Recipe details will be loaded here -->
+                </div>
+                <div class="modal-actions">
+                    <div class="modal-source">
+                        <i class="fas fa-database"></i>
+                        <span>Receta cargada desde Google Sheets</span>
+                    </div>
+                    <button class="btn btn-secondary" id="close-modal-btn">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Admin Panel -->
+    <div class="admin-overlay" id="admin-overlay">
+        <div class="admin-container">
+            <!-- Admin Login -->
+            <div class="admin-login" id="admin-login">
+                <div class="login-header">
+                    <h3><i class="fas fa-database"></i> Panel de Gestión</h3>
+                    <p>Acceso a la gestión de recetas desde Google Sheets</p>
+                </div>
+                
+                <div class="login-info">
+                    <div class="info-card">
+                        <i class="fab fa-google"></i>
+                        <h4>Google Sheets Integration</h4>
+                        <p>Las recetas se cargan automáticamente desde tu hoja de cálculo.</p>
+                    </div>
+                    
+                    <div class="instructions">
+                        <h5><i class="fas fa-list-ol"></i> Instrucciones:</h5>
+                        <ol>
+                            <li>Abre tu Google Sheets</li>
+                            <li>Agrega nuevas recetas en las filas</li>
+                            <li>Guarda los cambios</li>
+                            <li>Recarga esta página para ver las actualizaciones</li>
+                        </ol>
+                    </div>
+                </div>
+                
+                <div class="login-actions">
+                    <button class="btn btn-primary" id="open-sheets-btn">
+                        <i class="fas fa-external-link-alt"></i> Abrir Google Sheets
+                    </button>
+                    <button class="btn btn-secondary" id="cancel-login-btn">
+                        <i class="fas fa-times"></i> Cerrar
+                    </button>
+                </div>
+                
+                <div class="login-stats">
+                    <div class="stat">
+                        <div class="stat-number" id="admin-total-recipes">0</div>
+                        <div class="stat-text">Recetas Cargadas</div>
+                    </div>
+                    <div class="stat">
+                        <div class="stat-number" id="admin-last-update">Ahora</div>
+                        <div class="stat-text">Última Actualización</div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Admin Panel -->
+            <div class="admin-panel" id="admin-panel" style="display: none;">
+                <div class="admin-header">
+                    <h3><i class="fas fa-database"></i> Panel de Administración</h3>
+                    <button class="btn btn-small" id="logout-btn">
+                        <i class="fas fa-sign-out-alt"></i> Cerrar
+                    </button>
+                </div>
+                
+                <div class="admin-tabs">
+                    <button class="tab-btn active" data-tab="recipes-tab">
+                        <i class="fas fa-book"></i> Recetas
+                    </button>
+                    <button class="tab-btn" data-tab="sheets-tab">
+                        <i class="fab fa-google"></i> Google Sheets
+                    </button>
+                    <button class="tab-btn" data-tab="help-tab">
+                        <i class="fas fa-question-circle"></i> Ayuda
+                    </button>
+                </div>
+                
+                <!-- Recipes Management Tab -->
+                <div class="tab-content active" id="recipes-tab">
+                    <h4><i class="fas fa-list"></i> Recetas Cargadas</h4>
+                    <div class="admin-recipes-list" id="admin-recipes-list">
+                        <!-- Recipes will be loaded from Google Sheets -->
+                    </div>
+                    <div class="refresh-section">
+                        <button class="btn btn-primary" id="refresh-recipes-btn">
+                            <i class="fas fa-sync-alt"></i> Actualizar Recetas
+                        </button>
+                        <span class="last-updated">Última actualización: <span id="last-updated-time">Hace unos momentos</span></span>
+                    </div>
+                </div>
+                
+                <!-- Google Sheets Tab -->
+                <div class="tab-content" id="sheets-tab">
+                    <h4><i class="fab fa-google"></i> Configuración Google Sheets</h4>
+                    <div class="sheets-config">
+                        <div class="config-card">
+                            <h5><i class="fas fa-link"></i> URL de tu Google Sheets</h5>
+                            <div class="url-display">
+                                <code id="sheets-url">https://docs.google.com/spreadsheets/d/1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ/edit</code>
+                                <button class="btn btn-small" id="copy-url-btn">
+                                    <i class="fas fa-copy"></i> Copiar
+                                </button>
+                            </div>
+                            <a href="https://docs.google.com/spreadsheets/d/1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ/edit" 
+                               target="_blank" 
+                               class="btn btn-primary">
+                                <i class="fas fa-external-link-alt"></i> Abrir en Nueva Pestaña
+                            </a>
+                        </div>
+                        
+                        <div class="config-card">
+                            <h5><i class="fas fa-table"></i> Estructura de la Hoja</h5>
+                            <div class="structure-info">
+                                <p>Tu hoja debe tener estas columnas en orden:</p>
+                                <pre>
+id | titulo | descripcion | categoria | imagen_url | tiempo | porciones | dificultad | ingredientes | instrucciones</pre>
+                                <p class="note"><i class="fas fa-info-circle"></i> La primera fila debe contener los encabezados.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Help Tab -->
+                <div class="tab-content" id="help-tab">
+                    <h4><i class="fas fa-question-circle"></i> Ayuda y Soporte</h4>
+                    <div class="help-content">
+                        <div class="help-section">
+                            <h5><i class="fas fa-plus-circle"></i> Cómo agregar una receta:</h5>
+                            <ol>
+                                <li>Abre tu Google Sheets</li>
+                                <li>Ve a la última fila vacía</li>
+                                <li>Completa todas las columnas</li>
+                                <li>Guarda los cambios</li>
+                                <li>Recarga esta página o haz clic en "Actualizar Recetas"</li>
+                            </ol>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h5><i class="fas fa-image"></i> Cómo agregar imágenes:</h5>
+                            <ul>
+                                <li>Sube la imagen a un servicio como ImgBB, Imgur, o Google Drive</li>
+                                <li>Copia la URL directa de la imagen</li>
+                                <li>Pega la URL en la columna "imagen_url"</li>
+                                <li>Asegúrate que la URL comience con https://</li>
+                            </ul>
+                        </div>
+                        
+                        <div class="help-section">
+                            <h5><i class="fas fa-exclamation-triangle"></i> Solución de problemas:</h5>
+                            <div class="troubleshooting">
+                                <p><strong>Problema:</strong> Las recetas no se cargan</p>
+                                <p><strong>Solución:</strong> Verifica que tu Google Sheets esté compartido como "Cualquier persona con el enlace puede ver"</p>
+                                
+                                <p><strong>Problema:</strong> Las imágenes no se muestran</p>
+                                <p><strong>Solución:</strong> Asegúrate que las URLs de las imágenes sean válidas y accesibles públicamente</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
