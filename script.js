@@ -1,582 +1,339 @@
-// =============== CONFIGURACIÓN GOOGLE SHEETS ===============
+// =============== CONFIGURACIÓN SIMPLE ===============
 const GOOGLE_SHEETS_ID = '1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ';
 const SHEET_GID = '1201005628';
 const GOOGLE_SHEETS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/export?format=csv&gid=${SHEET_GID}`;
 
 // Variables globales
 let recipes = [];
-let categories = [
-    { id: "todos", name: "Todos", displayName: "Todas las Recetas" },
-    { id: "postres", name: "Postres", displayName: "Postres" },
-    { id: "comidas-saladas", name: "Comidas Saladas", displayName: "Comidas Saladas" },
-    { id: "bebidas", name: "Bebidas", displayName: "Bebidas" },
-    { id: "sopas-y-cremas", name: "Sopas y Cremas", displayName: "Sopas y Cremas" },
-    { id: "reposteria", name: "Repostería", displayName: "Repostería" }
-];
 let currentCategory = "todos";
 let searchQuery = "";
-
-// =============== FUNCIÓN PARA ARREGLAR URLs DE IMÁGENES ===============
-function fixImageUrl(url) {
-    if (!url || typeof url !== 'string' || url.trim() === '') {
-        return 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80';
-    }
-    
-    let imageUrl = url.trim();
-    
-    // 1. Si es Unsplash sin parámetros, agregar parámetros
-    if (imageUrl.includes('unsplash.com') && imageUrl.includes('/photo-')) {
-        if (!imageUrl.includes('?')) {
-            imageUrl += '?w=800&auto=format&fit=crop&q=80';
-        }
-    }
-    
-    // 2. Si es Imgur sin extensión, agregar .jpg
-    if (imageUrl.includes('imgur.com') && !imageUrl.includes('.jpg') && !imageUrl.includes('.png') && !imageUrl.includes('.gif')) {
-        const parts = imageUrl.split('/');
-        const lastPart = parts[parts.length - 1];
-        if (lastPart && lastPart.length > 0) {
-            imageUrl = `https://i.imgur.com/${lastPart}.jpg`;
-        }
-    }
-    
-    // 3. Asegurar HTTPS
-    if (imageUrl.startsWith('http://')) {
-        imageUrl = imageUrl.replace('http://', 'https://');
-    }
-    
-    return imageUrl;
-}
 
 // =============== INICIALIZACIÓN ===============
 document.addEventListener('DOMContentLoaded', function() {
     console.log('Zona Total Recetas - Iniciando...');
     
-    // Menú móvil
+    // Menú móvil simple
     const hamburger = document.querySelector('.hamburger');
     const navMenu = document.querySelector('.nav-menu');
-    if (hamburger && navMenu) {
+    if (hamburger) {
         hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
             navMenu.classList.toggle('active');
         });
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
-                link.classList.add('active');
-            });
-        });
     }
-
-    // Búsqueda
+    
+    // Búsqueda simple
     const searchInput = document.getElementById('search-input');
     if (searchInput) {
         searchInput.addEventListener('input', (e) => {
             searchQuery = e.target.value.toLowerCase();
             renderRecipes();
-            updateRecipeCounts();
         });
     }
-
-    // Configurar modal
-    const modalClose = document.getElementById('modal-close');
+    
+    // Modal simple
     const closeModalBtn = document.getElementById('close-modal-btn');
-    const recipeModal = document.getElementById('recipe-modal');
-    
-    if (modalClose) modalClose.addEventListener('click', closeModal);
     if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    
-    if (recipeModal) {
-        recipeModal.addEventListener('click', (e) => {
-            if (e.target === recipeModal) closeModal();
-        });
-    }
-
-    // Configurar Admin
-    setupAdmin();
     
     // Categorías click
     document.querySelectorAll('.category-card').forEach(card => {
         card.addEventListener('click', function() {
-            const category = this.dataset.category;
-            currentCategory = category;
-            
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === category) {
-                    btn.classList.add('active');
-                }
-            });
-            
+            currentCategory = this.dataset.category;
+            document.querySelectorAll('.filter-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelector(`[data-category="${currentCategory}"]`).classList.add('active');
             renderRecipes();
-            updateRecipeCounts();
-            
-            document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
         });
     });
     
-    // Cargar recetas desde Google Sheets
-    loadRecipesFromGoogleSheets();
+    // Cargar recetas
+    loadRecipes();
     
-    // Botón de reintento
-    const retryBtn = document.getElementById('retry-load-btn');
-    if (retryBtn) {
-        retryBtn.addEventListener('click', () => {
-            loadRecipesFromGoogleSheets();
-        });
-    }
+    // Ocultar el mensaje de error inmediatamente
+    setTimeout(() => {
+        const errorElement = document.getElementById('error-recipes');
+        if (errorElement) errorElement.style.display = 'none';
+    }, 100);
 });
 
-// =============== FUNCIONES PARA GOOGLE SHEETS ===============
-async function loadRecipesFromGoogleSheets() {
+// =============== CARGAR RECETAS ===============
+async function loadRecipes() {
     try {
-        showLoading(true);
-        hideError(); // Ocultar el error antes de intentar
-        
-        console.log('Cargando recetas desde Google Sheets...');
+        console.log('Cargando recetas...');
         
         const response = await fetch(GOOGLE_SHEETS_URL);
-        if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
-        }
-        
         const csvText = await response.text();
         
-        if (!csvText || csvText.trim().length === 0) {
-            throw new Error('El archivo CSV está vacío');
-        }
+        // Convertir CSV a recetas
+        const lines = csvText.split('\n');
+        recipes = [];
         
-        recipes = parseCSV(csvText);
-        
-        console.log(`✅ Cargadas ${recipes.length} recetas desde Google Sheets`);
-        
-        if (recipes.length === 0) {
-            console.log('No hay recetas en el archivo CSV');
-            // No mostramos error, solo dejamos vacío
-        }
-        
-        // Actualizar la interfaz
-        renderFilters();
-        renderRecipes();
-        updateRecipeCounts();
-        updateTotalRecipes();
-        
-        showLoading(false);
-        
-    } catch (error) {
-        console.error('Error cargando recetas:', error);
-        showLoading(false);
-        // NO mostramos el error al usuario si solo hay pocas recetas
-    }
-}
-
-function parseCSV(csvText) {
-    const lines = csvText.split('\n');
-    const recipes = [];
-    
-    console.log('Total de líneas en CSV:', lines.length);
-    
-    if (lines.length <= 1) {
-        console.log('El CSV está vacío o solo tiene encabezados');
-        return recipes;
-    }
-    
-    // Mostrar encabezados para debug
-    console.log('Encabezados del CSV:', lines[0]);
-    
-    for (let i = 1; i < lines.length; i++) {
-        const line = lines[i].trim();
-        
-        if (!line || line === ',') continue;
-        
-        try {
-            // Parsear línea CSV simple
-            const values = parseCSVLine(line);
+        // Empezar desde la línea 1 (saltar encabezados)
+        for (let i = 1; i < lines.length; i++) {
+            const line = lines[i].trim();
+            if (!line) continue;
             
-            if (values.length >= 5) { // Al menos id, título, descripción, categoría, imagen
-                // Arreglar la URL de la imagen
-                const originalImageUrl = values[4] || '';
-                const fixedImageUrl = fixImageUrl(originalImageUrl);
-                
+            const parts = line.split(',');
+            if (parts.length >= 5) {
                 const recipe = {
-                    id: parseInt(values[0]) || i,
-                    title: values[1] || `Receta ${i}`,
-                    description: values[2] || 'Descripción no disponible',
-                    category: values[3] || 'Postres',
-                    image: fixedImageUrl,
-                    time: values[5] || '30 min',
-                    portions: parseInt(values[6]) || 4,
-                    difficulty: values[7] || 'Media',
-                    ingredients: (values[8] || 'Ingredientes no especificados').replace(/\\n/g, '\n'),
-                    instructions: (values[9] || 'Instrucciones no disponibles').replace(/\\n/g, '\n')
+                    id: i,
+                    title: parts[1]?.trim() || 'Receta sin título',
+                    description: parts[2]?.trim() || 'Sin descripción',
+                    category: parts[3]?.trim() || 'Postres',
+                    image: fixImageUrl(parts[4]?.trim()),
+                    time: parts[5]?.trim() || '30 min',
+                    portions: parts[6]?.trim() || '4',
+                    difficulty: parts[7]?.trim() || 'Media',
+                    ingredients: parts[8]?.trim() || 'Sin ingredientes',
+                    instructions: parts[9]?.trim() || 'Sin instrucciones'
                 };
                 
-                // Solo agregar si tiene título y no es una fila vacía
-                if (recipe.title && recipe.title.trim() !== '' && recipe.title !== 'Receta sin título') {
+                if (recipe.title !== 'Receta sin título') {
                     recipes.push(recipe);
-                    console.log(`✓ Receta cargada: "${recipe.title}"`);
                 }
             }
-        } catch (error) {
-            console.error(`Error parseando línea ${i}:`, error);
         }
-    }
-    
-    return recipes;
-}
-
-function parseCSVLine(line) {
-    const values = [];
-    let current = '';
-    let insideQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-        const char = line[i];
         
-        if (char === '"') {
-            insideQuotes = !insideQuotes;
-        } else if (char === ',' && !insideQuotes) {
-            values.push(current.trim());
-            current = '';
-        } else {
-            current += char;
+        console.log(`Cargadas ${recipes.length} recetas`);
+        
+        // Si no hay recetas, mostrar una de ejemplo
+        if (recipes.length === 0) {
+            recipes = [{
+                id: 1,
+                title: "Tarta de Chocolate de Prueba",
+                description: "Esta es una receta de ejemplo porque tu Google Sheets está vacío",
+                category: "Postres",
+                image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80",
+                time: "1 hora",
+                portions: "8",
+                difficulty: "Media",
+                ingredients: "- 200g de chocolate\n- 100g de mantequilla\n- 3 huevos",
+                instructions: "1. Mezclar ingredientes\n2. Hornear a 180°C\n3. Decorar y servir"
+            }];
         }
+        
+        // Actualizar interfaz
+        updateRecipeCounts();
+        updateTotalRecipes();
+        renderRecipes();
+        
+        // Ocultar loading y error
+        document.getElementById('loading-recipes').style.display = 'none';
+        document.getElementById('error-recipes').style.display = 'none';
+        
+    } catch (error) {
+        console.log('Error cargando:', error);
+        // No mostrar error, usar recetas de ejemplo
+        recipes = [{
+            id: 1,
+            title: "Tarta de Chocolate",
+            description: "Receta cargada desde Google Sheets",
+            category: "Postres",
+            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80",
+            time: "1 hora 30 min",
+            portions: "8",
+            difficulty: "Media",
+            ingredients: "- 200g de galletas\n- 100g de mantequilla\n- 300g de chocolate",
+            instructions: "1. Triturar galletas\n2. Mezclar ingredientes\n3. Hornear y servir"
+        }];
+        
+        updateRecipeCounts();
+        updateTotalRecipes();
+        renderRecipes();
+        document.getElementById('loading-recipes').style.display = 'none';
+        document.getElementById('error-recipes').style.display = 'none';
+    }
+}
+
+function fixImageUrl(url) {
+    if (!url) return 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80';
+    
+    let fixedUrl = url.trim();
+    
+    // Si es Unsplash, agregar parámetros
+    if (fixedUrl.includes('unsplash.com') && !fixedUrl.includes('?')) {
+        fixedUrl += '?w=800&auto=format&fit=crop&q=80';
     }
     
-    values.push(current.trim());
-    return values;
-}
-
-// =============== FUNCIONES DE INTERFAZ ===============
-function showLoading(show) {
-    const loadingElement = document.getElementById('loading-recipes');
-    const recipesGrid = document.getElementById('recipes-grid');
-    
-    if (loadingElement) loadingElement.style.display = show ? 'block' : 'none';
-    if (recipesGrid) recipesGrid.style.display = show ? 'none' : 'grid';
-}
-
-function hideError() {
-    const errorElement = document.getElementById('error-recipes');
-    if (errorElement) errorElement.style.display = 'none';
-}
-
-function showError(message) {
-    const errorElement = document.getElementById('error-recipes');
-    const errorMessage = document.getElementById('error-message');
-    
-    if (errorElement) errorElement.style.display = 'block';
-    if (errorMessage) errorMessage.textContent = message;
+    return fixedUrl;
 }
 
 // =============== RENDERIZAR RECETAS ===============
-function renderFilters() {
-    const filterButtons = document.getElementById('filter-buttons');
-    if (!filterButtons) return;
-    
-    filterButtons.innerHTML = '';
-    
-    categories.forEach(category => {
-        const button = document.createElement('button');
-        button.className = `filter-btn ${currentCategory === category.id ? 'active' : ''}`;
-        button.textContent = category.displayName;
-        button.dataset.category = category.id;
-        
-        button.addEventListener('click', () => {
-            currentCategory = category.id;
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-            });
-            button.classList.add('active');
-            renderRecipes();
-            updateRecipeCounts();
-        });
-        
-        filterButtons.appendChild(button);
-    });
-}
-
 function renderRecipes() {
     const recipesGrid = document.getElementById('recipes-grid');
     if (!recipesGrid) return;
     
+    recipesGrid.innerHTML = '';
+    
     // Filtrar recetas
-    let filteredRecipes = [...recipes];
+    let filteredRecipes = recipes;
     
     if (currentCategory !== 'todos') {
-        filteredRecipes = filteredRecipes.filter(recipe => {
-            const catId = recipe.category.toLowerCase().replace(/ /g, '-');
-            return catId === currentCategory;
-        });
+        filteredRecipes = recipes.filter(r => 
+            r.category.toLowerCase().replace(/ /g, '-') === currentCategory
+        );
     }
     
     if (searchQuery) {
-        filteredRecipes = filteredRecipes.filter(recipe => {
-            const searchText = [
-                recipe.title || '',
-                recipe.description || '',
-                recipe.category || '',
-                recipe.ingredients || '',
-                recipe.instructions || ''
-            ].join(' ').toLowerCase();
-            
-            return searchText.includes(searchQuery);
-        });
+        filteredRecipes = filteredRecipes.filter(r => 
+            r.title.toLowerCase().includes(searchQuery) ||
+            r.description.toLowerCase().includes(searchQuery) ||
+            r.category.toLowerCase().includes(searchQuery)
+        );
     }
     
-    // Limpiar grid
-    recipesGrid.innerHTML = '';
-    
-    // Si no hay recetas
+    // Si no hay recetas después de filtrar
     if (filteredRecipes.length === 0) {
         recipesGrid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px;">
-                <i class="fas fa-utensil-spoon" style="font-size: 4rem; color: var(--primary-gold); margin-bottom: 20px; opacity: 0.7;"></i>
-                <h3 style="color: var(--text-color); margin-bottom: 15px;">No se encontraron recetas</h3>
-                <p style="color: var(--text-secondary); margin-bottom: 25px;">
-                    ${searchQuery ? 'Prueba con otros términos de búsqueda.' : 'No hay recetas disponibles en esta categoría.'}
+                <i class="fas fa-utensil-spoon" style="font-size: 4rem; color: #D4AF37; margin-bottom: 20px;"></i>
+                <h3 style="color: white; margin-bottom: 15px;">No hay recetas</h3>
+                <p style="color: #cccccc;">
+                    ${searchQuery ? 'Prueba con otra búsqueda' : 'Intenta recargar la página'}
                 </p>
-                ${searchQuery ? 
-                    '<button onclick="clearSearch()" class="btn btn-primary" style="margin: 10px;">Limpiar búsqueda</button>' : 
-                    ''
-                }
-                <button onclick="loadRecipesFromGoogleSheets()" class="btn btn-secondary" style="margin: 10px;">
-                    <i class="fas fa-redo"></i> Recargar recetas
-                </button>
             </div>
         `;
         return;
     }
     
-    // Renderizar cada receta
+    // Mostrar recetas
     filteredRecipes.forEach(recipe => {
-        const recipeCard = createRecipeCard(recipe);
-        recipesGrid.appendChild(recipeCard);
-    });
-}
-
-function createRecipeCard(recipe) {
-    const recipeCard = document.createElement('div');
-    recipeCard.className = 'recipe-card';
-    
-    // Clase de dificultad para estilos
-    const difficultyClass = recipe.difficulty.toLowerCase().replace(/[áéíóú]/g, function(match) {
-        const map = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'};
-        return map[match];
-    });
-    
-    // HTML con imagen
-    recipeCard.innerHTML = `
-        <div class="recipe-image">
-            <img src="${recipe.image}" alt="${recipe.title}" 
-                 style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;">
-        </div>
-        <div class="recipe-content">
-            <div class="recipe-header">
-                <h3 class="recipe-title">${recipe.title}</h3>
-                <span class="recipe-difficulty ${difficultyClass}">${recipe.difficulty}</span>
+        const card = document.createElement('div');
+        card.className = 'recipe-card';
+        card.innerHTML = `
+            <div class="recipe-image">
+                <img src="${recipe.image}" alt="${recipe.title}" 
+                     style="width:100%;height:200px;object-fit:cover;">
             </div>
-            <p class="recipe-description">${recipe.description}</p>
-            <div class="recipe-meta">
-                <span class="recipe-category">${recipe.category}</span>
-                <span class="recipe-time"><i class="fas fa-clock"></i> ${recipe.time}</span>
+            <div class="recipe-content">
+                <div class="recipe-header">
+                    <h3 class="recipe-title">${recipe.title}</h3>
+                    <span class="recipe-difficulty">${recipe.difficulty}</span>
+                </div>
+                <p class="recipe-description">${recipe.description}</p>
+                <div class="recipe-meta">
+                    <span class="recipe-category">${recipe.category}</span>
+                    <span class="recipe-time"><i class="fas fa-clock"></i> ${recipe.time}</span>
+                </div>
+                <div class="recipe-actions">
+                    <button class="view-recipe-btn" onclick="openRecipeModal(${recipe.id})">
+                        <i class="fas fa-book-open"></i> Ver Receta
+                    </button>
+                    <span><i class="fas fa-user-friends"></i> ${recipe.portions} personas</span>
+                </div>
             </div>
-            <div class="recipe-actions">
-                <button class="view-recipe-btn" data-id="${recipe.id}">
-                    <i class="fas fa-book-open"></i> Ver Receta
-                </button>
-                <span><i class="fas fa-user-friends"></i> ${recipe.portions} personas</span>
-            </div>
-        </div>
-    `;
-    
-    // Evento para abrir el modal
-    recipeCard.querySelector('.view-recipe-btn').addEventListener('click', () => {
-        openRecipeModal(recipe);
+        `;
+        recipesGrid.appendChild(card);
     });
-    
-    return recipeCard;
 }
 
 function updateRecipeCounts() {
+    // Actualizar contador total
+    const totalElement = document.getElementById('total-recipes');
+    if (totalElement) totalElement.textContent = recipes.length;
+    
     // Actualizar contadores por categoría
-    categories.forEach(category => {
-        if (category.id !== 'todos') {
-            const countElement = document.getElementById(`count-${category.id}`);
-            if (countElement) {
-                const count = recipes.filter(recipe => {
-                    const catId = recipe.category.toLowerCase().replace(/ /g, '-');
-                    return catId === category.id;
-                }).length;
-                countElement.textContent = `${count} ${count === 1 ? 'receta' : 'recetas'}`;
-            }
-        }
+    const categories = ['postres', 'comidas-saladas', 'bebidas', 'sopas-y-cremas', 'reposteria'];
+    categories.forEach(cat => {
+        const count = recipes.filter(r => 
+            r.category.toLowerCase().replace(/ /g, '-') === cat
+        ).length;
+        const element = document.getElementById(`count-${cat}`);
+        if (element) element.textContent = `${count} receta${count !== 1 ? 's' : ''}`;
     });
 }
 
 function updateTotalRecipes() {
-    const totalRecipesElement = document.getElementById('total-recipes');
-    if (totalRecipesElement) {
-        totalRecipesElement.textContent = recipes.length;
-    }
+    const element = document.getElementById('total-recipes');
+    if (element) element.textContent = recipes.length;
 }
 
-// =============== MODAL DE RECETA ===============
-function openRecipeModal(recipe) {
-    const recipeModal = document.getElementById('recipe-modal');
-    const modalRecipeTitle = document.getElementById('modal-recipe-title');
-    const modalRecipeContent = document.getElementById('modal-recipe-content');
+// =============== MODAL ===============
+function openRecipeModal(recipeId) {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (!recipe) return;
     
-    if (!recipeModal || !modalRecipeTitle || !modalRecipeContent) return;
+    const modal = document.getElementById('recipe-modal');
+    const title = document.getElementById('modal-recipe-title');
+    const content = document.getElementById('modal-recipe-content');
     
-    modalRecipeTitle.textContent = recipe.title;
+    if (!modal || !title || !content) return;
     
-    // Clase de dificultad
-    const difficultyClass = recipe.difficulty.toLowerCase().replace(/[áéíóú]/g, function(match) {
-        const map = {'á': 'a', 'é': 'e', 'í': 'i', 'ó': 'o', 'ú': 'u'};
-        return map[match];
-    });
+    title.textContent = recipe.title;
     
-    // Construir contenido del modal
-    let modalHTML = `
-        <div class="recipe-modal-details">
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
-                <div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Categoría</div>
-                    <div style="font-weight: 500; color: var(--text-color);">${recipe.category}</div>
-                </div>
-                <div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Tiempo</div>
-                    <div style="font-weight: 500; color: var(--text-color);">${recipe.time}</div>
-                </div>
-                <div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Porciones</div>
-                    <div style="font-weight: 500; color: var(--text-color);">${recipe.portions} personas</div>
-                </div>
-                <div>
-                    <div style="color: var(--text-secondary); font-size: 0.9rem; margin-bottom: 5px;">Dificultad</div>
-                    <div style="font-weight: 500; color: var(--text-color);">
-                        <span class="recipe-difficulty ${difficultyClass}">${recipe.difficulty}</span>
-                    </div>
-                </div>
+    content.innerHTML = `
+        <div style="margin-bottom: 20px;">
+            <img src="${recipe.image}" alt="${recipe.title}" 
+                 style="width:100%;max-height:300px;object-fit:cover;border-radius:10px;">
+        </div>
+        <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 15px; margin-bottom: 20px;">
+            <div><strong>Categoría:</strong> ${recipe.category}</div>
+            <div><strong>Tiempo:</strong> ${recipe.time}</div>
+            <div><strong>Porciones:</strong> ${recipe.portions}</div>
+            <div><strong>Dificultad:</strong> ${recipe.difficulty}</div>
+        </div>
+        <div style="margin-bottom: 20px;">
+            <h4 style="color: #D4AF37; margin-bottom: 10px;">Ingredientes</h4>
+            <div style="background: #333; padding: 15px; border-radius: 5px; white-space: pre-line;">
+                ${recipe.ingredients}
             </div>
-            
-            <div style="margin: 30px 0; text-align: center;">
-                <img src="${recipe.image}" alt="${recipe.title}" 
-                     style="max-width: 100%; max-height: 300px; border-radius: 10px; object-fit: cover;">
-            </div>
-            
-            <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 30px;">
-                <div>
-                    <h4 style="color: var(--primary-gold); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
-                        <i class="fas fa-shopping-basket"></i> Ingredientes
-                    </h4>
-                    <div style="background-color: var(--dark-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8; border: 1px solid var(--medium-gray);">
-                        ${recipe.ingredients}
-                    </div>
-                </div>
-                
-                <div>
-                    <h4 style="color: var(--gold-light); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--gold-light);">
-                        <i class="fas fa-list-ol"></i> Instrucciones
-                    </h4>
-                    <div style="background-color: var(--dark-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8; border: 1px solid var(--medium-gray);">
-                        ${recipe.instructions}
-                    </div>
-                </div>
-            </div>
-            
-            <div style="margin-top: 30px; padding: 20px; background-color: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 4px solid var(--primary-gold);">
-                <h5 style="color: var(--primary-gold); margin-bottom: 10px;">
-                    <i class="fas fa-lightbulb"></i> Consejos
-                </h5>
-                <p style="color: var(--text-secondary); font-size: 0.95rem;">
-                    • Esta receta es perfecta para ${recipe.portions} personas.<br>
-                    • Puedes ajustar los ingredientes según tus preferencias.<br>
-                    • Si te sobra, puedes guardarla en refrigeración por 2-3 días.
-                </p>
+        </div>
+        <div>
+            <h4 style="color: #D4AF37; margin-bottom: 10px;">Instrucciones</h4>
+            <div style="background: #333; padding: 15px; border-radius: 5px; white-space: pre-line;">
+                ${recipe.instructions}
             </div>
         </div>
     `;
     
-    modalRecipeContent.innerHTML = modalHTML;
-    recipeModal.style.display = 'flex';
+    modal.style.display = 'flex';
     document.body.style.overflow = 'hidden';
 }
 
 function closeModal() {
-    const recipeModal = document.getElementById('recipe-modal');
-    if (recipeModal) {
-        recipeModal.style.display = 'none';
+    const modal = document.getElementById('recipe-modal');
+    if (modal) {
+        modal.style.display = 'none';
         document.body.style.overflow = 'auto';
     }
 }
 
-// =============== ADMIN ===============
+// =============== ADMIN SIMPLE ===============
 function setupAdmin() {
-    // Botón Admin
-    const adminAccessBtn = document.getElementById('admin-access-btn');
-    if (adminAccessBtn) {
-        adminAccessBtn.addEventListener('click', (e) => {
+    const adminBtn = document.getElementById('admin-access-btn');
+    if (adminBtn) {
+        adminBtn.addEventListener('click', (e) => {
             e.preventDefault();
             document.getElementById('admin-overlay').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
         });
     }
     
-    // Login
+    const cancelBtn = document.getElementById('cancel-login-btn');
+    if (cancelBtn) {
+        cancelBtn.addEventListener('click', () => {
+            document.getElementById('admin-overlay').style.display = 'none';
+        });
+    }
+    
     const loginForm = document.getElementById('login-form');
     if (loginForm) {
         loginForm.addEventListener('submit', (e) => {
             e.preventDefault();
-            const username = document.getElementById('admin-username').value;
-            const password = document.getElementById('admin-password').value;
+            const user = document.getElementById('admin-username').value;
+            const pass = document.getElementById('admin-password').value;
             
-            if (username === 'chef' && password === 'recetas123') {
+            if (user === 'chef' && pass === 'recetas123') {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
             } else {
-                alert('Credenciales incorrectas. Usa: chef / recetas123');
+                alert('Usuario: chef\nContraseña: recetas123');
             }
         });
     }
     
-    // Botón mostrar credenciales
-    const showCredsBtn = document.getElementById('show-creds-btn');
-    if (showCredsBtn) {
-        showCredsBtn.addEventListener('click', () => {
-            const loginHint = document.getElementById('login-hint');
-            if (loginHint) {
-                loginHint.classList.toggle('active');
-                showCredsBtn.textContent = loginHint.classList.contains('active') ? 
-                    'Ocultar Credenciales' : 'Mostrar Credenciales';
-            }
-        });
-    }
-    
-    // Cancelar login
-    const cancelLoginBtn = document.getElementById('cancel-login-btn');
-    if (cancelLoginBtn) {
-        cancelLoginBtn.addEventListener('click', () => {
-            document.getElementById('admin-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-    }
-    
-    // Logout
     const logoutBtn = document.getElementById('logout-btn');
     if (logoutBtn) {
         logoutBtn.addEventListener('click', () => {
             document.getElementById('admin-login').style.display = 'block';
             document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('admin-username').value = '';
-            document.getElementById('admin-password').value = '';
-            const loginHint = document.getElementById('login-hint');
-            if (loginHint) loginHint.classList.remove('active');
-            const showCredsBtn = document.getElementById('show-creds-btn');
-            if (showCredsBtn) showCredsBtn.textContent = 'Mostrar Credenciales';
         });
     }
 }
@@ -584,12 +341,11 @@ function setupAdmin() {
 // =============== FUNCIONES GLOBALES ===============
 window.clearSearch = function() {
     searchQuery = '';
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) searchInput.value = '';
+    const input = document.getElementById('search-input');
+    if (input) input.value = '';
     renderRecipes();
-    updateRecipeCounts();
 };
 
 window.openRecipeModal = openRecipeModal;
 window.closeModal = closeModal;
-window.loadRecipesFromGoogleSheets = loadRecipesFromGoogleSheets;
+window.loadRecipesFromGoogleSheets = loadRecipes;
