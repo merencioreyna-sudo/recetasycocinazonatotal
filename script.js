@@ -1,5 +1,4 @@
 // =============== CONFIGURACIÓN GOOGLE SHEETS ===============
-// ID de tu Google Sheets
 const GOOGLE_SHEETS_ID = '1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ';
 const SHEET_GID = '1201005628';
 const GOOGLE_SHEETS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/export?format=csv&gid=${SHEET_GID}`;
@@ -19,107 +18,143 @@ let searchQuery = "";
 
 // =============== FUNCIÓN PARA ARREGLAR URLs DE IMÁGENES ===============
 function fixImageUrl(url) {
-    if (!url || url.trim() === '') {
-        return getDefaultImage();
+    if (!url || typeof url !== 'string' || url.trim() === '') {
+        console.log('URL vacía, usando imagen por defecto');
+        return 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80';
     }
     
     let imageUrl = url.trim();
+    console.log('URL original:', imageUrl);
     
-    console.log(`🔧 Procesando URL: ${imageUrl}`);
-    
-    // 1. Unsplash - Agregar parámetros si no los tiene
-    if (imageUrl.includes('unsplash.com')) {
+    // 1. Si es Unsplash sin parámetros, agregar parámetros
+    if (imageUrl.includes('unsplash.com') && imageUrl.includes('/photo-')) {
         if (!imageUrl.includes('?')) {
-            imageUrl += '?w=800&auto=format&fit=crop';
-            console.log(`   → Unsplash: Parámetros agregados`);
+            imageUrl += '?w=800&auto=format&fit=crop&q=80';
+            console.log('Unsplash: Agregados parámetros');
         }
     }
     
-    // 2. Imgur - Convertir enlaces de página a enlaces directos
-    if (imageUrl.includes('imgur.com')) {
-        // Si es un enlace de página (no termina en extensión)
-        if (!imageUrl.match(/\.(jpg|jpeg|png|gif|webp)$/i)) {
-            // Extraer el ID de la imagen
-            const imgurId = imageUrl.split('/').pop();
-            if (imgurId) {
-                imageUrl = `https://i.imgur.com/${imgurId}.jpg`;
-                console.log(`   → Imgur: Convertido a enlace directo`);
-            }
+    // 2. Si es Imgur sin extensión, agregar .jpg
+    if (imageUrl.includes('imgur.com') && !imageUrl.includes('.jpg') && !imageUrl.includes('.png') && !imageUrl.includes('.gif')) {
+        const parts = imageUrl.split('/');
+        const lastPart = parts[parts.length - 1];
+        if (lastPart && lastPart.length > 0) {
+            imageUrl = `https://i.imgur.com/${lastPart}.jpg`;
+            console.log('Imgur: Convertido a enlace directo');
         }
     }
     
-    // 3. Google Drive - Convertir enlaces de vista a enlaces directos
-    if (imageUrl.includes('drive.google.com')) {
-        // Extraer ID del archivo
-        const match = imageUrl.match(/\/d\/(.*?)\//);
-        if (match && match[1]) {
-            imageUrl = `https://drive.google.com/uc?export=view&id=${match[1]}`;
-            console.log(`   → Google Drive: Convertido a enlace directo`);
-        }
-    }
-    
-    // 4. Dropbox - Convertir enlaces de dropbox.com a dl.dropboxusercontent.com
-    if (imageUrl.includes('dropbox.com')) {
-        if (!imageUrl.includes('dl.dropboxusercontent.com')) {
-            imageUrl = imageUrl.replace('www.dropbox.com', 'dl.dropboxusercontent.com')
-                               .replace('dropbox.com', 'dl.dropboxusercontent.com')
-                               .replace('?dl=0', '?raw=1');
-            console.log(`   → Dropbox: Convertido a enlace directo`);
-        }
-    }
-    
-    // 5. Pinterest - Intentar obtener imagen directa (limitado)
-    if (imageUrl.includes('pinterest.com') || imageUrl.includes('pinimg.com')) {
-        // Pinterest es complicado, pero podemos intentar
-        console.log(`   → Pinterest: URL puede necesitar ajustes manuales`);
-    }
-    
-    // 6. Asegurar que sea HTTPS
+    // 3. Asegurar HTTPS
     if (imageUrl.startsWith('http://')) {
         imageUrl = imageUrl.replace('http://', 'https://');
-        console.log(`   → Actualizado a HTTPS`);
     }
     
-    console.log(`   → URL final: ${imageUrl}`);
+    console.log('URL final:', imageUrl);
     return imageUrl;
 }
 
-function getDefaultImage() {
-    const defaultImages = [
-        'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&auto=format&fit=crop',
-        'https://images.unsplash.com/photo-1555507036-ab794f27d2e9?w=800&auto=format&fit=crop'
-    ];
-    return defaultImages[Math.floor(Math.random() * defaultImages.length)];
-}
+// =============== INICIALIZACIÓN ===============
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('Zona Total Recetas - Iniciando...');
+    
+    // Menú móvil
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    }
+
+    // Búsqueda
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderRecipes();
+            updateRecipeCounts();
+        });
+    }
+
+    // Configurar modal
+    const modalClose = document.getElementById('modal-close');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const recipeModal = document.getElementById('recipe-modal');
+    
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    
+    if (recipeModal) {
+        recipeModal.addEventListener('click', (e) => {
+            if (e.target === recipeModal) closeModal();
+        });
+    }
+
+    // Configurar Admin
+    setupAdmin();
+    
+    // Categorías click
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const category = this.dataset.category;
+            currentCategory = category;
+            
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            renderRecipes();
+            updateRecipeCounts();
+            
+            document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+    
+    // Cargar recetas desde Google Sheets
+    loadRecipesFromGoogleSheets();
+    
+    // Botón de reintento
+    const retryBtn = document.getElementById('retry-load-btn');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', () => {
+            loadRecipesFromGoogleSheets();
+        });
+    }
+});
 
 // =============== FUNCIONES PARA GOOGLE SHEETS ===============
 async function loadRecipesFromGoogleSheets() {
     try {
         showLoading(true);
         
-        console.log('📥 Intentando cargar recetas desde:', GOOGLE_SHEETS_URL);
+        console.log('Cargando recetas desde:', GOOGLE_SHEETS_URL);
         
         const response = await fetch(GOOGLE_SHEETS_URL);
         if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
+            throw new Error(`Error HTTP: ${response.status}`);
         }
         
         const csvText = await response.text();
         
-        // Verificar que el CSV no esté vacío
         if (!csvText || csvText.trim().length === 0) {
             throw new Error('El archivo CSV está vacío');
         }
         
-        console.log('✅ CSV descargado correctamente');
-        console.log('Primeras 500 caracteres del CSV:', csvText.substring(0, 500));
-        
         recipes = parseCSV(csvText);
         
-        console.log(`✅ Cargadas ${recipes.length} recetas desde Google Sheets`);
+        console.log(`Cargadas ${recipes.length} recetas desde Google Sheets`);
         
         if (recipes.length === 0) {
             throw new Error('No se encontraron recetas en el archivo CSV');
@@ -136,12 +171,12 @@ async function loadRecipesFromGoogleSheets() {
         
         return recipes;
     } catch (error) {
-        console.error('❌ Error cargando recetas:', error);
+        console.error('Error cargando recetas:', error);
         showError(`No se pudieron cargar las recetas: ${error.message}`);
         showLoading(false);
         
-        // Mostrar datos de ejemplo para debug
-        console.log('Mostrando recetas de ejemplo para debug...');
+        // Mostrar datos de ejemplo
+        console.log('Mostrando recetas de ejemplo...');
         loadSampleRecipes();
         return [];
     }
@@ -151,48 +186,29 @@ function parseCSV(csvText) {
     const lines = csvText.split('\n');
     const recipes = [];
     
-    console.log(`📊 Total de líneas en CSV: ${lines.length}`);
+    console.log('Total de líneas en CSV:', lines.length);
     
-    // Verificar si hay datos
     if (lines.length <= 1) {
-        console.log('⚠️ El CSV está vacío o solo tiene encabezados');
+        console.log('El CSV está vacío o solo tiene encabezados');
         return recipes;
     }
     
-    // Mostrar encabezados para debug
-    console.log('📋 Encabezados del CSV:', lines[0]);
+    console.log('Encabezados del CSV:', lines[0]);
     
-    // Procesar cada línea (empezando desde la fila 1 para saltar encabezados)
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         
-        // Saltar líneas vacías
         if (!line || line === ',') continue;
         
-        console.log(`📝 Procesando línea ${i}: "${line.substring(0, 50)}..."`);
+        console.log(`Procesando línea ${i}:`, line.substring(0, 50));
         
         try {
-            // Parsear línea CSV considerando comas dentro de comillas
-            const values = [];
-            let current = '';
-            let insideQuotes = false;
+            // Parsear línea CSV simple
+            const values = parseCSVLine(line);
             
-            for (let char of line) {
-                if (char === '"') {
-                    insideQuotes = !insideQuotes;
-                } else if (char === ',' && !insideQuotes) {
-                    values.push(current.trim());
-                    current = '';
-                } else {
-                    current += char;
-                }
-            }
-            values.push(current.trim());
+            console.log('Valores parseados:', values);
             
-            console.log(`Valores parseados:`, values);
-            
-            // Asegurar que tenemos al menos 3 valores (id, título, categoría)
-            if (values.length >= 4) {
+            if (values.length >= 10) {
                 // Arreglar la URL de la imagen ANTES de crear el objeto
                 const originalImageUrl = values[4] || '';
                 const fixedImageUrl = fixImageUrl(originalImageUrl);
@@ -202,7 +218,7 @@ function parseCSV(csvText) {
                     title: values[1] || `Receta ${i}`,
                     description: values[2] || 'Descripción no disponible',
                     category: values[3] || 'Postres',
-                    image: fixedImageUrl, // Usamos la URL arreglada
+                    image: fixedImageUrl,
                     time: values[5] || '30 min',
                     portions: parseInt(values[6]) || 4,
                     difficulty: values[7] || 'Media',
@@ -213,11 +229,10 @@ function parseCSV(csvText) {
                 // Solo agregar si tiene título
                 if (recipe.title && recipe.title !== 'Receta sin título') {
                     recipes.push(recipe);
-                    console.log(`✓ Receta agregada: ${recipe.title} (${recipe.category})`);
-                    console.log(`  Imagen: ${recipe.image}`);
+                    console.log(`Receta agregada: ${recipe.title} (${recipe.category})`);
                 }
             } else {
-                console.log(`✗ Línea ${i} ignorada: solo ${values.length} valores`);
+                console.log(`Línea ${i} ignorada: solo ${values.length} valores`);
             }
         } catch (error) {
             console.error(`Error parseando línea ${i}:`, error);
@@ -227,6 +242,28 @@ function parseCSV(csvText) {
     return recipes;
 }
 
+function parseCSVLine(line) {
+    const values = [];
+    let current = '';
+    let insideQuotes = false;
+    
+    for (let i = 0; i < line.length; i++) {
+        const char = line[i];
+        
+        if (char === '"') {
+            insideQuotes = !insideQuotes;
+        } else if (char === ',' && !insideQuotes) {
+            values.push(current.trim());
+            current = '';
+        } else {
+            current += char;
+        }
+    }
+    
+    values.push(current.trim());
+    return values;
+}
+
 function loadSampleRecipes() {
     recipes = [
         {
@@ -234,7 +271,7 @@ function loadSampleRecipes() {
             title: "Tarta de Chocolate Intenso",
             description: "Una tarta de chocolate rica y cremosa con base de galleta",
             category: "Postres",
-            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80",
             time: "1 hora 30 min",
             portions: 8,
             difficulty: "Media",
@@ -246,7 +283,7 @@ function loadSampleRecipes() {
             title: "Pasta Carbonara Auténtica",
             description: "La clásica pasta carbonara italiana con huevo, panceta y queso pecorino.",
             category: "Comidas Saladas",
-            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop",
+            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop&q=80",
             time: "30 min",
             portions: 4,
             difficulty: "Fácil",
@@ -380,15 +417,12 @@ function createRecipeCard(recipe) {
         return map[match];
     });
     
-    // Usar la URL ya arreglada desde parseCSV
-    const imageUrl = recipe.image;
-    
-    // HTML con imagen
+    // HTML con imagen - CORREGIDO
     recipeCard.innerHTML = `
         <div class="recipe-image">
-            <img src="${imageUrl}" alt="${recipe.title}" 
-                 onerror="handleImageError(this, '${recipe.title}', '${imageUrl}')"
-                 onload="console.log('✅ Imagen cargada: ${recipe.title}')">
+            <img src="${recipe.image}" alt="${recipe.title}" 
+                 style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;"
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UmVjZXRhOiAke3JlY2lwZS50aXRsZX08L3RleHQ+PC9zdmc+';">
         </div>
         <div class="recipe-content">
             <div class="recipe-header">
@@ -416,31 +450,6 @@ function createRecipeCard(recipe) {
     
     return recipeCard;
 }
-
-// Función global para manejar errores de imágenes
-window.handleImageError = function(imgElement, title, originalUrl) {
-    console.error(`❌ Error cargando imagen para "${title}":`, originalUrl);
-    
-    // Crear imagen de respaldo
-    const backupImages = {
-        'Postres': 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=800&auto=format&fit=crop',
-        'Comidas Saladas': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop',
-        'Bebidas': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=800&auto=format&fit=crop',
-        'Sopas y Cremas': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=800&auto=format&fit=crop',
-        'Repostería': 'https://images.unsplash.com/photo-1555507036-ab794f27d2e9?w=800&auto=format&fit=crop'
-    };
-    
-    const backupUrl = backupImages[title] || getDefaultImage();
-    
-    // Intentar con URL de respaldo
-    imgElement.src = backupUrl;
-    imgElement.onerror = function() {
-        // Si también falla la de respaldo, mostrar placeholder SVG
-        this.src = 'data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UmVjZXRhOiAke3RpdGxlfTwvdGV4dD48L3N2Zz4=';
-        this.style.objectFit = 'contain';
-        this.style.padding = '20px';
-    };
-};
 
 function updateRecipeCounts() {
     // Actualizar contadores por categoría
@@ -481,15 +490,7 @@ function openRecipeModal(recipe) {
         return map[match];
     });
     
-    // Preparar URL de imagen para el modal (usar tamaño más grande)
-    let modalImageUrl = recipe.image;
-    
-    // Si es Unsplash, cambiar parámetros para tamaño mayor
-    if (modalImageUrl.includes('unsplash.com') && modalImageUrl.includes('w=')) {
-        modalImageUrl = modalImageUrl.replace(/w=\d+/, 'w=1200');
-    }
-    
-    // Construir contenido del modal
+    // Construir contenido del modal - CORREGIDO
     let modalHTML = `
         <div class="recipe-modal-details">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
@@ -514,10 +515,9 @@ function openRecipeModal(recipe) {
             </div>
             
             <div style="margin: 30px 0; text-align: center;">
-                <img src="${modalImageUrl}" alt="${recipe.title}" 
-                     style="max-width: 100%; max-height: 400px; border-radius: 10px; object-fit: cover; background-color: #222;"
-                     onerror="handleModalImageError(this, '${recipe.title}', '${modalImageUrl}')"
-                     onload="console.log('✅ Imagen del modal cargada: ${recipe.title}')">
+                <img src="${recipe.image}" alt="${recipe.title}" 
+                     style="max-width: 100%; max-height: 300px; border-radius: 10px; object-fit: cover;"
+                     onerror="this.style.display='none'">
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 30px;">
@@ -558,29 +558,81 @@ function openRecipeModal(recipe) {
     document.body.style.overflow = 'hidden';
 }
 
-// Función para manejar errores en imágenes del modal
-window.handleModalImageError = function(imgElement, title, originalUrl) {
-    console.error(`❌ Error cargando imagen del modal para "${title}":`, originalUrl);
-    
-    // Crear imagen de respaldo para modal
-    const backupImages = {
-        'Postres': 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=1200&auto=format&fit=crop',
-        'Comidas Saladas': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=1200&auto=format&fit=crop',
-        'Bebidas': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=1200&auto=format&fit=crop',
-        'Sopas y Cremas': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=1200&auto=format&fit=crop',
-        'Repostería': 'https://images.unsplash.com/photo-1555507036-ab794f27d2e9?w=1200&auto=format&fit=crop'
-    };
-    
-    const backupUrl = backupImages[title] || getDefaultImage().replace('w=800', 'w=1200');
-    
-    imgElement.src = backupUrl;
-};
-
 function closeModal() {
     const recipeModal = document.getElementById('recipe-modal');
     if (recipeModal) {
         recipeModal.style.display = 'none';
         document.body.style.overflow = 'auto';
+    }
+}
+
+// =============== ADMIN ===============
+function setupAdmin() {
+    // Botón Admin
+    const adminAccessBtn = document.getElementById('admin-access-btn');
+    if (adminAccessBtn) {
+        adminAccessBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('admin-overlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            loadAdminRecipes();
+        });
+    }
+    
+    // Login
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            if (username === 'chef' && password === 'recetas123') {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadAdminRecipes();
+                loadEditRecipeSelect();
+            } else {
+                alert('Credenciales incorrectas. Usa: chef / recetas123');
+            }
+        });
+    }
+    
+    // Botón mostrar credenciales
+    const showCredsBtn = document.getElementById('show-creds-btn');
+    if (showCredsBtn) {
+        showCredsBtn.addEventListener('click', () => {
+            const loginHint = document.getElementById('login-hint');
+            if (loginHint) {
+                loginHint.classList.toggle('active');
+                showCredsBtn.textContent = loginHint.classList.contains('active') ? 
+                    'Ocultar Credenciales' : 'Mostrar Credenciales';
+            }
+        });
+    }
+    
+    // Cancelar login
+    const cancelLoginBtn = document.getElementById('cancel-login-btn');
+    if (cancelLoginBtn) {
+        cancelLoginBtn.addEventListener('click', () => {
+            document.getElementById('admin-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+    
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('admin-username').value = '';
+            document.getElementById('admin-password').value = '';
+            const loginHint = document.getElementById('login-hint');
+            if (loginHint) loginHint.classList.remove('active');
+            const showCredsBtn = document.getElementById('show-creds-btn');
+            if (showCredsBtn) showCredsBtn.textContent = 'Mostrar Credenciales';
+        });
     }
 }
 
