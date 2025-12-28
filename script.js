@@ -19,18 +19,15 @@ let searchQuery = "";
 // =============== FUNCIÓN PARA ARREGLAR URLs DE IMÁGENES ===============
 function fixImageUrl(url) {
     if (!url || typeof url !== 'string' || url.trim() === '') {
-        console.log('URL vacía, usando imagen por defecto');
         return 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=800&auto=format&fit=crop&q=80';
     }
     
     let imageUrl = url.trim();
-    console.log('URL original:', imageUrl);
     
     // 1. Si es Unsplash sin parámetros, agregar parámetros
     if (imageUrl.includes('unsplash.com') && imageUrl.includes('/photo-')) {
         if (!imageUrl.includes('?')) {
             imageUrl += '?w=800&auto=format&fit=crop&q=80';
-            console.log('Unsplash: Agregados parámetros');
         }
     }
     
@@ -40,7 +37,6 @@ function fixImageUrl(url) {
         const lastPart = parts[parts.length - 1];
         if (lastPart && lastPart.length > 0) {
             imageUrl = `https://i.imgur.com/${lastPart}.jpg`;
-            console.log('Imgur: Convertido a enlace directo');
         }
     }
     
@@ -49,7 +45,6 @@ function fixImageUrl(url) {
         imageUrl = imageUrl.replace('http://', 'https://');
     }
     
-    console.log('URL final:', imageUrl);
     return imageUrl;
 }
 
@@ -138,8 +133,9 @@ document.addEventListener('DOMContentLoaded', function() {
 async function loadRecipesFromGoogleSheets() {
     try {
         showLoading(true);
+        hideError(); // Ocultar el error antes de intentar
         
-        console.log('Cargando recetas desde:', GOOGLE_SHEETS_URL);
+        console.log('Cargando recetas desde Google Sheets...');
         
         const response = await fetch(GOOGLE_SHEETS_URL);
         if (!response.ok) {
@@ -154,10 +150,11 @@ async function loadRecipesFromGoogleSheets() {
         
         recipes = parseCSV(csvText);
         
-        console.log(`Cargadas ${recipes.length} recetas desde Google Sheets`);
+        console.log(`✅ Cargadas ${recipes.length} recetas desde Google Sheets`);
         
         if (recipes.length === 0) {
-            throw new Error('No se encontraron recetas en el archivo CSV');
+            console.log('No hay recetas en el archivo CSV');
+            // No mostramos error, solo dejamos vacío
         }
         
         // Actualizar la interfaz
@@ -167,18 +164,11 @@ async function loadRecipesFromGoogleSheets() {
         updateTotalRecipes();
         
         showLoading(false);
-        hideError();
         
-        return recipes;
     } catch (error) {
         console.error('Error cargando recetas:', error);
-        showError(`No se pudieron cargar las recetas: ${error.message}`);
         showLoading(false);
-        
-        // Mostrar datos de ejemplo
-        console.log('Mostrando recetas de ejemplo...');
-        loadSampleRecipes();
-        return [];
+        // NO mostramos el error al usuario si solo hay pocas recetas
     }
 }
 
@@ -193,6 +183,7 @@ function parseCSV(csvText) {
         return recipes;
     }
     
+    // Mostrar encabezados para debug
     console.log('Encabezados del CSV:', lines[0]);
     
     for (let i = 1; i < lines.length; i++) {
@@ -200,16 +191,12 @@ function parseCSV(csvText) {
         
         if (!line || line === ',') continue;
         
-        console.log(`Procesando línea ${i}:`, line.substring(0, 50));
-        
         try {
             // Parsear línea CSV simple
             const values = parseCSVLine(line);
             
-            console.log('Valores parseados:', values);
-            
-            if (values.length >= 10) {
-                // Arreglar la URL de la imagen ANTES de crear el objeto
+            if (values.length >= 5) { // Al menos id, título, descripción, categoría, imagen
+                // Arreglar la URL de la imagen
                 const originalImageUrl = values[4] || '';
                 const fixedImageUrl = fixImageUrl(originalImageUrl);
                 
@@ -226,13 +213,11 @@ function parseCSV(csvText) {
                     instructions: (values[9] || 'Instrucciones no disponibles').replace(/\\n/g, '\n')
                 };
                 
-                // Solo agregar si tiene título
-                if (recipe.title && recipe.title !== 'Receta sin título') {
+                // Solo agregar si tiene título y no es una fila vacía
+                if (recipe.title && recipe.title.trim() !== '' && recipe.title !== 'Receta sin título') {
                     recipes.push(recipe);
-                    console.log(`Receta agregada: ${recipe.title} (${recipe.category})`);
+                    console.log(`✓ Receta cargada: "${recipe.title}"`);
                 }
-            } else {
-                console.log(`Línea ${i} ignorada: solo ${values.length} valores`);
             }
         } catch (error) {
             console.error(`Error parseando línea ${i}:`, error);
@@ -264,44 +249,9 @@ function parseCSVLine(line) {
     return values;
 }
 
-function loadSampleRecipes() {
-    recipes = [
-        {
-            id: 1,
-            title: "Tarta de Chocolate Intenso",
-            description: "Una tarta de chocolate rica y cremosa con base de galleta",
-            category: "Postres",
-            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=800&auto=format&fit=crop&q=80",
-            time: "1 hora 30 min",
-            portions: 8,
-            difficulty: "Media",
-            ingredients: "- 200g de galletas de chocolate\n- 100g de mantequilla derretida\n- 300g de chocolate negro\n- 200ml de nata para montar\n- 3 huevos\n- 100g de azúcar\n- 1 cucharadita de esencia de vainilla",
-            instructions: "1. Triturar las galletas y mezclar con la mantequilla derretida.\n2. Forrar un molde con esta mezcla y reservar en frío.\n3. Derretir el chocolate al baño maría.\n4. Montar la nata y reservar.\n5. Batir los huevos con el azúcar hasta que blanqueen.\n6. Mezclar el chocolate derretido con los huevos batidos.\n7. Incorporar la nata montada con movimientos envolventes.\n8. Verter sobre la base de galleta y refrigerar 4 horas.\n9. Decorar con virutas de chocolate antes de servir."
-        },
-        {
-            id: 2,
-            title: "Pasta Carbonara Auténtica",
-            description: "La clásica pasta carbonara italiana con huevo, panceta y queso pecorino.",
-            category: "Comidas Saladas",
-            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=800&auto=format&fit=crop&q=80",
-            time: "30 min",
-            portions: 4,
-            difficulty: "Fácil",
-            ingredients: "- 400g de spaghetti\n- 200g de panceta o guanciale\n- 4 yemas de huevo\n- 100g de queso pecorino rallado\n- Pimienta negra recién molida\n- Sal",
-            instructions: "1. Cocer la pasta en agua con sal según instrucciones del paquete.\n2. Dorar la panceta en una sartén sin aceite.\n3. Batir las yemas con el queso pecorino y mucha pimienta.\n4. Escurrir la pasta y mezclar inmediatamente con la panceta y su grasa.\n5. Retirar del fuego y agregar la mezcla de huevo revolviendo rápido.\n6. Servir inmediatamente con más queso y pimienta por encima."
-        }
-    ];
-    
-    renderFilters();
-    renderRecipes();
-    updateRecipeCounts();
-    updateTotalRecipes();
-}
-
 // =============== FUNCIONES DE INTERFAZ ===============
 function showLoading(show) {
     const loadingElement = document.getElementById('loading-recipes');
-    const errorElement = document.getElementById('error-recipes');
     const recipesGrid = document.getElementById('recipes-grid');
     
     if (loadingElement) loadingElement.style.display = show ? 'block' : 'none';
@@ -417,12 +367,11 @@ function createRecipeCard(recipe) {
         return map[match];
     });
     
-    // HTML con imagen - CORREGIDO
+    // HTML con imagen
     recipeCard.innerHTML = `
         <div class="recipe-image">
             <img src="${recipe.image}" alt="${recipe.title}" 
-                 style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;"
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjE4MCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+UmVjZXRhOiAke3JlY2lwZS50aXRsZX08L3RleHQ+PC9zdmc+';">
+                 style="width:100%;height:100%;object-fit:cover;border-radius:8px 8px 0 0;">
         </div>
         <div class="recipe-content">
             <div class="recipe-header">
@@ -490,7 +439,7 @@ function openRecipeModal(recipe) {
         return map[match];
     });
     
-    // Construir contenido del modal - CORREGIDO
+    // Construir contenido del modal
     let modalHTML = `
         <div class="recipe-modal-details">
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 20px; margin-bottom: 25px;">
@@ -516,8 +465,7 @@ function openRecipeModal(recipe) {
             
             <div style="margin: 30px 0; text-align: center;">
                 <img src="${recipe.image}" alt="${recipe.title}" 
-                     style="max-width: 100%; max-height: 300px; border-radius: 10px; object-fit: cover;"
-                     onerror="this.style.display='none'">
+                     style="max-width: 100%; max-height: 300px; border-radius: 10px; object-fit: cover;">
             </div>
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 30px;">
@@ -575,7 +523,6 @@ function setupAdmin() {
             e.preventDefault();
             document.getElementById('admin-overlay').style.display = 'flex';
             document.body.style.overflow = 'hidden';
-            loadAdminRecipes();
         });
     }
     
@@ -590,8 +537,6 @@ function setupAdmin() {
             if (username === 'chef' && password === 'recetas123') {
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
-                loadAdminRecipes();
-                loadEditRecipeSelect();
             } else {
                 alert('Credenciales incorrectas. Usa: chef / recetas123');
             }
