@@ -1,6 +1,6 @@
 // =============== CONFIGURACIÓN GOOGLE SHEETS ===============
 const GOOGLE_SHEETS_ID = '1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ';
-const SHEET_NAME = 'recetas'; // Nombre de la hoja
+const SHEET_NAME = 'recetas';
 const GOOGLE_SHEETS_CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
 
 // Variables globales
@@ -16,10 +16,254 @@ let categories = [
 let currentCategory = "todos";
 let searchQuery = "";
 
+// =============== INICIALIZACIÓN ===============
+document.addEventListener('DOMContentLoaded', function() {
+    console.log('🍳 Zona Total Recetas - Iniciando...');
+    
+    // Inicializar elementos de la interfaz
+    initNavigation();
+    initSearch();
+    initModal();
+    initAdmin();
+    initCategories();
+    
+    // Cargar recetas desde Google Sheets
+    loadRecipesFromGoogleSheets();
+    
+    // Configurar botón de reintento
+    const retryBtn = document.getElementById('retry-load-btn');
+    if (retryBtn) {
+        retryBtn.addEventListener('click', () => {
+            loadRecipesFromGoogleSheets();
+        });
+    }
+});
+
+// =============== FUNCIONES DE INICIALIZACIÓN ===============
+function initNavigation() {
+    const hamburger = document.querySelector('.hamburger');
+    const navMenu = document.querySelector('.nav-menu');
+    if (hamburger && navMenu) {
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', () => {
+                hamburger.classList.remove('active');
+                navMenu.classList.remove('active');
+                // Actualizar clase activa
+                document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+                link.classList.add('active');
+            });
+        });
+    }
+}
+
+function initSearch() {
+    const searchInput = document.getElementById('search-input');
+    if (searchInput) {
+        searchInput.addEventListener('input', (e) => {
+            searchQuery = e.target.value.toLowerCase();
+            renderRecipes();
+            updateRecipeCounts();
+        });
+    }
+}
+
+function initModal() {
+    const modalClose = document.getElementById('modal-close');
+    const closeModalBtn = document.getElementById('close-modal-btn');
+    const recipeModal = document.getElementById('recipe-modal');
+    
+    if (modalClose) modalClose.addEventListener('click', closeModal);
+    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
+    
+    if (recipeModal) {
+        recipeModal.addEventListener('click', (e) => {
+            if (e.target === recipeModal) closeModal();
+        });
+    }
+}
+
+function initCategories() {
+    document.querySelectorAll('.category-card').forEach(card => {
+        card.addEventListener('click', function() {
+            const category = this.dataset.category;
+            currentCategory = category;
+            
+            // Actualizar botones de filtro
+            document.querySelectorAll('.filter-btn').forEach(btn => {
+                btn.classList.remove('active');
+                if (btn.dataset.category === category) {
+                    btn.classList.add('active');
+                }
+            });
+            
+            renderRecipes();
+            updateRecipeCounts();
+            
+            // Scroll a recetas
+            document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
+        });
+    });
+}
+
+function initAdmin() {
+    // Botón Admin
+    const adminAccessBtn = document.getElementById('admin-access-btn');
+    if (adminAccessBtn) {
+        adminAccessBtn.addEventListener('click', (e) => {
+            e.preventDefault();
+            document.getElementById('admin-overlay').style.display = 'flex';
+            document.body.style.overflow = 'hidden';
+            loadAdminRecipes();
+        });
+    }
+    
+    // Login
+    const loginForm = document.getElementById('login-form');
+    if (loginForm) {
+        loginForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            const username = document.getElementById('admin-username').value;
+            const password = document.getElementById('admin-password').value;
+            
+            // Credenciales de prueba
+            if (username === 'chef' && password === 'recetas123') {
+                document.getElementById('admin-login').style.display = 'none';
+                document.getElementById('admin-panel').style.display = 'block';
+                loadAdminRecipes();
+                loadEditRecipeSelect();
+            } else {
+                alert('Credenciales incorrectas. Usa: chef / recetas123');
+            }
+        });
+    }
+    
+    // Botón mostrar credenciales
+    const showCredsBtn = document.getElementById('show-creds-btn');
+    if (showCredsBtn) {
+        showCredsBtn.addEventListener('click', () => {
+            const loginHint = document.getElementById('login-hint');
+            if (loginHint) {
+                loginHint.classList.toggle('active');
+                showCredsBtn.textContent = loginHint.classList.contains('active') ? 
+                    'Ocultar Credenciales' : 'Mostrar Credenciales';
+            }
+        });
+    }
+    
+    // Cancelar login
+    const cancelLoginBtn = document.getElementById('cancel-login-btn');
+    if (cancelLoginBtn) {
+        cancelLoginBtn.addEventListener('click', () => {
+            document.getElementById('admin-overlay').style.display = 'none';
+            document.body.style.overflow = 'auto';
+        });
+    }
+    
+    // Logout
+    const logoutBtn = document.getElementById('logout-btn');
+    if (logoutBtn) {
+        logoutBtn.addEventListener('click', () => {
+            document.getElementById('admin-login').style.display = 'block';
+            document.getElementById('admin-panel').style.display = 'none';
+            document.getElementById('admin-username').value = '';
+            document.getElementById('admin-password').value = '';
+            const loginHint = document.getElementById('login-hint');
+            if (loginHint) loginHint.classList.remove('active');
+            const showCredsBtn = document.getElementById('show-creds-btn');
+            if (showCredsBtn) showCredsBtn.textContent = 'Mostrar Credenciales';
+        });
+    }
+    
+    // Tabs Admin
+    const tabBtns = document.querySelectorAll('.tab-btn');
+    tabBtns.forEach(btn => {
+        btn.addEventListener('click', function() {
+            const tabId = this.dataset.tab;
+            
+            // Actualizar botones
+            tabBtns.forEach(b => b.classList.remove('active'));
+            this.classList.add('active');
+            
+            // Actualizar contenido
+            document.querySelectorAll('.tab-content').forEach(content => {
+                content.classList.remove('active');
+                if (content.id === tabId) {
+                    content.classList.add('active');
+                }
+            });
+            
+            // Cargar datos si es necesario
+            if (tabId === 'recipes-tab') {
+                loadAdminRecipes();
+            } else if (tabId === 'edit-recipe-tab') {
+                loadEditRecipeSelect();
+            }
+        });
+    });
+    
+    // Agregar receta (en memoria para demo)
+    const addRecipeForm = document.getElementById('add-recipe-form');
+    if (addRecipeForm) {
+        addRecipeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            addNewRecipe();
+        });
+    }
+    
+    // Editar receta (en memoria para demo)
+    const editRecipeSelect = document.getElementById('edit-recipe-select');
+    if (editRecipeSelect) {
+        editRecipeSelect.addEventListener('change', function() {
+            const recipeId = parseInt(this.value);
+            if (recipeId) {
+                loadRecipeForEditing(recipeId);
+            } else {
+                document.getElementById('edit-recipe-form').style.display = 'none';
+            }
+        });
+    }
+    
+    // Guardar edición (en memoria para demo)
+    const editRecipeForm = document.getElementById('edit-recipe-form');
+    if (editRecipeForm) {
+        editRecipeForm.addEventListener('submit', (e) => {
+            e.preventDefault();
+            saveEditedRecipe();
+        });
+    }
+    
+    // Cancelar edición
+    const cancelEditBtn = document.getElementById('cancel-edit-btn');
+    if (cancelEditBtn) {
+        cancelEditBtn.addEventListener('click', () => {
+            document.getElementById('edit-recipe-form').style.display = 'none';
+            document.getElementById('edit-recipe-select').value = '';
+            document.getElementById('edit-form-status').innerHTML = '';
+        });
+    }
+    
+    // Eliminar receta (en memoria para demo)
+    const deleteRecipeBtn = document.getElementById('delete-recipe-btn');
+    if (deleteRecipeBtn) {
+        deleteRecipeBtn.addEventListener('click', () => {
+            const recipeId = parseInt(document.getElementById('edit-recipe-select').value);
+            if (recipeId && confirm('¿Estás seguro de que quieres eliminar esta receta? Esta acción no se puede deshacer.')) {
+                deleteRecipe(recipeId);
+            }
+        });
+    }
+}
+
 // =============== FUNCIONES PARA GOOGLE SHEETS ===============
 async function loadRecipesFromGoogleSheets() {
     try {
         showLoading(true);
+        
+        console.log('📥 Intentando cargar recetas desde:', GOOGLE_SHEETS_CSV_URL);
         
         const response = await fetch(GOOGLE_SHEETS_CSV_URL);
         if (!response.ok) {
@@ -27,6 +271,8 @@ async function loadRecipesFromGoogleSheets() {
         }
         
         const csvText = await response.text();
+        console.log('✅ CSV descargado, tamaño:', csvText.length, 'caracteres');
+        
         recipes = parseCSV(csvText);
         
         console.log(`✅ Cargadas ${recipes.length} recetas desde Google Sheets`);
@@ -54,32 +300,50 @@ function parseCSV(csvText) {
     const lines = csvText.split('\n');
     const recipes = [];
     
+    // Verificar si hay datos
+    if (lines.length <= 1) {
+        console.log('⚠️ El CSV está vacío o solo tiene encabezados');
+        return recipes;
+    }
+    
+    console.log('📊 Total de líneas en CSV:', lines.length);
+    
     // Saltar la primera línea (encabezados)
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
         if (!line) continue;
         
-        // Parsear línea CSV (manejar comas dentro de comillas)
-        const values = parseCSVLine(line);
-        
-        if (values.length >= 10) {
-            const recipe = {
-                id: parseInt(values[0]) || i,
-                title: values[1]?.trim() || `Receta ${i}`,
-                description: values[2]?.trim() || 'Descripción no disponible',
-                category: values[3]?.trim() || 'Postres',
-                image: values[4]?.trim() || getDefaultImage(values[3]?.trim()),
-                time: values[5]?.trim() || '30 min',
-                portions: parseInt(values[6]) || 4,
-                difficulty: values[7]?.trim() || 'Media',
-                ingredients: values[8]?.trim().replace(/↵/g, '\n') || 'Ingredientes no especificados',
-                instructions: values[9]?.trim().replace(/↵/g, '\n') || 'Instrucciones no disponibles'
-            };
+        try {
+            // Parsear línea CSV (manejar comas dentro de comillas)
+            const values = parseCSVLine(line);
             
-            // Solo agregar si tiene título
-            if (recipe.title !== 'Receta sin título') {
-                recipes.push(recipe);
+            console.log(`Línea ${i}:`, values);
+            
+            // Verificar que tenemos suficientes valores
+            if (values.length >= 10) {
+                const recipe = {
+                    id: parseInt(values[0]) || i,
+                    title: values[1]?.trim() || `Receta ${i}`,
+                    description: values[2]?.trim() || 'Descripción no disponible',
+                    category: values[3]?.trim() || 'Postres',
+                    image: values[4]?.trim() || getDefaultImage(values[3]?.trim()),
+                    time: values[5]?.trim() || '30 min',
+                    portions: parseInt(values[6]) || 4,
+                    difficulty: values[7]?.trim() || 'Media',
+                    ingredients: values[8]?.trim().replace(/↵/g, '\n') || 'Ingredientes no especificados',
+                    instructions: values[9]?.trim().replace(/↵/g, '\n') || 'Instrucciones no disponibles'
+                };
+                
+                // Solo agregar si tiene título
+                if (recipe.title && recipe.title !== 'Receta sin título') {
+                    recipes.push(recipe);
+                    console.log(`✓ Receta agregada: ${recipe.title}`);
+                }
+            } else {
+                console.log(`✗ Línea ${i} ignorada: solo ${values.length} valores`);
             }
+        } catch (error) {
+            console.error(`Error parseando línea ${i}:`, error);
         }
     }
     
@@ -139,6 +403,18 @@ function loadSampleRecipes() {
             difficulty: "Media",
             ingredients: "- 200g de galletas de chocolate\n- 100g de mantequilla derretida\n- 300g de chocolate negro\n- 200ml de nata para montar\n- 3 huevos\n- 100g de azúcar\n- 1 cucharadita de esencia de vainilla",
             instructions: "1. Triturar las galletas y mezclar con la mantequilla derretida.\n2. Forrar un molde con esta mezcla y reservar en frío.\n3. Derretir el chocolate al baño maría.\n4. Montar la nata y reservar.\n5. Batir los huevos con el azúcar hasta que blanqueen.\n6. Mezclar el chocolate derretido con los huevos batidos.\n7. Incorporar la nata montada con movimientos envolventes.\n8. Verter sobre la base de galleta y refrigerar 4 horas.\n9. Decorar con virutas de chocolate antes de servir."
+        },
+        {
+            id: 2,
+            title: "Pasta Carbonara Auténtica",
+            description: "La clásica pasta carbonara italiana con huevo, panceta y queso pecorino.",
+            category: "Comidas Saladas",
+            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3",
+            time: "30 min",
+            portions: 4,
+            difficulty: "Fácil",
+            ingredients: "- 400g de spaghetti\n- 200g de panceta o guanciale\n- 4 yemas de huevo\n- 100g de queso pecorino rallado\n- Pimienta negra recién molida\n- Sal",
+            instructions: "1. Cocer la pasta en agua con sal según instrucciones del paquete.\n2. Dorar la panceta en una sartén sin aceite.\n3. Batir las yemas con el queso pecorino y mucha pimienta.\n4. Escurrir la pasta y mezclar inmediatamente con la panceta y su grasa.\n5. Retirar del fuego y agregar la mezcla de huevo revolviendo rápido.\n6. Servir inmediatamente con más queso y pimienta por encima."
         }
     ];
     
@@ -147,87 +423,6 @@ function loadSampleRecipes() {
     updateRecipeCounts();
     updateTotalRecipes();
 }
-
-// =============== INICIALIZACIÓN ===============
-document.addEventListener('DOMContentLoaded', function() {
-    console.log('🍳 Zona Total Recetas - Iniciando...');
-    
-    // Menú móvil
-    const hamburger = document.querySelector('.hamburger');
-    const navMenu = document.querySelector('.nav-menu');
-    if (hamburger && navMenu) {
-        hamburger.addEventListener('click', () => {
-            hamburger.classList.toggle('active');
-            navMenu.classList.toggle('active');
-        });
-        document.querySelectorAll('.nav-link').forEach(link => {
-            link.addEventListener('click', () => {
-                hamburger.classList.remove('active');
-                navMenu.classList.remove('active');
-            });
-        });
-    }
-
-    // Búsqueda
-    const searchInput = document.getElementById('search-input');
-    if (searchInput) {
-        searchInput.addEventListener('input', (e) => {
-            searchQuery = e.target.value.toLowerCase();
-            renderRecipes();
-            updateRecipeCounts();
-        });
-    }
-
-    // Configurar modal
-    const modalClose = document.getElementById('modal-close');
-    const closeModalBtn = document.getElementById('close-modal-btn');
-    const recipeModal = document.getElementById('recipe-modal');
-    
-    if (modalClose) modalClose.addEventListener('click', closeModal);
-    if (closeModalBtn) closeModalBtn.addEventListener('click', closeModal);
-    
-    if (recipeModal) {
-        recipeModal.addEventListener('click', (e) => {
-            if (e.target === recipeModal) closeModal();
-        });
-    }
-
-    // Configurar Admin
-    setupAdmin();
-    
-    // Categorías click
-    document.querySelectorAll('.category-card').forEach(card => {
-        card.addEventListener('click', function() {
-            const category = this.dataset.category;
-            currentCategory = category;
-            
-            // Actualizar botones de filtro
-            document.querySelectorAll('.filter-btn').forEach(btn => {
-                btn.classList.remove('active');
-                if (btn.dataset.category === category) {
-                    btn.classList.add('active');
-                }
-            });
-            
-            renderRecipes();
-            updateRecipeCounts();
-            
-            // Scroll a recetas
-            document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
-        });
-    });
-    
-    // Cargar recetas desde Google Sheets
-    loadRecipesFromGoogleSheets();
-    
-    // Botón de reintento
-    const retryBtn = document.getElementById('retry-load-btn');
-    if (retryBtn) {
-        retryBtn.addEventListener('click', () => {
-            loadRecipesFromGoogleSheets();
-        });
-    }
-});
 
 // =============== FUNCIONES DE INTERFAZ ===============
 function showLoading(show) {
@@ -310,7 +505,7 @@ function renderRecipes() {
     if (filteredRecipes.length === 0) {
         recipesGrid.innerHTML = `
             <div style="grid-column: 1/-1; text-align: center; padding: 50px 20px;">
-                <i class="fas fa-utensil-spoon" style="font-size: 4rem; color: var(--primary-orange); margin-bottom: 20px; opacity: 0.7;"></i>
+                <i class="fas fa-utensil-spoon" style="font-size: 4rem; color: var(--primary-gold); margin-bottom: 20px; opacity: 0.7;"></i>
                 <h3 style="color: var(--text-color); margin-bottom: 15px;">No se encontraron recetas</h3>
                 <p style="color: var(--text-secondary); margin-bottom: 25px;">
                     ${searchQuery ? 'Prueba con otros términos de búsqueda.' : 'No hay recetas disponibles en esta categoría.'}
@@ -348,7 +543,7 @@ function createRecipeCard(recipe) {
     recipeCard.innerHTML = `
         <div class="recipe-image">
             <img src="${recipe.image}" alt="${recipe.title}" 
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjZjhmOGY4Ii8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJQb3BwaW5zIiBmb250LXNpemU9IjE0IiBmaWxsPSIjNjY2IiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+${encodeURIComponent(recipe.title)}PC90ZXh0Pjx0ZXh0IHg9IjUwJSIgeT0iNjAlIiBmb250LWZhbWlseT0iUG9wcGlucyIgZm9udC1zaXplPSIxMiIgZmlsbD0iIzk5OSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZHk9Ii4zZW0iPkltYWdlbiBubyBkaXNwb25pYmxlPC90ZXh0Pjwvc3ZnPg='; this.style.objectFit='contain'; this.style.padding='20px'">
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+JXtyZWNpcGUudGl0bGV9PC90ZXh0Pjwvc3ZnPg='; this.style.objectFit='contain'; this.style.padding='20px'">
         </div>
         <div class="recipe-content">
             <div class="recipe-header">
@@ -450,26 +645,26 @@ function openRecipeModal(recipe) {
             
             <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 30px; margin-bottom: 30px;">
                 <div>
-                    <h4 style="color: var(--primary-green); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-green);">
+                    <h4 style="color: var(--primary-gold); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-gold);">
                         <i class="fas fa-shopping-basket"></i> Ingredientes
                     </h4>
-                    <div style="background-color: var(--light-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8;">
+                    <div style="background-color: var(--dark-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8; border: 1px solid var(--medium-gray);">
                         ${recipe.ingredients}
                     </div>
                 </div>
                 
                 <div>
-                    <h4 style="color: var(--primary-orange); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--primary-orange);">
+                    <h4 style="color: var(--gold-light); margin-bottom: 15px; padding-bottom: 10px; border-bottom: 2px solid var(--gold-light);">
                         <i class="fas fa-list-ol"></i> Instrucciones
                     </h4>
-                    <div style="background-color: var(--light-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8;">
+                    <div style="background-color: var(--dark-gray); padding: 20px; border-radius: 5px; white-space: pre-line; line-height: 1.8; border: 1px solid var(--medium-gray);">
                         ${recipe.instructions}
                     </div>
                 </div>
             </div>
             
-            <div style="margin-top: 30px; padding: 20px; background-color: rgba(46, 139, 87, 0.05); border-radius: 10px; border-left: 4px solid var(--primary-green);">
-                <h5 style="color: var(--primary-green); margin-bottom: 10px;">
+            <div style="margin-top: 30px; padding: 20px; background-color: rgba(212, 175, 55, 0.05); border-radius: 10px; border-left: 4px solid var(--primary-gold);">
+                <h5 style="color: var(--primary-gold); margin-bottom: 10px;">
                     <i class="fas fa-lightbulb"></i> Consejos
                 </h5>
                 <p style="color: var(--text-secondary); font-size: 0.95rem;">
@@ -494,95 +689,7 @@ function closeModal() {
     }
 }
 
-// =============== ADMIN (solo lectura ahora) ===============
-function setupAdmin() {
-    // Botón Admin
-    const adminAccessBtn = document.getElementById('admin-access-btn');
-    if (adminAccessBtn) {
-        adminAccessBtn.addEventListener('click', (e) => {
-            e.preventDefault();
-            document.getElementById('admin-overlay').style.display = 'flex';
-            document.body.style.overflow = 'hidden';
-            loadAdminRecipes();
-        });
-    }
-    
-    // Login (simplificado - solo para mostrar)
-    const loginForm = document.getElementById('login-form');
-    if (loginForm) {
-        loginForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            // Acceso directo para demo
-            document.getElementById('admin-login').style.display = 'none';
-            document.getElementById('admin-panel').style.display = 'block';
-            loadAdminRecipes();
-            loadEditRecipeSelect();
-        });
-    }
-    
-    // Botón mostrar credenciales
-    const showCredsBtn = document.getElementById('show-creds-btn');
-    if (showCredsBtn) {
-        showCredsBtn.addEventListener('click', () => {
-            const loginHint = document.getElementById('login-hint');
-            if (loginHint) {
-                loginHint.classList.toggle('active');
-                showCredsBtn.textContent = loginHint.classList.contains('active') ? 
-                    'Ocultar Credenciales' : 'Mostrar Credenciales';
-            }
-        });
-    }
-    
-    // Cancelar login
-    const cancelLoginBtn = document.getElementById('cancel-login-btn');
-    if (cancelLoginBtn) {
-        cancelLoginBtn.addEventListener('click', () => {
-            document.getElementById('admin-overlay').style.display = 'none';
-            document.body.style.overflow = 'auto';
-        });
-    }
-    
-    // Logout
-    const logoutBtn = document.getElementById('logout-btn');
-    if (logoutBtn) {
-        logoutBtn.addEventListener('click', () => {
-            document.getElementById('admin-login').style.display = 'block';
-            document.getElementById('admin-panel').style.display = 'none';
-            document.getElementById('admin-username').value = '';
-            document.getElementById('admin-password').value = '';
-            const loginHint = document.getElementById('login-hint');
-            if (loginHint) loginHint.classList.remove('active');
-            const showCredsBtn = document.getElementById('show-creds-btn');
-            if (showCredsBtn) showCredsBtn.textContent = 'Mostrar Credenciales';
-        });
-    }
-    
-    // Tabs (solo mostrar)
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            
-            // Actualizar botones
-            tabBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Actualizar contenido
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-            
-            // Mostrar mensaje informativo
-            if (tabId === 'add-recipe-tab' || tabId === 'edit-recipe-tab') {
-                showAdminMessage('Para agregar o editar recetas, debes hacerlo directamente en Google Sheets.', 'info');
-            }
-        });
-    });
-}
-
+// =============== FUNCIONES ADMIN (DEMO - EN MEMORIA) ===============
 function loadAdminRecipes() {
     const adminRecipesList = document.getElementById('admin-recipes-list');
     if (!adminRecipesList) return;
@@ -590,15 +697,7 @@ function loadAdminRecipes() {
     adminRecipesList.innerHTML = '';
     
     if (recipes.length === 0) {
-        adminRecipesList.innerHTML = `
-            <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-                <i class="fas fa-utensil-spoon" style="font-size: 3rem; margin-bottom: 20px; opacity: 0.5;"></i>
-                <p>No hay recetas cargadas desde Google Sheets.</p>
-                <button onclick="loadRecipesFromGoogleSheets()" class="btn btn-primary" style="margin-top: 20px;">
-                    <i class="fas fa-redo"></i> Cargar Recetas
-                </button>
-            </div>
-        `;
+        adminRecipesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">No hay recetas disponibles.</p>';
         return;
     }
     
@@ -609,9 +708,12 @@ function loadAdminRecipes() {
             <div class="admin-recipe-header">
                 <div class="admin-recipe-title">${recipe.title}</div>
                 <div class="admin-recipe-actions">
-                    <span style="font-size: 0.8rem; color: var(--text-secondary);">
-                        <i class="fas fa-database"></i> Desde Google Sheets
-                    </span>
+                    <button class="action-btn edit" onclick="editRecipe(${recipe.id})">
+                        <i class="fas fa-edit"></i> Editar
+                    </button>
+                    <button class="action-btn delete" onclick="deleteRecipePrompt(${recipe.id})">
+                        <i class="fas fa-trash"></i> Eliminar
+                    </button>
                 </div>
             </div>
             <div class="admin-recipe-details">
@@ -629,60 +731,216 @@ function loadEditRecipeSelect() {
     const editRecipeSelect = document.getElementById('edit-recipe-select');
     if (!editRecipeSelect) return;
     
-    editRecipeSelect.innerHTML = '<option value="">Las recetas se editan directamente en Google Sheets</option>';
+    editRecipeSelect.innerHTML = '<option value="">Seleccionar receta para editar</option>';
     
-    // Deshabilitar formularios de edición
-    document.getElementById('add-recipe-form').innerHTML = `
-        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-            <i class="fas fa-exclamation-circle" style="font-size: 3rem; color: var(--primary-orange); margin-bottom: 20px;"></i>
-            <h4 style="margin-bottom: 15px;">Edición Directa en Google Sheets</h4>
-            <p>Para agregar nuevas recetas, edita directamente tu Google Sheets:</p>
-            <p style="margin: 20px 0; font-family: monospace; background: var(--light-gray); padding: 10px; border-radius: 5px;">
-                ${GOOGLE_SHEETS_CSV_URL}
-            </p>
-            <a href="https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/edit" 
-               target="_blank" 
-               class="btn btn-primary">
-                <i class="fas fa-external-link-alt"></i> Abrir Google Sheets
-            </a>
-        </div>
-    `;
-    
-    document.getElementById('edit-recipe-form').innerHTML = `
-        <div style="text-align: center; padding: 40px; color: var(--text-secondary);">
-            <i class="fas fa-info-circle" style="font-size: 3rem; color: var(--primary-green); margin-bottom: 20px;"></i>
-            <h4 style="margin-bottom: 15px;">Modo Solo Lectura</h4>
-            <p>Las recetas se cargan automáticamente desde Google Sheets.</p>
-            <p>Para editar recetas, modifícalas directamente en tu hoja de cálculo.</p>
-            <div style="margin: 20px 0; padding: 15px; background: var(--light-gray); border-radius: 5px;">
-                <p><strong>Instrucciones:</strong></p>
-                <p>1. Abre tu Google Sheets</p>
-                <p>2. Agrega nuevas filas con el formato correcto</p>
-                <p>3. La web se actualizará automáticamente</p>
-            </div>
-        </div>
-    `;
+    recipes.forEach(recipe => {
+        const option = document.createElement('option');
+        option.value = recipe.id;
+        option.textContent = `${recipe.title} (${recipe.category})`;
+        editRecipeSelect.appendChild(option);
+    });
 }
 
-function showAdminMessage(message, type) {
-    const formStatus = document.getElementById('form-status');
-    const editFormStatus = document.getElementById('edit-form-status');
+function loadRecipeForEditing(recipeId) {
+    const recipe = recipes.find(r => r.id === recipeId);
+    if (!recipe) return;
     
-    const color = type === 'info' ? 'var(--primary-orange)' : 
-                  type === 'success' ? 'var(--primary-green)' : 'var(--accent-red)';
-    const icon = type === 'info' ? 'fa-info-circle' : 
-                 type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    // Llenar el formulario de edición
+    document.getElementById('edit-recipe-title').value = recipe.title;
+    document.getElementById('edit-recipe-category').value = recipe.category;
+    document.getElementById('edit-recipe-image').value = recipe.image;
+    document.getElementById('edit-recipe-time').value = recipe.time;
+    document.getElementById('edit-recipe-portions').value = recipe.portions;
+    document.getElementById('edit-recipe-difficulty').value = recipe.difficulty;
+    document.getElementById('edit-recipe-ingredients').value = recipe.ingredients;
+    document.getElementById('edit-recipe-instructions').value = recipe.instructions;
     
-    const html = `
-        <div style="padding: 15px; background-color: rgba(255, 127, 80, 0.1); 
+    // Mostrar formulario
+    document.getElementById('edit-recipe-form').style.display = 'block';
+    document.getElementById('edit-form-status').innerHTML = '';
+}
+
+function addNewRecipe() {
+    const title = document.getElementById('new-recipe-title').value.trim();
+    const category = document.getElementById('new-recipe-category').value;
+    const image = document.getElementById('new-recipe-image').value.trim();
+    const time = document.getElementById('new-recipe-time').value.trim();
+    const portions = parseInt(document.getElementById('new-recipe-portions').value);
+    const difficulty = document.getElementById('new-recipe-difficulty').value;
+    const ingredients = document.getElementById('new-recipe-ingredients').value.trim();
+    const instructions = document.getElementById('new-recipe-instructions').value.trim();
+    
+    // Validación básica
+    if (!title || !category || !image || !time || !portions || !difficulty || !ingredients || !instructions) {
+        showFormStatus('Por favor completa todos los campos obligatorios.', 'error');
+        return;
+    }
+    
+    // Crear nueva receta (en memoria para demo)
+    const newRecipe = {
+        id: recipes.length > 0 ? Math.max(...recipes.map(r => r.id)) + 1 : 1,
+        title,
+        description: `${title} - Una deliciosa receta de ${category.toLowerCase()}.`,
+        category,
+        image,
+        time,
+        portions,
+        difficulty,
+        ingredients,
+        instructions
+    };
+    
+    // Agregar a la lista en memoria
+    recipes.push(newRecipe);
+    
+    // Mostrar éxito
+    showFormStatus(`¡Receta "${title}" agregada exitosamente!`, 'success');
+    
+    // Limpiar formulario
+    document.getElementById('add-recipe-form').reset();
+    
+    // Actualizar vistas
+    renderRecipes();
+    updateRecipeCounts();
+    updateTotalRecipes();
+    loadAdminRecipes();
+    loadEditRecipeSelect();
+    
+    // Scroll a la nueva receta
+    setTimeout(() => {
+        document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
+    }, 500);
+}
+
+function saveEditedRecipe() {
+    const recipeId = parseInt(document.getElementById('edit-recipe-select').value);
+    const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+    
+    if (recipeIndex === -1) {
+        showEditFormStatus('Receta no encontrada.', 'error');
+        return;
+    }
+    
+    // Actualizar receta en memoria
+    recipes[recipeIndex] = {
+        ...recipes[recipeIndex],
+        title: document.getElementById('edit-recipe-title').value.trim(),
+        category: document.getElementById('edit-recipe-category').value,
+        image: document.getElementById('edit-recipe-image').value.trim(),
+        time: document.getElementById('edit-recipe-time').value.trim(),
+        portions: parseInt(document.getElementById('edit-recipe-portions').value),
+        difficulty: document.getElementById('edit-recipe-difficulty').value,
+        ingredients: document.getElementById('edit-recipe-ingredients').value.trim(),
+        instructions: document.getElementById('edit-recipe-instructions').value.trim()
+    };
+    
+    // Mostrar éxito
+    showEditFormStatus(`¡Receta "${recipes[recipeIndex].title}" actualizada exitosamente!`, 'success');
+    
+    // Actualizar vistas
+    renderRecipes();
+    updateRecipeCounts();
+    loadAdminRecipes();
+    loadEditRecipeSelect();
+    
+    // Resetear formulario de edición
+    setTimeout(() => {
+        document.getElementById('edit-recipe-form').style.display = 'none';
+        document.getElementById('edit-recipe-select').value = '';
+        document.getElementById('edit-form-status').innerHTML = '';
+    }, 2000);
+}
+
+function deleteRecipe(recipeId) {
+    const recipeIndex = recipes.findIndex(r => r.id === recipeId);
+    
+    if (recipeIndex === -1) {
+        showEditFormStatus('Receta no encontrada.', 'error');
+        return;
+    }
+    
+    const recipeTitle = recipes[recipeIndex].title;
+    
+    // Eliminar receta en memoria
+    recipes.splice(recipeIndex, 1);
+    
+    // Mostrar éxito
+    showEditFormStatus(`¡Receta "${recipeTitle}" eliminada exitosamente!`, 'success');
+    
+    // Actualizar vistas
+    renderRecipes();
+    updateRecipeCounts();
+    updateTotalRecipes();
+    loadAdminRecipes();
+    loadEditRecipeSelect();
+    
+    // Resetear formulario de edición
+    setTimeout(() => {
+        document.getElementById('edit-recipe-form').style.display = 'none';
+        document.getElementById('edit-recipe-select').value = '';
+        document.getElementById('edit-form-status').innerHTML = '';
+    }, 2000);
+}
+
+function deleteRecipePrompt(recipeId) {
+    if (confirm('¿Estás seguro de que quieres eliminar esta receta? Esta acción no se puede deshacer.')) {
+        deleteRecipe(recipeId);
+    }
+}
+
+function editRecipe(recipeId) {
+    // Cambiar a pestaña de edición
+    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+    
+    document.querySelector('[data-tab="edit-recipe-tab"]').classList.add('active');
+    document.getElementById('edit-recipe-tab').classList.add('active');
+    
+    // Seleccionar la receta
+    document.getElementById('edit-recipe-select').value = recipeId;
+    loadRecipeForEditing(recipeId);
+}
+
+function showFormStatus(message, type) {
+    const statusElement = document.getElementById('form-status');
+    if (!statusElement) return;
+    
+    const color = type === 'success' ? '#4CAF50' : '#ff6b6b';
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    statusElement.innerHTML = `
+        <div style="padding: 15px; background-color: ${type === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; 
                     border-radius: 5px; border-left: 4px solid ${color}; color: ${color};">
             <i class="fas ${icon}" style="margin-right: 10px;"></i>
             ${message}
         </div>
     `;
     
-    if (formStatus) formStatus.innerHTML = html;
-    if (editFormStatus) editFormStatus.innerHTML = html;
+    // Auto-ocultar después de 5 segundos
+    setTimeout(() => {
+        statusElement.innerHTML = '';
+    }, 5000);
+}
+
+function showEditFormStatus(message, type) {
+    const statusElement = document.getElementById('edit-form-status');
+    if (!statusElement) return;
+    
+    const color = type === 'success' ? '#4CAF50' : '#ff6b6b';
+    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+    
+    statusElement.innerHTML = `
+        <div style="padding: 15px; background-color: ${type === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; 
+                    border-radius: 5px; border-left: 4px solid ${color}; color: ${color};">
+            <i class="fas ${icon}" style="margin-right: 10px;"></i>
+            ${message}
+        </div>
+    `;
+    
+    // Auto-ocultar después de 5 segundos
+    setTimeout(() => {
+        statusElement.innerHTML = '';
+    }, 5000);
 }
 
 // =============== FUNCIONES GLOBALES ===============
@@ -696,8 +954,6 @@ window.clearSearch = function() {
 
 window.openRecipeModal = openRecipeModal;
 window.closeModal = closeModal;
+window.editRecipe = editRecipe;
+window.deleteRecipePrompt = deleteRecipePrompt;
 window.loadRecipesFromGoogleSheets = loadRecipesFromGoogleSheets;
-
-// Para depuración
-window.getRecipes = () => recipes;
-window.getGoogleSheetsURL = () => GOOGLE_SHEETS_CSV_URL;
