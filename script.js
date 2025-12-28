@@ -1,7 +1,7 @@
 // =============== CONFIGURACIÓN GOOGLE SHEETS ===============
 const GOOGLE_SHEETS_ID = '1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ';
 const SHEET_NAME = 'recetas';
-const GOOGLE_SHEETS_CSV_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/gviz/tq?tqx=out:csv&sheet=${SHEET_NAME}`;
+const GOOGLE_SHEETS_CSV_URL = `https://docs.google.com/spreadsheets/d/1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ/edit?gid=1201005628#gid=1201005628`;
 
 // Variables globales
 let recipes = [];
