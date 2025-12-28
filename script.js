@@ -1,7 +1,9 @@
 // =============== CONFIGURACIÓN GOOGLE SHEETS ===============
+// ID de tu Google Sheets
 const GOOGLE_SHEETS_ID = '1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ';
-const SHEET_NAME = 'recetas';
-const GOOGLE_SHEETS_CSV_URL = `https://docs.google.com/spreadsheets/d/1YAqfZadMR5O6mABhl0QbhF8scbtIW9JJPfwdED4bzDQ/edit?gid=1201005628#gid=1201005628`;
+// IMPORTANTE: Si tu hoja tiene un gid diferente, cámbialo aquí
+const SHEET_GID = '1201005628'; // ← ¡CAMBIAR SI ES DIFERENTE!
+const GOOGLE_SHEETS_URL = `https://docs.google.com/spreadsheets/d/${GOOGLE_SHEETS_ID}/export?format=csv&gid=${SHEET_GID}`;
 
 // Variables globales
 let recipes = [];
@@ -177,85 +179,6 @@ function initAdmin() {
             if (showCredsBtn) showCredsBtn.textContent = 'Mostrar Credenciales';
         });
     }
-    
-    // Tabs Admin
-    const tabBtns = document.querySelectorAll('.tab-btn');
-    tabBtns.forEach(btn => {
-        btn.addEventListener('click', function() {
-            const tabId = this.dataset.tab;
-            
-            // Actualizar botones
-            tabBtns.forEach(b => b.classList.remove('active'));
-            this.classList.add('active');
-            
-            // Actualizar contenido
-            document.querySelectorAll('.tab-content').forEach(content => {
-                content.classList.remove('active');
-                if (content.id === tabId) {
-                    content.classList.add('active');
-                }
-            });
-            
-            // Cargar datos si es necesario
-            if (tabId === 'recipes-tab') {
-                loadAdminRecipes();
-            } else if (tabId === 'edit-recipe-tab') {
-                loadEditRecipeSelect();
-            }
-        });
-    });
-    
-    // Agregar receta (en memoria para demo)
-    const addRecipeForm = document.getElementById('add-recipe-form');
-    if (addRecipeForm) {
-        addRecipeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            addNewRecipe();
-        });
-    }
-    
-    // Editar receta (en memoria para demo)
-    const editRecipeSelect = document.getElementById('edit-recipe-select');
-    if (editRecipeSelect) {
-        editRecipeSelect.addEventListener('change', function() {
-            const recipeId = parseInt(this.value);
-            if (recipeId) {
-                loadRecipeForEditing(recipeId);
-            } else {
-                document.getElementById('edit-recipe-form').style.display = 'none';
-            }
-        });
-    }
-    
-    // Guardar edición (en memoria para demo)
-    const editRecipeForm = document.getElementById('edit-recipe-form');
-    if (editRecipeForm) {
-        editRecipeForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            saveEditedRecipe();
-        });
-    }
-    
-    // Cancelar edición
-    const cancelEditBtn = document.getElementById('cancel-edit-btn');
-    if (cancelEditBtn) {
-        cancelEditBtn.addEventListener('click', () => {
-            document.getElementById('edit-recipe-form').style.display = 'none';
-            document.getElementById('edit-recipe-select').value = '';
-            document.getElementById('edit-form-status').innerHTML = '';
-        });
-    }
-    
-    // Eliminar receta (en memoria para demo)
-    const deleteRecipeBtn = document.getElementById('delete-recipe-btn');
-    if (deleteRecipeBtn) {
-        deleteRecipeBtn.addEventListener('click', () => {
-            const recipeId = parseInt(document.getElementById('edit-recipe-select').value);
-            if (recipeId && confirm('¿Estás seguro de que quieres eliminar esta receta? Esta acción no se puede deshacer.')) {
-                deleteRecipe(recipeId);
-            }
-        });
-    }
 }
 
 // =============== FUNCIONES PARA GOOGLE SHEETS ===============
@@ -263,19 +186,30 @@ async function loadRecipesFromGoogleSheets() {
     try {
         showLoading(true);
         
-        console.log('📥 Intentando cargar recetas desde:', GOOGLE_SHEETS_CSV_URL);
+        console.log('📥 Intentando cargar recetas desde:', GOOGLE_SHEETS_URL);
         
-        const response = await fetch(GOOGLE_SHEETS_CSV_URL);
+        const response = await fetch(GOOGLE_SHEETS_URL);
         if (!response.ok) {
-            throw new Error(`Error HTTP: ${response.status}`);
+            throw new Error(`Error HTTP: ${response.status} - ${response.statusText}`);
         }
         
         const csvText = await response.text();
-        console.log('✅ CSV descargado, tamaño:', csvText.length, 'caracteres');
+        
+        // Verificar que el CSV no esté vacío
+        if (!csvText || csvText.trim().length === 0) {
+            throw new Error('El archivo CSV está vacío');
+        }
+        
+        console.log('✅ CSV descargado correctamente');
+        console.log('Primeras 500 caracteres del CSV:', csvText.substring(0, 500));
         
         recipes = parseCSV(csvText);
         
         console.log(`✅ Cargadas ${recipes.length} recetas desde Google Sheets`);
+        
+        if (recipes.length === 0) {
+            throw new Error('No se encontraron recetas en el archivo CSV');
+        }
         
         // Actualizar la interfaz
         renderFilters();
@@ -284,13 +218,16 @@ async function loadRecipesFromGoogleSheets() {
         updateTotalRecipes();
         
         showLoading(false);
+        hideError();
+        
         return recipes;
     } catch (error) {
         console.error('❌ Error cargando recetas:', error);
         showError(`No se pudieron cargar las recetas: ${error.message}`);
         showLoading(false);
         
-        // Mostrar datos de ejemplo si hay error
+        // Mostrar datos de ejemplo para debug
+        console.log('Mostrando recetas de ejemplo para debug...');
         loadSampleRecipes();
         return [];
     }
@@ -300,44 +237,58 @@ function parseCSV(csvText) {
     const lines = csvText.split('\n');
     const recipes = [];
     
+    console.log(`📊 Total de líneas en CSV: ${lines.length}`);
+    
     // Verificar si hay datos
     if (lines.length <= 1) {
         console.log('⚠️ El CSV está vacío o solo tiene encabezados');
         return recipes;
     }
     
-    console.log('📊 Total de líneas en CSV:', lines.length);
+    // Mostrar encabezados para debug
+    console.log('📋 Encabezados del CSV:', lines[0]);
     
-    // Saltar la primera línea (encabezados)
+    // Procesar cada línea (empezando desde la fila 1 para saltar encabezados)
     for (let i = 1; i < lines.length; i++) {
         const line = lines[i].trim();
-        if (!line) continue;
+        
+        // Saltar líneas vacías
+        if (!line || line === ',') continue;
+        
+        console.log(`📝 Procesando línea ${i}: "${line.substring(0, 50)}..."`);
         
         try {
-            // Parsear línea CSV (manejar comas dentro de comillas)
-            const values = parseCSVLine(line);
+            // Parsear línea CSV simple
+            const values = line.split(',').map(value => {
+                let trimmed = value.trim();
+                // Remover comillas si las hay
+                if (trimmed.startsWith('"') && trimmed.endsWith('"')) {
+                    trimmed = trimmed.substring(1, trimmed.length - 1);
+                }
+                return trimmed;
+            });
             
-            console.log(`Línea ${i}:`, values);
+            console.log(`Valores parseados:`, values);
             
-            // Verificar que tenemos suficientes valores
-            if (values.length >= 10) {
+            // Asegurar que tenemos al menos 3 valores (id, título, categoría)
+            if (values.length >= 4) {
                 const recipe = {
                     id: parseInt(values[0]) || i,
-                    title: values[1]?.trim() || `Receta ${i}`,
-                    description: values[2]?.trim() || 'Descripción no disponible',
-                    category: values[3]?.trim() || 'Postres',
-                    image: values[4]?.trim() || getDefaultImage(values[3]?.trim()),
-                    time: values[5]?.trim() || '30 min',
+                    title: values[1] || `Receta ${i}`,
+                    description: values[2] || 'Descripción no disponible',
+                    category: values[3] || 'Postres',
+                    image: values[4] || getDefaultImage(values[3]),
+                    time: values[5] || '30 min',
                     portions: parseInt(values[6]) || 4,
-                    difficulty: values[7]?.trim() || 'Media',
-                    ingredients: values[8]?.trim().replace(/↵/g, '\n') || 'Ingredientes no especificados',
-                    instructions: values[9]?.trim().replace(/↵/g, '\n') || 'Instrucciones no disponibles'
+                    difficulty: values[7] || 'Media',
+                    ingredients: (values[8] || 'Ingredientes no especificados').replace(/\\n/g, '\n'),
+                    instructions: (values[9] || 'Instrucciones no disponibles').replace(/\\n/g, '\n')
                 };
                 
                 // Solo agregar si tiene título
                 if (recipe.title && recipe.title !== 'Receta sin título') {
                     recipes.push(recipe);
-                    console.log(`✓ Receta agregada: ${recipe.title}`);
+                    console.log(`✓ Receta agregada: ${recipe.title} (${recipe.category})`);
                 }
             } else {
                 console.log(`✗ Línea ${i} ignorada: solo ${values.length} valores`);
@@ -350,44 +301,16 @@ function parseCSV(csvText) {
     return recipes;
 }
 
-function parseCSVLine(line) {
-    const values = [];
-    let current = '';
-    let inQuotes = false;
-    
-    for (let i = 0; i < line.length; i++) {
-        const char = line[i];
-        const nextChar = line[i + 1];
-        
-        if (char === '"') {
-            if (inQuotes && nextChar === '"') {
-                current += '"';
-                i++; // Saltar la siguiente comilla
-            } else {
-                inQuotes = !inQuotes;
-            }
-        } else if (char === ',' && !inQuotes) {
-            values.push(current);
-            current = '';
-        } else {
-            current += char;
-        }
-    }
-    
-    values.push(current); // Último valor
-    return values;
-}
-
 function getDefaultImage(category) {
     const defaultImages = {
-        'Postres': 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e',
-        'Comidas Saladas': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187',
-        'Bebidas': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b',
-        'Sopas y Cremas': 'https://images.unsplash.com/photo-1547592166-23ac45744acd',
-        'Repostería': 'https://images.unsplash.com/photo-1555507036-ab794f27d2e9'
+        'Postres': 'https://images.unsplash.com/photo-1563729784474-d77dbb933a9e?w=400&auto=format&fit=crop',
+        'Comidas Saladas': 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w-400&auto=format&fit=crop',
+        'Bebidas': 'https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&auto=format&fit=crop',
+        'Sopas y Cremas': 'https://images.unsplash.com/photo-1547592166-23ac45744acd?w=400&auto=format&fit=crop',
+        'Repostería': 'https://images.unsplash.com/photo-1555507036-ab794f27d2e9?w=400&auto=format&fit=crop'
     };
     
-    return defaultImages[category] || 'https://images.unsplash.com/photo-1565958011703-44f9829ba187';
+    return defaultImages[category] || 'https://images.unsplash.com/photo-1565958011703-44f9829ba187?w=400&auto=format&fit=crop';
 }
 
 function loadSampleRecipes() {
@@ -397,7 +320,7 @@ function loadSampleRecipes() {
             title: "Tarta de Chocolate Intenso",
             description: "Una tarta de chocolate rica y cremosa con base de galleta",
             category: "Postres",
-            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587",
+            image: "https://images.unsplash.com/photo-1578985545062-69928b1d9587?w=400&auto=format&fit=crop",
             time: "1 hora 30 min",
             portions: 8,
             difficulty: "Media",
@@ -409,12 +332,24 @@ function loadSampleRecipes() {
             title: "Pasta Carbonara Auténtica",
             description: "La clásica pasta carbonara italiana con huevo, panceta y queso pecorino.",
             category: "Comidas Saladas",
-            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3",
+            image: "https://images.unsplash.com/photo-1612874742237-6526221588e3?w=400&auto=format&fit=crop",
             time: "30 min",
             portions: 4,
             difficulty: "Fácil",
             ingredients: "- 400g de spaghetti\n- 200g de panceta o guanciale\n- 4 yemas de huevo\n- 100g de queso pecorino rallado\n- Pimienta negra recién molida\n- Sal",
             instructions: "1. Cocer la pasta en agua con sal según instrucciones del paquete.\n2. Dorar la panceta en una sartén sin aceite.\n3. Batir las yemas con el queso pecorino y mucha pimienta.\n4. Escurrir la pasta y mezclar inmediatamente con la panceta y su grasa.\n5. Retirar del fuego y agregar la mezcla de huevo revolviendo rápido.\n6. Servir inmediatamente con más queso y pimienta por encima."
+        },
+        {
+            id: 3,
+            title: "Mojito Cubano",
+            description: "Refrescante cóctel cubano con ron, hierbabuena y lima",
+            category: "Bebidas",
+            image: "https://images.unsplash.com/photo-1514362545857-3bc16c4c7d1b?w=400&auto=format&fit=crop",
+            time: "10 min",
+            portions: 1,
+            difficulty: "Fácil",
+            ingredients: "- 6 hojas de hierbabuena\n- 1/2 lima\n- 2 cucharaditas de azúcar\n- 60ml de ron blanco\n- Hielo picado\n- Soda o agua con gas\n- Rodaja de lima para decorar",
+            instructions: "1. Machacar la hierbabuena con el azúcar y el jugo de lima en un vaso.\n2. Agregar el ron y remover.\n3. Llenar con hielo picado.\n4. Completar con soda.\n5. Decorar con rodaja de lima y hierbabuena.\n6. Servir inmediatamente."
         }
     ];
     
@@ -431,8 +366,12 @@ function showLoading(show) {
     const recipesGrid = document.getElementById('recipes-grid');
     
     if (loadingElement) loadingElement.style.display = show ? 'block' : 'none';
-    if (errorElement) errorElement.style.display = 'none';
     if (recipesGrid) recipesGrid.style.display = show ? 'none' : 'grid';
+}
+
+function hideError() {
+    const errorElement = document.getElementById('error-recipes');
+    if (errorElement) errorElement.style.display = 'none';
 }
 
 function showError(message) {
@@ -543,7 +482,7 @@ function createRecipeCard(recipe) {
     recipeCard.innerHTML = `
         <div class="recipe-image">
             <img src="${recipe.image}" alt="${recipe.title}" 
-                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+JXtyZWNpcGUudGl0bGV9PC90ZXh0Pjwvc3ZnPg='; this.style.objectFit='contain'; this.style.padding='20px'">
+                 onerror="this.onerror=null; this.src='data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzIwIiBoZWlnaHQ9IjIwMCIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj48cmVjdCB3aWR0aD0iMTAwJSIgaGVpZ2h0PSIxMDAlIiBmaWxsPSIjMzMzIi8+PHRleHQgeD0iNTAlIiB5PSI1MCUiIGZvbnQtZmFtaWx5PSJNb250c2VycmF0IiBmb250LXNpemU9IjE0IiBmaWxsPSIjZmZmIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBkeT0iLjNlbSI+JHtyZWNpcGUudGl0bGV9PC90ZXh0Pjwvc3ZnPg='; this.style.objectFit='contain'; this.style.padding='20px'">
         </div>
         <div class="recipe-content">
             <div class="recipe-header">
@@ -689,260 +628,6 @@ function closeModal() {
     }
 }
 
-// =============== FUNCIONES ADMIN (DEMO - EN MEMORIA) ===============
-function loadAdminRecipes() {
-    const adminRecipesList = document.getElementById('admin-recipes-list');
-    if (!adminRecipesList) return;
-    
-    adminRecipesList.innerHTML = '';
-    
-    if (recipes.length === 0) {
-        adminRecipesList.innerHTML = '<p style="text-align: center; color: var(--text-secondary); padding: 20px;">No hay recetas disponibles.</p>';
-        return;
-    }
-    
-    recipes.forEach(recipe => {
-        const recipeItem = document.createElement('div');
-        recipeItem.className = 'admin-recipe-item';
-        recipeItem.innerHTML = `
-            <div class="admin-recipe-header">
-                <div class="admin-recipe-title">${recipe.title}</div>
-                <div class="admin-recipe-actions">
-                    <button class="action-btn edit" onclick="editRecipe(${recipe.id})">
-                        <i class="fas fa-edit"></i> Editar
-                    </button>
-                    <button class="action-btn delete" onclick="deleteRecipePrompt(${recipe.id})">
-                        <i class="fas fa-trash"></i> Eliminar
-                    </button>
-                </div>
-            </div>
-            <div class="admin-recipe-details">
-                <div><strong>Categoría:</strong> ${recipe.category}</div>
-                <div><strong>Tiempo:</strong> ${recipe.time}</div>
-                <div><strong>Porciones:</strong> ${recipe.portions}</div>
-                <div><strong>Dificultad:</strong> ${recipe.difficulty}</div>
-            </div>
-        `;
-        adminRecipesList.appendChild(recipeItem);
-    });
-}
-
-function loadEditRecipeSelect() {
-    const editRecipeSelect = document.getElementById('edit-recipe-select');
-    if (!editRecipeSelect) return;
-    
-    editRecipeSelect.innerHTML = '<option value="">Seleccionar receta para editar</option>';
-    
-    recipes.forEach(recipe => {
-        const option = document.createElement('option');
-        option.value = recipe.id;
-        option.textContent = `${recipe.title} (${recipe.category})`;
-        editRecipeSelect.appendChild(option);
-    });
-}
-
-function loadRecipeForEditing(recipeId) {
-    const recipe = recipes.find(r => r.id === recipeId);
-    if (!recipe) return;
-    
-    // Llenar el formulario de edición
-    document.getElementById('edit-recipe-title').value = recipe.title;
-    document.getElementById('edit-recipe-category').value = recipe.category;
-    document.getElementById('edit-recipe-image').value = recipe.image;
-    document.getElementById('edit-recipe-time').value = recipe.time;
-    document.getElementById('edit-recipe-portions').value = recipe.portions;
-    document.getElementById('edit-recipe-difficulty').value = recipe.difficulty;
-    document.getElementById('edit-recipe-ingredients').value = recipe.ingredients;
-    document.getElementById('edit-recipe-instructions').value = recipe.instructions;
-    
-    // Mostrar formulario
-    document.getElementById('edit-recipe-form').style.display = 'block';
-    document.getElementById('edit-form-status').innerHTML = '';
-}
-
-function addNewRecipe() {
-    const title = document.getElementById('new-recipe-title').value.trim();
-    const category = document.getElementById('new-recipe-category').value;
-    const image = document.getElementById('new-recipe-image').value.trim();
-    const time = document.getElementById('new-recipe-time').value.trim();
-    const portions = parseInt(document.getElementById('new-recipe-portions').value);
-    const difficulty = document.getElementById('new-recipe-difficulty').value;
-    const ingredients = document.getElementById('new-recipe-ingredients').value.trim();
-    const instructions = document.getElementById('new-recipe-instructions').value.trim();
-    
-    // Validación básica
-    if (!title || !category || !image || !time || !portions || !difficulty || !ingredients || !instructions) {
-        showFormStatus('Por favor completa todos los campos obligatorios.', 'error');
-        return;
-    }
-    
-    // Crear nueva receta (en memoria para demo)
-    const newRecipe = {
-        id: recipes.length > 0 ? Math.max(...recipes.map(r => r.id)) + 1 : 1,
-        title,
-        description: `${title} - Una deliciosa receta de ${category.toLowerCase()}.`,
-        category,
-        image,
-        time,
-        portions,
-        difficulty,
-        ingredients,
-        instructions
-    };
-    
-    // Agregar a la lista en memoria
-    recipes.push(newRecipe);
-    
-    // Mostrar éxito
-    showFormStatus(`¡Receta "${title}" agregada exitosamente!`, 'success');
-    
-    // Limpiar formulario
-    document.getElementById('add-recipe-form').reset();
-    
-    // Actualizar vistas
-    renderRecipes();
-    updateRecipeCounts();
-    updateTotalRecipes();
-    loadAdminRecipes();
-    loadEditRecipeSelect();
-    
-    // Scroll a la nueva receta
-    setTimeout(() => {
-        document.getElementById('recipes').scrollIntoView({ behavior: 'smooth' });
-    }, 500);
-}
-
-function saveEditedRecipe() {
-    const recipeId = parseInt(document.getElementById('edit-recipe-select').value);
-    const recipeIndex = recipes.findIndex(r => r.id === recipeId);
-    
-    if (recipeIndex === -1) {
-        showEditFormStatus('Receta no encontrada.', 'error');
-        return;
-    }
-    
-    // Actualizar receta en memoria
-    recipes[recipeIndex] = {
-        ...recipes[recipeIndex],
-        title: document.getElementById('edit-recipe-title').value.trim(),
-        category: document.getElementById('edit-recipe-category').value,
-        image: document.getElementById('edit-recipe-image').value.trim(),
-        time: document.getElementById('edit-recipe-time').value.trim(),
-        portions: parseInt(document.getElementById('edit-recipe-portions').value),
-        difficulty: document.getElementById('edit-recipe-difficulty').value,
-        ingredients: document.getElementById('edit-recipe-ingredients').value.trim(),
-        instructions: document.getElementById('edit-recipe-instructions').value.trim()
-    };
-    
-    // Mostrar éxito
-    showEditFormStatus(`¡Receta "${recipes[recipeIndex].title}" actualizada exitosamente!`, 'success');
-    
-    // Actualizar vistas
-    renderRecipes();
-    updateRecipeCounts();
-    loadAdminRecipes();
-    loadEditRecipeSelect();
-    
-    // Resetear formulario de edición
-    setTimeout(() => {
-        document.getElementById('edit-recipe-form').style.display = 'none';
-        document.getElementById('edit-recipe-select').value = '';
-        document.getElementById('edit-form-status').innerHTML = '';
-    }, 2000);
-}
-
-function deleteRecipe(recipeId) {
-    const recipeIndex = recipes.findIndex(r => r.id === recipeId);
-    
-    if (recipeIndex === -1) {
-        showEditFormStatus('Receta no encontrada.', 'error');
-        return;
-    }
-    
-    const recipeTitle = recipes[recipeIndex].title;
-    
-    // Eliminar receta en memoria
-    recipes.splice(recipeIndex, 1);
-    
-    // Mostrar éxito
-    showEditFormStatus(`¡Receta "${recipeTitle}" eliminada exitosamente!`, 'success');
-    
-    // Actualizar vistas
-    renderRecipes();
-    updateRecipeCounts();
-    updateTotalRecipes();
-    loadAdminRecipes();
-    loadEditRecipeSelect();
-    
-    // Resetear formulario de edición
-    setTimeout(() => {
-        document.getElementById('edit-recipe-form').style.display = 'none';
-        document.getElementById('edit-recipe-select').value = '';
-        document.getElementById('edit-form-status').innerHTML = '';
-    }, 2000);
-}
-
-function deleteRecipePrompt(recipeId) {
-    if (confirm('¿Estás seguro de que quieres eliminar esta receta? Esta acción no se puede deshacer.')) {
-        deleteRecipe(recipeId);
-    }
-}
-
-function editRecipe(recipeId) {
-    // Cambiar a pestaña de edición
-    document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-    document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
-    
-    document.querySelector('[data-tab="edit-recipe-tab"]').classList.add('active');
-    document.getElementById('edit-recipe-tab').classList.add('active');
-    
-    // Seleccionar la receta
-    document.getElementById('edit-recipe-select').value = recipeId;
-    loadRecipeForEditing(recipeId);
-}
-
-function showFormStatus(message, type) {
-    const statusElement = document.getElementById('form-status');
-    if (!statusElement) return;
-    
-    const color = type === 'success' ? '#4CAF50' : '#ff6b6b';
-    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-    
-    statusElement.innerHTML = `
-        <div style="padding: 15px; background-color: ${type === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; 
-                    border-radius: 5px; border-left: 4px solid ${color}; color: ${color};">
-            <i class="fas ${icon}" style="margin-right: 10px;"></i>
-            ${message}
-        </div>
-    `;
-    
-    // Auto-ocultar después de 5 segundos
-    setTimeout(() => {
-        statusElement.innerHTML = '';
-    }, 5000);
-}
-
-function showEditFormStatus(message, type) {
-    const statusElement = document.getElementById('edit-form-status');
-    if (!statusElement) return;
-    
-    const color = type === 'success' ? '#4CAF50' : '#ff6b6b';
-    const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
-    
-    statusElement.innerHTML = `
-        <div style="padding: 15px; background-color: ${type === 'success' ? 'rgba(76, 175, 80, 0.1)' : 'rgba(255, 107, 107, 0.1)'}; 
-                    border-radius: 5px; border-left: 4px solid ${color}; color: ${color};">
-            <i class="fas ${icon}" style="margin-right: 10px;"></i>
-            ${message}
-        </div>
-    `;
-    
-    // Auto-ocultar después de 5 segundos
-    setTimeout(() => {
-        statusElement.innerHTML = '';
-    }, 5000);
-}
-
 // =============== FUNCIONES GLOBALES ===============
 window.clearSearch = function() {
     searchQuery = '';
@@ -954,6 +639,4 @@ window.clearSearch = function() {
 
 window.openRecipeModal = openRecipeModal;
 window.closeModal = closeModal;
-window.editRecipe = editRecipe;
-window.deleteRecipePrompt = deleteRecipePrompt;
 window.loadRecipesFromGoogleSheets = loadRecipesFromGoogleSheets;
