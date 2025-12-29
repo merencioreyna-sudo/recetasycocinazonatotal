@@ -464,7 +464,7 @@ function setupAdmin() {
             console.log('Usuario:', username, 'Contraseña:', password);
             
             // Credenciales válidas
-            if (username === 'chef' && password === 'recetas123') {
+            if (username === 'admin' && password === 'admin123') {
                 console.log('✅ Login exitoso');
                 document.getElementById('admin-login').style.display = 'none';
                 document.getElementById('admin-panel').style.display = 'block';
@@ -473,7 +473,7 @@ function setupAdmin() {
                 loadAdminRecipes();
             } else {
                 console.log('❌ Login fallido');
-                alert('Credenciales incorrectas.\n\nUsuario: chef\nContraseña: recetas123');
+                alert('Credenciales incorrectas.');
             }
         });
     } else {
