@@ -1,0 +1,281 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ZT Recetas</title>
+
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- HEADER -->
+    <header class="header">
+    
+
+    <div class="logo-circle">ZT</div>
+
+    <input type="text" placeholder="Buscar receta..." class="search">
+
+    <a href="https://merencioreyna-sudo.github.io/zona-total-peliculas/" class="home-link">
+        Inicio
+    </a>
+</header>
+
+
+    <!-- HERO -->
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Descubre recetas increíbles</h2>
+            <p>Fáciles, rápidas y deliciosas</p>
+        </div>
+    </section>
+
+
+    <!-- CATEGORÍAS -->
+    <!-- CATEGORÍAS -->
+<div class="categories-wrapper">
+
+    <div class="arrow left" onclick="scrollCategories(-200)">‹</div>
+
+    <section class="categories">
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/1640777/pexels-photo-1640777.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Fáciles</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/3026804/pexels-photo-3026804.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Postres</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/70497/pexels-photo-70497.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Carnes</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/1640774/pexels-photo-1640774.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Ensaladas</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/1279330/pexels-photo-1279330.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Pastas</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/2109099/pexels-photo-2109099.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Bebidas</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/209540/pexels-photo-209540.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Arroces</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/539451/pexels-photo-539451.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Sopas</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/566566/pexels-photo-566566.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Mariscos</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/461198/pexels-photo-461198.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Comida Cubana</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/704569/pexels-photo-704569.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Desayunos</span>
+        </div>
+
+        <div class="category-item">
+            <img src="https://images.pexels.com/photos/461382/pexels-photo-461382.jpeg?auto=compress&cs=tinysrgb&w=300">
+            <span>Rápidas</span>
+        </div>
+
+    </section>
+
+    <div class="arrow right" onclick="scrollCategories(200)">›</div>
+
+</div>
+
+    <!-- RECETAS -->
+    <section class="recipes">
+    <h2 class="section-title">Recientes</h2>
+
+    <div id="recent-container" class="recipes-scroll"></div>
+
+    <h2 class="section-title">Todas</h2>
+
+    <div id="recipes-container" class="recipes-grid"></div>
+</section>
+
+
+    <script src="script.js"></script>
+<!-- MODAL RECETA -->
+<div id="recipe-modal" class="modal">
+    <div class="modal-content">
+
+        <span class="close-btn" id="close-modal">✖</span>
+
+        <img id="modal-img">
+
+        <h2 id="modal-title"></h2>
+<div id="modal-badges" class="badges modal-badges"></div>
+        <p id="modal-desc"></p>
+
+        <p><strong>Tiempo:</strong> <span id="modal-time"></span></p>
+        <p><strong>Porciones:</strong> <span id="modal-servings"></span></p>
+        <p><strong>Dificultad:</strong> <span id="modal-difficulty"></span></p>
+
+        <div class="box">
+    <h3>Ingredientes</h3>
+    <p id="modal-ingredients"></p>
+</div>
+
+<div class="box">
+    <h3>Preparación</h3>
+    <p id="modal-steps"></p>
+</div>
+
+<button id="btn-pdf" style="
+    background: #6bbf59;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 8px;
+    cursor: pointer;
+    margin-top: 15px;
+    width: 100%;
+    font-size: 16px;
+">
+    📥 Descargar receta en PDF
+</button>
+
+    </div>
+</div>
+
+<!-- FOOTER RESPONSIVE BIEN HECHO -->
+<footer class="footer-zt">
+
+  <div class="footer-left">
+    🍳 Recetas Zona Total
+  </div>
+
+  <div class="footer-center">
+    ✉️
+    <a href="mailto:anelistrabajo@gmail.com">
+      anelistrabajo@gmail.com
+    </a>
+  </div>
+
+  <div class="footer-right">
+    <button id="btnAdmin">Admin</button>
+  </div>
+
+</footer>
+
+<style>
+.footer-zt {
+  margin-top:40px;
+  padding:15px 20px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  flex-wrap:wrap;
+  background:linear-gradient(90deg, #f8f9fa, #ececec);
+  border-top:1px solid #ddd;
+  font-size:14px;
+}
+
+/* IZQUIERDA */
+.footer-left {
+  font-weight:600;
+  color:#333;
+}
+
+/* CENTRO */
+.footer-center {
+  display:flex;
+  align-items:center;
+  gap:6px;
+  color:#555;
+}
+
+.footer-center a {
+  color:#333;
+  text-decoration:none;
+}
+
+.footer-center a:hover {
+  text-decoration:underline;
+}
+
+/* BOTÓN */
+.footer-right button {
+  padding:6px 14px;
+  border:none;
+  background:#333;
+  color:#fff;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:13px;
+  transition:0.2s;
+}
+
+.footer-right button:hover {
+  background:#555;
+}
+
+/* 📱 MÓVIL */
+@media (max-width: 600px) {
+  .footer-zt {
+    flex-direction:column;
+    gap:8px;
+    text-align:center;
+  }
+}
+</style>
+
+<script>
+document.getElementById("btnAdmin").addEventListener("click", function() {
+
+    const pass = prompt("Introduce la contraseña de admin:");
+
+    // Contraseña ofuscada (admin123 en base64)
+    const claveOculta = "YWRtaW4xMjM=";
+
+    function decodificar(base64) {
+        return atob(base64);
+    }
+
+    if (pass === decodificar(claveOculta)) {
+        window.location.href = "admin.html";
+    } else {
+        alert("Contraseña incorrecta");
+    }
+
+});
+</script>
+<div id="modal-categoria" class="modal-categoria">
+
+    <div class="modal-categoria-content">
+
+        <span class="cerrar-categoria" onclick="cerrarCategoria()">✖</span>
+
+        <h2 id="titulo-categoria"></h2>
+
+        <div id="contenedor-categoria" class="grid-categoria"></div>
+
+    </div>
+
+</div>
+</body>
+</html>

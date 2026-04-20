@@ -1,0 +1,566 @@
+/* RESET */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+/* BODY */
+body {
+    font-family: Arial, sans-serif;
+    background: #f5f7f6;
+    color: #333;
+}
+
+/* ================= HEADER ================= */
+.header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between; /* 👈 mejor distribución */
+    gap: 10px;
+    background: #6bbf59;
+    padding: 10px 15px;
+}
+
+
+.logo-circle {
+    background: white;
+    color: #6bbf59;
+    font-weight: bold;
+    border-radius: 50%;
+    width: 35px;
+    height: 35px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.search {
+    flex: 1;
+    padding: 8px 12px;
+    border-radius: 20px;
+    border: none;
+    outline: none;
+}
+
+.home-link {
+    color: white;
+    font-size: 14px;
+    text-decoration: none;
+    font-weight: bold;
+}
+
+/* ================= HERO ================= */
+.hero {
+    position: relative; /* 👈 IMPORTANTE */
+    background: url('https://images.unsplash.com/photo-1504674900247-0877df9cc836') center/cover no-repeat;
+    height: 320px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.4);
+}
+
+.hero-content {
+    position: relative;
+    z-index: 2;
+    background: rgba(255,255,255,0.85);
+    padding: 20px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+.hero h2 {
+    font-size: 22px;
+}
+
+.hero p {
+    font-size: 14px;
+    color: #555;
+}
+
+/* ================= CATEGORIES ================= */
+.categories {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 15px;
+    scroll-behavior: smooth;
+    -webkit-overflow-scrolling: touch;
+}
+.categories::-webkit-scrollbar {
+    display: none;
+}
+
+.category-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-width: 80px;
+}
+
+.category-item img {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    object-fit: cover;
+    border: 3px solid #6bbf59;
+    transition: transform 0.3s;
+    loading: lazy;
+}
+
+.category-item img:hover {
+    transform: scale(1.1);
+}
+
+.category-item span {
+    margin-top: 5px;
+    font-size: 12px;
+}
+
+/* ================= RECIPES ================= */
+.recipes {
+    padding: 20px;
+}
+
+.section-title {
+    margin-bottom: 15px;
+}
+
+/* GRID RESPONSIVE REAL */
+.recipes-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 15px;
+    max-width: 1200px; /* 👈 limita ancho */
+    margin: 0 auto;    /* 👈 centra */
+}
+
+/* CARD */
+.card {
+    background: white;
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+}
+
+.card:hover {
+    transform: translateY(-8px) scale(1.03); /* 👈 sube y crece */
+    box-shadow: 0 8px 20px rgba(0,0,0,0.25); /* 👈 sombra más fuerte */
+    border: 2px solid #6bbf59; /* 👈 borde verde */
+}
+
+.card {
+    transition: all 0.3s ease;
+}
+
+.card img {
+    width: 100%;
+    height: 150px;
+    object-fit: cover;
+}
+
+.card-content {
+    padding: 12px;
+}
+
+.card h3 {
+    font-size: 15px;
+    margin-bottom: 5px;
+}
+
+.card p {
+    font-size: 13px;
+    color: #666;
+}
+
+/* ================= RESPONSIVE ================= */
+
+/* TABLET */
+@media (max-width: 768px) {
+    .hero {
+        height: 220px;
+    }
+
+    .hero h2 {
+        font-size: 18px;
+    }
+}
+
+/* MOBILE */
+@media (max-width: 600px) {
+
+    .header {
+        flex-wrap: wrap;
+    }
+
+    .home-link {
+        width: 100%;
+        text-align: right;
+        margin-top: 5px;
+        margin-right: 5px; /* 👈 AQUÍ */
+    }
+
+    .search {
+        width: 100%;
+    }
+
+    .hero {
+        height: 200px;
+    }
+
+    .category-item img {
+        width: 60px;
+        height: 60px;
+    }
+}
+
+.categories {
+    position: relative;
+}
+
+/* efecto lateral */
+.categories::after {
+    content: "";
+    position: absolute;
+    right: 0;
+    top: 0;
+    height: 100%;
+    width: 40px;
+    background: linear-gradient(to left, #f5f7f6, transparent);
+    pointer-events: none;
+}
+
+@media (min-width: 768px) {
+    .categories {
+        justify-content: center;
+        overflow-x: visible; /* 👈 CLAVE */
+    }
+}
+.categories-wrapper {
+    position: relative;
+    display: flex;
+    justify-content: center; /* 👈 ESTA ES LA CLAVE REAL */
+    align-items: center;
+}
+
+/* Flechas */
+.arrow {
+    position: absolute;
+    top: 70%;
+    transform: translateY(-50%);
+    background: rgba(0,0,0,0.5);
+    color: white;
+    font-size: 22px;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    z-index: 5;
+}
+
+/* izquierda */
+.arrow.left {
+    left: 5px;
+}
+
+/* derecha */
+.arrow.right {
+    right: 5px;
+}
+
+/* ocultar en PC */
+@media (min-width: 768px) {
+    .arrow {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+    .arrow {
+        top: 65%;
+    }
+}
+
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 10000;  /* 👈 Cambiado de 100 a 10000 */
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.7);
+}
+
+.modal.active {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.modal-content {
+    background: white;
+    margin: 3% auto;
+    padding: 15px;
+    width: 90%;
+    max-width: 620px; /* 👈 más compacto */
+    border-radius: 12px;
+    overflow-y: auto;
+    max-height: 85vh; /* 👈 menos alto */
+}
+
+.modal-content img {
+    width: 100%;
+    height: 180px; /* 👈 controla altura */
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.close-btn {
+    float: right;
+    font-size: 20px;
+    cursor: pointer;
+}
+
+/* TITULOS DENTRO DEL MODAL */
+.modal-content h2 {
+    margin: 10px 0;
+}
+
+.modal-content h3 {
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+/* TEXTOS */
+.modal-content p {
+    margin-bottom: 10px;
+    line-height: 1.4;
+}
+
+/* LISTAS */
+.modal-content ul,
+.modal-content ol {
+    margin: 10px 0 15px 0;
+    padding-left: 20px;
+}
+
+.modal-content li {
+    margin-bottom: 6px;
+    line-height: 1.4;
+}
+
+.divider {
+    height: 1px;
+    background: #6bbf59;
+    margin: 15px 0;
+    opacity: 0.5;
+}
+
+.badges {
+    display: flex;
+    gap: 8px;
+    margin: 8px 0;
+    flex-wrap: wrap;
+}
+
+.badges span {
+    background: #6bbf59;
+    color: white;
+    font-size: 11px;
+    padding: 4px 8px;
+    border-radius: 12px;
+}
+
+/* BADGES dentro del modal */
+.modal-badges {
+    justify-content: center;
+    margin-bottom: 10px;
+}
+
+/* CAJAS BONITAS */
+.box {
+    background: #f0f7f0;
+    padding: 12px;
+    border-radius: 8px;
+    margin: 10px 0;
+}
+
+/* título de sección */
+.box h3 {
+    margin-bottom: 8px;
+    color: #6bbf59;
+}
+
+/* CARRUSEL RECENTES */
+.recipes-scroll {
+    display: flex;
+    overflow-x: auto;
+    gap: 15px;
+    padding: 10px 15px;
+    scroll-behavior: auto; /* 👈 CAMBIO CLAVE */
+}
+
+.recipes-scroll::-webkit-scrollbar {
+    display: none;
+}
+
+/* TARJETAS EN CARRUSEL */
+.recipes-scroll .card {
+    min-width: 240px;  /* 👈 tamaño fijo */
+    max-width: 240px;
+    flex: 0 0 auto;    /* 👈 evita que se estiren */
+}
+
+.recipes-scroll {
+    position: relative;
+}
+
+.modal-categoria {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-categoria.active {
+    display: flex;
+}
+
+.modal-categoria {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0,0,0,0.8);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9999;
+}
+
+.modal-categoria-content {
+    background: #ffffff;
+    width: 94%;
+    max-width: 1050px;
+    height: 85%;
+    overflow-y: auto;
+    border-radius: 16px;
+    padding: 20px;
+    border: 3px solid transparent;
+    background-image: linear-gradient(#fff, #fff),
+                      linear-gradient(135deg, #6bbf59, #d4af37);
+    background-origin: border-box;
+    background-clip: padding-box, border-box;
+    box-shadow: 0 10px 40px rgba(0,0,0,0.3);
+    position: relative;
+    display: flex;
+    flex-direction: column;
+}
+
+/* TÍTULO BONITO */
+#titulo-categoria {
+    text-align: center;
+    font-size: 22px;
+    margin-bottom: 15px;
+    color: #6bbf59;
+    font-weight: bold;
+}
+
+/* BOTÓN CERRAR */
+.cerrar-categoria {
+    position: absolute;
+    top: 15px;
+    right: 15px;
+    background: #eee;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 14px;
+    transition: 0.2s;
+}
+
+.cerrar-categoria:hover {
+    background: #ddd;
+}
+
+/* FONDO MÁS SUAVE */
+.modal-categoria {
+    backdrop-filter: blur(5px);
+}
+
+.grid-categoria {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(150px,1fr));
+    gap: 15px;
+}
+
+.cerrar-categoria {
+    cursor: pointer;
+    float: right;
+    font-size: 18px;
+}
+
+@media (max-width:600px){
+
+    #contenedor-categoria div{
+        white-space: normal !important;
+        flex-wrap: wrap;
+        justify-content: center;
+        text-align: center;
+    }
+
+}
+
+#contenedor-categoria {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+}
+
+#contenedor-categoria > div:not(.grid-categoria) {
+    width: 100%;
+}
+
+.grid-categoria, 
+#contenedor-categoria > div[style*="display: grid"] {
+    justify-items: center;
+    align-items: start;
+}
+
+#contenedor-categoria > div[style*="display: grid"] > div {
+    width: 100%;
+    max-width: 200px;
+    margin: 0 auto;
+}
+
+@media (max-width: 600px) {
+    #contenedor-categoria > div[style*="display: grid"] {
+        grid-template-columns: repeat(2, 1fr) !important;
+    }
+}

@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Admin - Recetas</title>
+
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background:#f4f4f4;
+  margin:0;
+  padding:20px;
+}
+
+h2 {
+  text-align:center;
+  margin-bottom:20px;
+}
+
+/* CONTENEDOR */
+.form-container {
+  max-width:900px;
+  margin:auto;
+  background:#fff;
+  padding:20px;
+  border-radius:10px;
+  box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+/* GRID */
+.form-grid {
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:15px;
+}
+
+/* CAMPOS */
+.form-group {
+  display:flex;
+  flex-direction:column;
+}
+
+.form-group.full {
+  grid-column:1 / -1;
+}
+
+label {
+  margin-bottom:5px;
+  font-weight:600;
+}
+
+input, textarea, select {
+  padding:8px;
+  border:1px solid #ccc;
+  border-radius:6px;
+  font-size:14px;
+}
+
+textarea {
+  resize:vertical;
+  min-height:80px;
+}
+
+/* BOTÓN */
+button {
+  margin-top:15px;
+  padding:10px;
+  background:#333;
+  color:#fff;
+  border:none;
+  border-radius:6px;
+  cursor:pointer;
+  font-size:15px;
+}
+
+button:hover {
+  background:#555;
+}
+
+/* 📱 MÓVIL */
+@media (max-width:600px){
+  .form-grid {
+    grid-template-columns:1fr;
+  }
+}
+</style>
+</head>
+
+<body>
+
+<h2>Panel Admin - Agregar Receta</h2>
+
+<div class="form-container">
+<div style="text-align:right; margin-bottom:10px;">
+  <button onclick="cerrarAdmin()" style="
+    background:#ccc;
+    color:#000;
+    border:none;
+    padding:6px 12px;
+    border-radius:6px;
+    cursor:pointer;
+    font-size:13px;
+  ">
+    ✖ Cerrar
+  </button>
+</div>
+
+<form id="formReceta">
+
+<div class="form-grid">
+
+  <div class="form-group">
+    <label>Título</label>
+    <input type="text" id="titulo" required>
+  </div>
+
+  <div class="form-group">
+  <label>Categoría</label>
+  <select id="categoria" required>
+    <option value="">Seleccionar</option>
+    <option>Fáciles</option>
+    <option>Postres</option>
+    <option>Carnes</option>
+    <option>Ensaladas</option>
+    <option>Pastas</option>
+    <option>Bebidas</option>
+    <option>Arroces</option>
+    <option>Sopas</option>
+    <option>Mariscos</option>
+    <option>Comida Cubana</option>
+    <option>Desayunos</option>
+    <option>Rápidas</option>
+  </select>
+</div>
+
+  <div class="form-group">
+    <label>Imagen (URL)</label>
+    <input type="text" id="imagen_url" required>
+  </div>
+
+  <div class="form-group">
+    <label>Tiempo</label>
+    <input type="text" id="tiempo" required>
+  </div>
+
+  <div class="form-group">
+    <label>Porciones</label>
+    <input type="text" id="porciones" required>
+  </div>
+
+  <div class="form-group">
+    <label>Dificultad</label>
+    <select id="dificultad" required>
+      <option value="">Seleccionar</option>
+      <option>Fácil</option>
+      <option>Media</option>
+      <option>Difícil</option>
+    </select>
+  </div>
+
+  <div class="form-group full">
+    <label>Descripción</label>
+    <textarea id="descripcion" required></textarea>
+  </div>
+
+  <div class="form-group full">
+    <label>Ingredientes (uno por línea)</label>
+    <textarea id="ingredientes" required></textarea>
+  </div>
+
+  <div class="form-group full">
+    <label>Instrucciones (una por línea)</label>
+    <textarea id="instrucciones" required></textarea>
+  </div>
+
+</div>
+
+<button type="submit">Guardar Receta</button>
+
+</form>
+<h3 style="margin-top:30px;">Recetas existentes</h3>
+
+<div id="lista-recetas-admin"></div>
+
+</div>
+
+<script>
+function cerrarAdmin(){
+    window.location.href = "index.html";
+}
+
+document.getElementById("formReceta").addEventListener("submit", function(e){
+    e.preventDefault();
+
+    const titulo = document.getElementById("titulo").value.trim();
+    const categoria = document.getElementById("categoria").value.trim();
+    const imagen = document.getElementById("imagen_url").value.trim();
+    const tiempo = document.getElementById("tiempo").value.trim();
+    const porciones = document.getElementById("porciones").value.trim();
+    const dificultad = document.getElementById("dificultad").value.trim();
+    const descripcion = document.getElementById("descripcion").value.trim();
+    const ingredientes = document.getElementById("ingredientes").value.trim();
+    const instrucciones = document.getElementById("instrucciones").value.trim();
+
+    // VALIDACIÓN
+    if(!titulo || !categoria || !imagen || !tiempo || !porciones || !dificultad || !descripcion || !ingredientes || !instrucciones){
+        alert("Todos los campos son obligatorios");
+        return;
+    }
+
+    if(!imagen.startsWith("http")){
+        alert("La imagen debe ser una URL válida");
+        return;
+    }
+
+    if(ingredientes.split("\n").length < 2){
+        alert("Agrega al menos 2 ingredientes");
+        return;
+    }
+
+    if(instrucciones.split("\n").length < 2){
+        alert("Agrega al menos 2 pasos de preparación");
+        return;
+    }
+
+    const data = {
+        titulo,
+        categoria,
+        imagen_url: imagen,
+        tiempo,
+        porciones,
+        dificultad,
+        descripcion,
+        ingredientes: ingredientes.split("\n").map(i => i.trim()).join("|"),
+        instrucciones: instrucciones.split("\n").map(i => i.trim()).join("|")
+    };
+
+    // ENVÍO A SHEETS
+    fetch("https://script.google.com/macros/s/AKfycbxo0DBK61S9YAezS68zJ1l8e_ihh28iKE3KYd7gA16SvrAt7YgSOItUo2ksf30DsOsimw/exec", {
+        method: "POST",
+        body: JSON.stringify(data)
+    })
+    .then(res => res.json())
+    .then(response => {
+       if(response.status === "ok"){
+    alert("Receta guardada correctamente ✅");
+
+    document.getElementById("formReceta").reset();
+
+    // refrescar lista admin
+    cargarRecetasAdmin();
+
+    // avisar a la web
+    localStorage.setItem("actualizarRecetas", Date.now());
+} else {
+            alert("Error al guardar ❌");
+        }
+    })
+    .catch(() => {
+        alert("Error de conexión ❌");
+    });
+
+});
+</script>
+
+<script>
+function cargarRecetasAdmin(){
+
+    const url = "https://docs.google.com/spreadsheets/d/e/2PACX-1vTgIQOv_9-zGwgO_5oK4wmtKvgC0OSkgjz9Nk05I3p7kxT9isiRUKOXSiuUNGLrrRblk3sSiqQR0yPF/pub?output=csv&t=" + new Date().getTime();
+
+    fetch(url)
+    .then(res => res.text())
+    .then(data => {
+
+        const rows = data.split("\n").slice(1).filter(r => r.trim());
+        const container = document.getElementById("lista-recetas-admin");
+
+        container.innerHTML = "";
+
+        rows.forEach(row => {
+
+            const cols = row.split(",");
+
+            const id = cols[0];
+            const titulo = cols[1];
+            const categoria = cols[3];
+
+            const div = document.createElement("div");
+
+            div.style = "padding:10px; border-bottom:1px solid #ddd; display:flex; justify-content:space-between;";
+
+            div.innerHTML = `
+    <span><strong>${id}</strong> - ${titulo} (${categoria})</span>
+    <span>
+        <button onclick="eliminarReceta('${id}')">Eliminar</button>
+    </span>
+`;
+
+            container.appendChild(div);
+
+        });
+
+    });
+
+}
+
+cargarRecetasAdmin();
+</script>
+
+<script>
+function eliminarReceta(id){
+
+    if(!confirm("¿Seguro que quieres eliminar esta receta?")) return;
+
+    fetch("https://script.google.com/macros/s/AKfycbxo0DBK61S9YAezS68zJ1l8e_ihh28iKE3KYd7gA16SvrAt7YgSOItUo2ksf30DsOsimw/exec?action=delete&id=" + id)
+    .then(res => res.text())
+    .then(response => {
+
+        if(response === "ok"){
+    alert("Receta eliminada ✅");
+
+    // refrescar admin
+    cargarRecetasAdmin();
+
+    // avisar a la otra página que actualice
+    localStorage.setItem("actualizarRecetas", Date.now());
+
+
+        } else {
+            alert("No se pudo eliminar ❌");
+        }
+
+    })
+    .catch(() => {
+        alert("Error de conexión ❌");
+    });
+
+}
+</script>
+</body>
+</html>
