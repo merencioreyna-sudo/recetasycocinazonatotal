@@ -157,6 +157,10 @@ window.addEventListener("click", (e) => {
 });
 
 function autoScroll() {
+
+    if (window.autoScrollActivo) return;
+    window.autoScrollActivo = true;
+
     const recent = document.querySelector(".recipes-scroll");
 
     if (!recent) return;
@@ -171,20 +175,21 @@ function autoScroll() {
     recent.dataset.cloned = "true";
 }
 
-    let speed = 0.8;
-    let isPaused = false;
+    let speed = 1; // movimiento real (NO tocar más)
+let delay = 25; // controla velocidad visual
+let isPaused = false;
 
-    function scroll() {
-        if (!isPaused) {
-            recent.scrollLeft += speed;
+function scroll() {
+    if (!isPaused) {
+        recent.scrollLeft += speed;
 
-            if (recent.scrollLeft >= recent.scrollWidth / 2) {
-                recent.scrollLeft = 0;
-            }
-        }
-
-        requestAnimationFrame(scroll);
+       if (recent.scrollLeft >= recent.scrollWidth - recent.clientWidth) {
+    recent.scrollLeft = 0;
+}
     }
+
+    setTimeout(scroll, delay);
+}
 
     // 👇 CLAVE: parar EXACTO al hacer click
     recent.addEventListener("click", () => {
@@ -249,9 +254,6 @@ document.getElementById("recipe-modal").classList.add("active");
 
 cargarRecetas();
 
-setInterval(() => {
-    cargarRecetas();
-}, 5000);
 
 window.addEventListener("storage", function(e) {
     if (e.key === "actualizarRecetas") {
