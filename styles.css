@@ -36,18 +36,30 @@ body {
 }
 
 .search {
-    flex: 1;
-    padding: 8px 12px;
+    width: 500px;
+    padding: 6px 10px;
     border-radius: 20px;
     border: none;
     outline: none;
 }
 
 .home-link {
-    color: white;
-    font-size: 14px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+
+    background: white;
+    color: #6bbf59;
+    padding: 6px 14px;
+    border-radius: 20px;
     text-decoration: none;
-    font-weight: bold;
+    font-weight: 600;
+    font-size: 13px;
+    transition: 0.2s;
+}
+
+.home-link:hover {
+    background: #e8f5e4;
 }
 
 /* ================= HERO ================= */
@@ -197,22 +209,27 @@ body {
     }
 }
 
-/* MOBILE */
 @media (max-width: 600px) {
 
     .header {
-        flex-wrap: wrap;
+        display: flex;
+        align-items: center;
+        gap: 8px;
     }
 
     .home-link {
-        width: 100%;
-        text-align: right;
-        margin-top: 5px;
-        margin-right: 5px; /* 👈 AQUÍ */
+        display: flex;
+        align-items: center;
+        gap: 6px;
+        margin-right: 5px;
     }
 
     .search {
-        width: 100%;
+        width: 90px;
+    }
+
+    .recipes-grid {
+        grid-template-columns: repeat(2, 1fr);
     }
 
     .hero {
@@ -224,10 +241,11 @@ body {
         height: 60px;
     }
 }
-
 .categories {
     position: relative;
 }
+
+
 
 /* efecto lateral */
 .categories::after {
@@ -563,4 +581,68 @@ body {
     #contenedor-categoria > div[style*="display: grid"] {
         grid-template-columns: repeat(2, 1fr) !important;
     }
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.logo-text {
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    letter-spacing: 1px;
+}
+
+.search-wrapper {
+    position: relative;
+}
+
+.search {
+    padding-left: 28px;
+}
+
+.search-wrapper::before {
+    content: "🔍";
+    position: absolute;
+    left: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 12px;
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.section-title.recientes {
+    font-size: 22px;
+    font-weight: 700;
+    color: #6bbf59;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+
+.section-title.todas {
+    font-size: 18px;
+    font-weight: 600;
+    color: #333;
+    margin-top: 25px;
+}
+
+#recent-container {
+    background: #e4f3e1;
+    border-radius: 12px;
+    padding: 10px;
+}
+
+.footer-left .logo-circle {
+    background: #6bbf59;
+    color: white;
+}
+
+.footer-left {
+    display: flex;
+    align-items: center;
+    gap: 8px;
 }
